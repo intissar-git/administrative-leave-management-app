@@ -16,7 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +48,6 @@ public class DemandeCongeService {
         demande.setMotif(demandeDTO.getMotif());
         demande.setDuree(demandeDTO.getDuree());
         demande.setRemplacerPar(demandeDTO.getRemplacerPar());
-        demande.setRemplacantArab(demandeDTO.getRemplacantArab());
         demande.setStatut("EN_ATTENTE"); // Set default status
 
         DemandeConge savedDemande = demandeCongeRepository.save(demande);
@@ -68,8 +66,7 @@ public class DemandeCongeService {
         responseDTO.setStatut(demande.getStatut());
         responseDTO.setDuree(demande.getDuree());
         responseDTO.setRemplacerPar(demande.getRemplacerPar());
-        responseDTO.setMotifRefus(demande.getMotifRefus());
-        responseDTO.setRemplacantArab(demande.getRemplacantArab()); // Ajout de ce champ
+
         return responseDTO;
     }
 
@@ -137,7 +134,6 @@ public class DemandeCongeService {
         demande.setMotif(demandeDTO.getMotif());
         demande.setDuree(demandeDTO.getDuree());
         demande.setRemplacerPar(demandeDTO.getRemplacerPar());
-        demande.setRemplacantArab(demandeDTO.getRemplacantArab());
 
         DemandeConge updatedDemande = demandeCongeRepository.save(demande);
         return mapToResponseDTO(updatedDemande);
@@ -176,159 +172,5 @@ public class DemandeCongeService {
         return demandeCongeRepository.findAllWithEmployeeInfo();
     }
 
-
-    // Dans DemandeCongeService.java
-    @Transactional
-    public void updateStatutDemande(Long id, String statut, String motifRefus) {
-        // Si le statut est "REFUSE" et qu'il n'y a pas de motif de refus
-        if ("REFUSE".equals(statut) && (motifRefus == null || motifRefus.isEmpty())) {
-            throw new RuntimeException("Un motif de refus est obligatoire pour rejeter une demande");
-        }
-
-        // Si le statut n'est pas "REFUSE", on ne garde pas le motif de refus
-        String finalMotifRefus = "REFUSE".equals(statut) ? motifRefus : null;
-
-        demandeCongeRepository.updateStatutAndMotifRefus(id, statut, finalMotifRefus);
-    }
-
-
-
-
-
-
-
-
-
-
-
-// ========== NOUVELLES FONCTIONNALITÉS ==========
-
-    // Ajoutez cette méthode pour récupérer les demandes des chefs de service
-    public List<DemandeCongeResponseDTO> getDemandesChefsByDepartement(Long departementId) {
-        // 1. Récupérer tous les chefs de service du département
-        List<User> chefs = userRepository.findChefsServiceByDepartementId(departementId);
-
-        if (chefs.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        // 2. Récupérer leurs IDs
-        List<Long> chefsIds = chefs.stream()
-                .map(User::getId)
-                .map(Long::valueOf)
-                .collect(Collectors.toList());
-
-        // 3. Récupérer les demandes de ces chefs
-        List<DemandeConge> demandes = demandeCongeRepository.findByIdEmployeeIn(chefsIds);
-
-        // 4. Créer un map pour retrouver facilement les chefs par leur ID
-        Map<Long, User> chefsMap = chefs.stream()
-                .collect(Collectors.toMap(
-                        chef -> Long.valueOf(chef.getId()),
-                        chef -> chef
-                ));
-
-        // 5. Convertir en DTO et enrichir avec les infos utilisateur
-        return demandes.stream()
-                .map(demande -> {
-                    DemandeCongeResponseDTO dto = new DemandeCongeResponseDTO();
-                    dto.setId(demande.getId());
-                    dto.setIdEmployee(demande.getIdEmployee());
-                    dto.setDateCreation(demande.getDateCreation());
-                    dto.setDateDebut(demande.getDateDebut());
-                    dto.setDateFin(demande.getDateFin());
-                    dto.setMotif(demande.getMotif());
-                    dto.setStatut(demande.getStatut());
-                    dto.setDuree(demande.getDuree());
-                    dto.setRemplacerPar(demande.getRemplacerPar());
-                    dto.setMotifRefus(demande.getMotifRefus());
-
-                    User chef = chefsMap.get(demande.getIdEmployee());
-                    if (chef != null) {
-                        dto.setEmployeeName(chef.getFirstName() + " " + chef.getLastName());
-                        dto.setDepartement(chef.getDepartement() != null ?
-                                chef.getDepartement().getNomDepartement() : "Non spécifié");
-                        dto.setServiceName(chef.getService() != null ?
-                                chef.getService().getNomService() : "Non spécifié");
-                        dto.setRole(chef.getRole());
-                    }
-                    return dto;
-                })
-                .collect(Collectors.toList());
-    }
-
-
-
-
-
-
-
-// Ajoutez cette méthode pour les statistiques
-
-
-    public DemandeStatsDTO getStatsDemandesChefsByDepartement(Long departementId) {
-        // 1. Récupérer tous les chefs de service du département
-        List<User> chefsService = userRepository.findChefsServiceByDepartementId(departementId);
-
-        // 2. Collecter leurs IDs
-        List<Long> chefsIds = chefsService.stream()
-                .map(user -> Long.valueOf(user.getId()))
-                .collect(Collectors.toList());
-
-        if (chefsIds.isEmpty()) {
-            return new DemandeStatsDTO(0, 0, 0);
-        }
-
-        // 3. Compter les demandes par statut
-        long approuvees = demandeCongeRepository.countByIdEmployeeInAndStatut(chefsIds, StatutDemande.APPROUVE);
-        long enAttente = demandeCongeRepository.countByIdEmployeeInAndStatut(chefsIds, StatutDemande.EN_ATTENTE);
-        long refusees = demandeCongeRepository.countByIdEmployeeInAndStatut(chefsIds, StatutDemande.REFUSE);
-
-        return new DemandeStatsDTO(approuvees, enAttente, refusees);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // Dans DemandeCongeService.java
-
-    public long countByEmployeeIds(List<Long> employeeIds) {
-        if (employeeIds.isEmpty()) return 0;
-        return demandeCongeRepository.countByIdEmployeeIn(employeeIds);
-    }
-
-    public long countByEmployeeIdsAndStatus(List<Long> employeeIds, String status) {
-        if (employeeIds.isEmpty()) return 0;
-        return demandeCongeRepository.countByIdEmployeeInAndStatut(employeeIds, status);
-    }
-
-
-
-
-    public List<DemandeCongeResponseDTO> findRecentByEmployeeIds(List<Long> employeeIds, int limit) {
-        if (employeeIds.isEmpty()) return Collections.emptyList();
-
-        // Modification importante ici - Ajout du tri explicite
-        Pageable pageable = PageRequest.of(
-                0, // première page
-                limit, // nombre d'éléments
-                Sort.by(Sort.Direction.DESC, "dateCreation") // tri explicite par date décroissante
-        );
-
-        return demandeCongeRepository.findByIdEmployeeIn(employeeIds, pageable)
-                .getContent()
-                .stream()
-                .map(this::mapToResponseDTO)
-                .collect(Collectors.toList());
-    }
 
 }

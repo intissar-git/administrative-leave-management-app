@@ -3,7 +3,6 @@ package com.helloIftekhar.springJwt.controller;
 import com.helloIftekhar.springJwt.dto.DtoMapper;
 import com.helloIftekhar.springJwt.dto.UserDTO;
 import com.helloIftekhar.springJwt.model.User;
-import com.helloIftekhar.springJwt.repository.UserRepository;
 import com.helloIftekhar.springJwt.service.AuthenticationService;
 import com.helloIftekhar.springJwt.service.ServiceDepartementService;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,11 +20,9 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final AuthenticationService authenticationService;
-    private final UserRepository userRepository;
 
-    public UserController(AuthenticationService authenticationService, UserRepository userRepository) {
+    public UserController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
-        this.userRepository = userRepository;
     }
 
     @GetMapping("/me")
@@ -99,6 +95,8 @@ public class UserController {
     }
 
 
+
+
     @PutMapping("/{username}")
     public ResponseEntity<User> updateUser(@PathVariable String username, @RequestBody User user) {
         // Vérifier que l'username dans le path correspond à l'username dans le body
@@ -107,6 +105,7 @@ public class UserController {
         }
         return ResponseEntity.ok(authenticationService.updateUser(user));
     }
+
 
 
     @PutMapping("/update/{username}")
@@ -125,6 +124,7 @@ public class UserController {
 
         return ResponseEntity.ok(DtoMapper.convertToUserDTO(savedUser));
     }
+
 
 
     @DeleteMapping("/{username}")
@@ -149,28 +149,10 @@ public class UserController {
         Map<String, Object> stats = authenticationService.getUserStatistics();
         return ResponseEntity.ok(stats);
     }
-
-    //hhhhhh
-    @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(
-            @RequestBody Map<String, String> request
-    ) {
-        try {
-            authenticationService.changePassword(
-                    SecurityContextHolder.getContext().getAuthentication().getName(),
-                    request.get("currentPassword"),
-                    request.get("newPassword")
-            );
-            return ResponseEntity.ok().body(Map.of("message", "Password changed successfully"));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
-        }
-    }
-
+    // developé par chef service
 
 
 
 
 
 }
-

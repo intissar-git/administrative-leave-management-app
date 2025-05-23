@@ -1,9 +1,7 @@
 package com.helloIftekhar.springJwt.repository;
 
 import com.helloIftekhar.springJwt.dto.DemandeCongeResponseDTO;
-import com.helloIftekhar.springJwt.dto.StatutDemande;
 import com.helloIftekhar.springJwt.model.DemandeConge;
-import com.helloIftekhar.springJwt.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -42,93 +40,46 @@ public interface DemandeCongeRepository extends JpaRepository<DemandeConge, Long
         Long getCount();
     }
 
+        // Pour les stats globales
+        @Query("SELECT COUNT(d) FROM DemandeConge d WHERE d.statut = 'APPROUVE' OR d.statut = 'APPROUVÉ'")
+        long countApprouvees();
 
+        @Query("SELECT COUNT(d) FROM DemandeConge d WHERE d.statut = 'REFUSE' OR d.statut = 'REFUSÉ'")
+        long countRefusees();
 
+        @Query("SELECT COUNT(d) FROM DemandeConge d WHERE d.statut = 'EN_ATTENTE' OR d.statut = 'EN ATTENTE'")
+        long countEnAttente();
 
-    //affihcer les departement de chef de service
+        // Pour les stats par utilisateur
+        @Query("SELECT COUNT(d) FROM DemandeConge d WHERE (d.statut = 'APPROUVE' OR d.statut = 'APPROUVÉ') AND d.idEmployee = :userId")
+        long countApprouveesByUser(Long userId);
 
+        @Query("SELECT COUNT(d) FROM DemandeConge d WHERE (d.statut = 'REFUSE' OR d.statut = 'REFUSÉ') AND d.idEmployee = :userId")
+        long countRefuseesByUser(Long userId);
 
-
-
-    // Pour les stats globales
-    @Query("SELECT COUNT(d) FROM DemandeConge d WHERE d.statut = 'APPROUVE' OR d.statut = 'APPROUVÉ'")
-    long countApprouvees();
-
-    @Query("SELECT COUNT(d) FROM DemandeConge d WHERE d.statut = 'REFUSE' OR d.statut = 'REFUSÉ'")
-    long countRefusees();
-
-    @Query("SELECT COUNT(d) FROM DemandeConge d WHERE d.statut = 'EN_ATTENTE' OR d.statut = 'EN ATTENTE'")
-    long countEnAttente();
-
-    // Pour les stats par utilisateur
-    @Query("SELECT COUNT(d) FROM DemandeConge d WHERE (d.statut = 'APPROUVE' OR d.statut = 'APPROUVÉ') AND d.idEmployee = :userId")
-    long countApprouveesByUser(Long userId);
-
-    @Query("SELECT COUNT(d) FROM DemandeConge d WHERE (d.statut = 'REFUSE' OR d.statut = 'REFUSÉ') AND d.idEmployee = :userId")
-    long countRefuseesByUser(Long userId);
-
-    @Query("SELECT COUNT(d) FROM DemandeConge d WHERE (d.statut = 'EN_ATTENTE' OR d.statut = 'EN ATTENTE') AND d.idEmployee = :userId")
-    long countEnAttenteByUser(Long userId);
-
-
-
-    @Modifying
-    @Query("UPDATE DemandeConge d SET d.statut = :statut, d.motifRefus = :motifRefus WHERE d.id = :id")
-    void updateStatutAndMotifRefus(@Param("id") Long id,
-                                   @Param("statut") String statut,
-                                   @Param("motifRefus") String motifRefus);
+        @Query("SELECT COUNT(d) FROM DemandeConge d WHERE (d.statut = 'EN_ATTENTE' OR d.statut = 'EN ATTENTE') AND d.idEmployee = :userId")
+        long countEnAttenteByUser(Long userId);
 
 
     @Query("SELECT new com.helloIftekhar.springJwt.dto.DemandeCongeResponseDTO(" +
             "d.id, d.idEmployee, CONCAT(u.firstName, ' ', u.lastName), dep.nomDepartement, " +
-            "d.dateCreation, d.dateDebut, d.dateFin, d.motif, d.statut, d.duree, d.remplacerPar, u.role, s.nomService,d.remplacantArab) " +
+            "d.dateCreation, d.dateDebut, d.dateFin, d.motif, d.statut, d.duree, d.remplacerPar,u.role) " +
             "FROM DemandeConge d " +
             "JOIN User u ON d.idEmployee = u.id " +
-            "LEFT JOIN u.departement dep " +
-            "LEFT JOIN u.service s")
+            "LEFT JOIN u.departement dep")
     List<DemandeCongeResponseDTO> findAllWithEmployeeInfo();
+
     Optional<DemandeConge> findByIdAndIdEmployee(Long id, Long idEmployee);
 
     // Dans DemandeCongeRepository.java
     @Modifying
-    @Query("UPDATE DemandeConge d SET d.dateDebut = :dateDebut, d.dateFin = :dateFin, d.motif = :motif, d.duree = :duree, d.remplacerPar = :remplacerPar, d.remplacantArab = :remplacantArab WHERE d.id = :id AND d.idEmployee = :employeeId")
+    @Query("UPDATE DemandeConge d SET d.dateDebut = :dateDebut, d.dateFin = :dateFin, d.motif = :motif, d.duree = :duree, d.remplacerPar = :remplacerPar WHERE d.id = :id AND d.idEmployee = :employeeId")
     int updateDemande(@Param("id") Long id,
                       @Param("employeeId") Long employeeId,
                       @Param("dateDebut") Date dateDebut,
                       @Param("dateFin") Date dateFin,
                       @Param("motif") String motif,
                       @Param("duree") int duree,
-                      @Param("remplacerPar") String remplacerPar,
-                      @Param("remplacantArab") String remplacantArab);
-
-
-/// ////////////////////////////
-@Query("SELECT d FROM DemandeConge d WHERE d.idEmployee IN :employeeIds ORDER BY d.dateCreation DESC")
-List<DemandeConge> findByIdEmployeeIn(@Param("employeeIds") List<Long> employeeIds);
-
-
-//en train de dev
-    long countByIdEmployeeInAndStatut(List<Long> employeeIds, StatutDemande statut);
-
-
-    @Query("SELECT u FROM User u WHERE u.departement.id = :departementId AND u.role = 'CHEF_SERVICE'")
-    List<User> findChefsServiceByDepartementId(@Param("departementId") Long departementId);
-
-
-
-
-
-    // Dans DemandeCongeRepository.java
-
-    @Query("SELECT COUNT(d) FROM DemandeConge d WHERE d.idEmployee IN :employeeIds")
-    long countByIdEmployeeIn(@Param("employeeIds") List<Long> employeeIds);
-
-    @Query("SELECT COUNT(d) FROM DemandeConge d WHERE d.idEmployee IN :employeeIds AND d.statut = :status")
-    long countByIdEmployeeInAndStatut(@Param("employeeIds") List<Long> employeeIds,
-                                      @Param("status") String status);
-
-    @Query("SELECT d FROM DemandeConge d WHERE d.idEmployee IN :employeeIds ORDER BY d.dateCreation DESC")
-    Page<DemandeConge> findByIdEmployeeIn(@Param("employeeIds") List<Long> employeeIds,
-                                          Pageable pageable);
+                      @Param("remplacerPar") String remplacerPar);
 }
 
