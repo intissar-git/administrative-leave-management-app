@@ -203,88 +203,69 @@ public class DemandeCongeService {
 
 // ========== NOUVELLES FONCTIONNALITÉS ==========
 
-    // Ajoutez cette méthode pour récupérer les demandes des chefs de service
-    public List<DemandeCongeResponseDTO> getDemandesChefsByDepartement(Long departementId) {
-        // 1. Récupérer tous les chefs de service du département
-        List<User> chefs = userRepository.findChefsServiceByDepartementId(departementId);
-
-        if (chefs.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        // 2. Récupérer leurs IDs
-        List<Long> chefsIds = chefs.stream()
-                .map(User::getId)
-                .map(Long::valueOf)
-                .collect(Collectors.toList());
-
-        // 3. Récupérer les demandes de ces chefs
-        List<DemandeConge> demandes = demandeCongeRepository.findByIdEmployeeIn(chefsIds);
-
-        // 4. Créer un map pour retrouver facilement les chefs par leur ID
-        Map<Long, User> chefsMap = chefs.stream()
-                .collect(Collectors.toMap(
-                        chef -> Long.valueOf(chef.getId()),
-                        chef -> chef
-                ));
-
-        // 5. Convertir en DTO et enrichir avec les infos utilisateur
-        return demandes.stream()
-                .map(demande -> {
-                    DemandeCongeResponseDTO dto = new DemandeCongeResponseDTO();
-                    dto.setId(demande.getId());
-                    dto.setIdEmployee(demande.getIdEmployee());
-                    dto.setDateCreation(demande.getDateCreation());
-                    dto.setDateDebut(demande.getDateDebut());
-                    dto.setDateFin(demande.getDateFin());
-                    dto.setMotif(demande.getMotif());
-                    dto.setStatut(demande.getStatut());
-                    dto.setDuree(demande.getDuree());
-                    dto.setRemplacerPar(demande.getRemplacerPar());
-                    dto.setMotifRefus(demande.getMotifRefus());
-
-                    User chef = chefsMap.get(demande.getIdEmployee());
-                    if (chef != null) {
-                        dto.setEmployeeName(chef.getFirstName() + " " + chef.getLastName());
-                        dto.setDepartement(chef.getDepartement() != null ?
-                                chef.getDepartement().getNomDepartement() : "Non spécifié");
-                        dto.setServiceName(chef.getService() != null ?
-                                chef.getService().getNomService() : "Non spécifié");
-                        dto.setRole(chef.getRole());
-                    }
-                    return dto;
-                })
-                .collect(Collectors.toList());
-    }
-
-
-
-
-
-
-
-// Ajoutez cette méthode pour les statistiques
-
+    //fonctionnalites nouveaux
 
     public DemandeStatsDTO getStatsDemandesChefsByDepartement(Long departementId) {
-        // 1. Récupérer tous les chefs de service du département
-        List<User> chefsService = userRepository.findChefsServiceByDepartementId(departementId);
+        // 1. Vérification de l'ID du département
+        if (departementId == null) {
+            throw new IllegalArgumentException("L'ID du département ne peut pas être null");
+        }
 
-        // 2. Collecter leurs IDs
+        // 2. Récupération des chefs de service avec vérification
+        List<User> chefsService = userRepository.findChefsServiceByDepartementId(departementId);
+        if (chefsService.isEmpty()) {
+            System.out.println("[INFO] Aucun chef de service trouvé pour le département " + departementId);
+            return new DemandeStatsDTO(0L, 0L, 0L);
+        }
+
+        // 3. Extraction des IDs des employés
         List<Long> chefsIds = chefsService.stream()
                 .map(user -> Long.valueOf(user.getId()))
                 .collect(Collectors.toList());
 
-        if (chefsIds.isEmpty()) {
-            return new DemandeStatsDTO(0, 0, 0);
+        // Debug: Afficher la liste des chefs de service
+        System.out.println("[DEBUG] Liste des chefs de service:");
+        chefsService.forEach(chef -> System.out.println(
+                "ID: " + chef.getId() +
+                        ", Nom: " + chef.getFirstName() + " " + chef.getLastName()
+        ));
+
+        // 4. Récupération de toutes les demandes
+        List<DemandeConge> allDemandes = (List<DemandeConge>) demandeCongeRepository.findByIdEmployeeIn(chefsIds);
+
+        // 5. Comptage manuel avec vérification des statuts
+        long approuvees = 0L;
+        long enAttente = 0L;
+        long refusees = 0L;
+
+        System.out.println("[DEBUG] Détail des demandes:");
+        for (DemandeConge demande : allDemandes) {
+            System.out.println(
+                    "ID: " + demande.getId() +
+                            ", Statut: " + demande.getStatut() +
+                            ", Employé: " + demande.getIdEmployee() +
+                            ", Date: " + demande.getDateCreation()
+            );
+
+            // Vérification case-sensitive des statuts
+            if ("APPROUVE".equalsIgnoreCase(demande.getStatut())) {
+                approuvees++;
+            } else if ("EN_ATTENTE".equalsIgnoreCase(demande.getStatut())
+                    || "EN ATTENTE".equalsIgnoreCase(demande.getStatut())) {
+                enAttente++;
+            } else if ("REFUSE".equalsIgnoreCase(demande.getStatut())
+                    || "REFUSÉ".equalsIgnoreCase(demande.getStatut())) {
+                refusees++;
+            }
         }
 
-        // 3. Compter les demandes par statut
-        long approuvees = demandeCongeRepository.countByIdEmployeeInAndStatut(chefsIds, StatutDemande.APPROUVE);
-        long enAttente = demandeCongeRepository.countByIdEmployeeInAndStatut(chefsIds, StatutDemande.EN_ATTENTE);
-        long refusees = demandeCongeRepository.countByIdEmployeeInAndStatut(chefsIds, StatutDemande.REFUSE);
+        // 6. Affichage des totaux
+        System.out.println("[DEBUG] Totaux calculés - " +
+                "Approuvées: " + approuvees +
+                ", En attente: " + enAttente +
+                ", Refusées: " + refusees);
 
-        return new DemandeStatsDTO(approuvees, enAttente, refusees);
+        return new DemandeStatsDTO(approuvees, refusees, enAttente);
     }
 
 
@@ -329,6 +310,10 @@ public class DemandeCongeService {
                 .stream()
                 .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
+
+
+
+
     }
 
 }
