@@ -1,3 +1,4 @@
+
 package com.helloIftekhar.springJwt.repository;
 
 import com.helloIftekhar.springJwt.model.User;
@@ -12,6 +13,13 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findByUsername(String username);
 
+
+    //add chef service codes
+
+
+    List<User> findByDepartementIdAndServiceId(Integer departementId, Integer serviceId);
+
+
     List<User> findByRole(String role);
 
     // Trouver par matricule
@@ -20,7 +28,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     List<User> findByFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String firstName, String lastName);
 
-    Optional<User> findByEmail(String email);
+    List<User> findByEmail(String email);
 
     boolean existsByEmail(String email);
 
@@ -37,11 +45,17 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Query("SELECT COUNT(u) FROM User u WHERE u.service.id = :serviceId")
     Long countByServiceId(@Param("serviceId") Long serviceId);
+
     // developer par  chef service
     @Query("SELECT u FROM User u WHERE u.service.id = :serviceId AND u.service.departement.id = :departementId")
     List<User> findByServiceAndDepartement(
             @Param("serviceId") Long serviceId,
             @Param("departementId") Long departementId);
 
-}
+//reccupere chef serviice
 
+    // Correction dans UserRepository.java
+    @Query("SELECT u FROM User u WHERE u.departement.id = :departementId AND u.role = 'CHEF_SERVICE'")
+    List<User> findChefsServiceByDepartementId(@Param("departementId") Long departementId);
+
+}

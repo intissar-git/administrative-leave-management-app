@@ -4,6 +4,7 @@ package com.helloIftekhar.springJwt.controller;
 import com.helloIftekhar.springJwt.dto.DemandeCongeRequestDTO;
 import com.helloIftekhar.springJwt.dto.DemandeCongeResponseDTO;
 import com.helloIftekhar.springJwt.dto.DemandeStatsDTO;
+import com.helloIftekhar.springJwt.dto.UpdateStatutDTO;
 import com.helloIftekhar.springJwt.model.DemandeConge;
 import com.helloIftekhar.springJwt.model.User;
 import com.helloIftekhar.springJwt.repository.DemandeCongeRepository;
@@ -12,6 +13,7 @@ import com.helloIftekhar.springJwt.service.DemandeCongeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.AccessType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -118,6 +120,8 @@ public class DemandeCongeController {
         responseDTO.setStatut(demande.getStatut());
         responseDTO.setDuree(demande.getDuree());
         responseDTO.setRemplacerPar(demande.getRemplacerPar());
+        responseDTO.setRemplacantArab(demande.getRemplacantArab()); // Ajout de ce champ
+        responseDTO.setMotifRefus(demande.getMotifRefus());
         return responseDTO;
     }
 
@@ -153,6 +157,30 @@ public class DemandeCongeController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         DemandeStatsDTO stats = demandeCongeService.getUserDemandesStats(Long.valueOf(user.getId()));
+        return ResponseEntity.ok(stats);
+    }
+
+
+
+
+    @PatchMapping("/{id}/statut")
+    public ResponseEntity<Void> updateStatutDemande(
+            @PathVariable Long id,
+            @RequestBody UpdateStatutDTO updateStatutDTO) {
+
+        demandeCongeService.updateStatutDemande(id, updateStatutDTO.getStatut(), updateStatutDTO.getMotifRefus());
+        return ResponseEntity.noContent().build();
+    }
+
+
+
+    // ========== NOUVELLES FONCTIONNALITÉS ==========
+
+    @GetMapping("/departement/{departementId}/chefs-demandes/stats")
+    @PreAuthorize("hasRole('CHEF_DEPARTEMENT')")
+    public ResponseEntity<DemandeStatsDTO> getStatsDemandesChefsByDepartement(
+            @PathVariable Long departementId) {
+        DemandeStatsDTO stats = demandeCongeService.getStatsDemandesChefsByDepartement(departementId);
         return ResponseEntity.ok(stats);
     }
 
