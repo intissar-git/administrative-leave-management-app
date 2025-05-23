@@ -47,6 +47,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("/login/**", "/register/**", "/refresh_token/**")
                         .permitAll()
+                        .requestMatchers("/forgot-password","/reset-password").permitAll()
+                        .requestMatchers("/api/users/change-password").authenticated()
+                        .requestMatchers("/api/users/departement/**").hasRole("CHEF_DEPARTEMENT")
                         .requestMatchers("/admin_only/**").hasAuthority("ADMIN")
                         .requestMatchers("/api/users/me").authenticated()
                         .requestMatchers("/api/users/**").authenticated()
@@ -79,7 +82,7 @@ public class SecurityConfig {
                 "http://127.0.0.1:63342",
                 "http://localhost:8080"
         ));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
 
