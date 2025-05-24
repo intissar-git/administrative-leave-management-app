@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historique Congés - Chef Département</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script>
@@ -63,6 +64,16 @@
         }
         .rejected-card {
             border-left-color: #EF4444;
+        }
+        #toast {
+            transition: all 0.3s ease;
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
     </style>
 </head>
@@ -126,6 +137,11 @@
                         Gestion des Services
                     </a>
 
+                    <a href="leave-requests-chef-service.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-file-signature text-gray-500 group-hover:text-gray-600 mr-3"></i>
+                        Demandes Chef Service
+                    </a>
+
                     <a href="leave-request-chef.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                         <i class="fas fa-file-alt text-gray-500 group-hover:text-gray-600 mr-3"></i>
                         Demander un congé
@@ -150,10 +166,21 @@
         </div>
 
         <!-- Main Content -->
-        <main class="flex-1 p-8 overflow-y-auto">
-            <div class="max-w-7xl mx-auto">
+        <div class="flex-1 min-w-0 overflow-auto">
+            <div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-800">Historique des demandes</h1>
+                        <p class="text-gray-600">Toutes vos demandes de congé</p>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        <i class="fas fa-calendar-alt mr-1"></i>
+                        <span id="currentDate"></span>
+                    </div>
+                </div>
+
                 <!-- Statistiques -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <!-- Solde de congé -->
                     <div class="stat-card solde-card bg-white rounded-lg shadow overflow-hidden">
                         <div class="px-4 py-5 sm:p-6">
@@ -167,10 +194,18 @@
                                     </dt>
                                     <dd class="flex items-baseline">
                                         <div id="soldeConges" class="text-2xl font-semibold text-gray-900">
-                                            --
+                                            <div class="h-8 w-12 bg-gray-200 rounded animate-pulse"></div>
                                         </div>
                                     </dd>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 sm:px-6">
+                            <div class="text-sm">
+                                <a href="leave-request-chef.html" class="font-medium text-indigo-600 hover:text-indigo-500 flex items-center">
+                                    <span>Demander un congé</span>
+                                    <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -188,10 +223,18 @@
                                     </dt>
                                     <dd class="flex items-baseline">
                                         <div id="approvedLeaves" class="text-2xl font-semibold text-gray-900">
-                                            --
+                                            <div class="h-8 w-12 bg-gray-200 rounded animate-pulse"></div>
                                         </div>
                                     </dd>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 sm:px-6">
+                            <div class="text-sm">
+                                <a href="#" onclick="filterByStatus('APPROUVÉ')" class="font-medium text-green-600 hover:text-green-500 flex items-center">
+                                    <span>Voir les demandes</span>
+                                    <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -209,10 +252,18 @@
                                     </dt>
                                     <dd class="flex items-baseline">
                                         <div id="pendingLeaves" class="text-2xl font-semibold text-gray-900">
-                                            --
+                                            <div class="h-8 w-12 bg-gray-200 rounded animate-pulse"></div>
                                         </div>
                                     </dd>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 sm:px-6">
+                            <div class="text-sm">
+                                <a href="#" onclick="filterByStatus('EN_ATTENTE')" class="font-medium text-yellow-600 hover:text-yellow-500 flex items-center">
+                                    <span>Voir les demandes</span>
+                                    <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -230,10 +281,18 @@
                                     </dt>
                                     <dd class="flex items-baseline">
                                         <div id="rejectedLeaves" class="text-2xl font-semibold text-gray-900">
-                                            --
+                                            <div class="h-8 w-12 bg-gray-200 rounded animate-pulse"></div>
                                         </div>
                                     </dd>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 sm:px-6">
+                            <div class="text-sm">
+                                <a href="#" onclick="filterByStatus('REFUSÉ')" class="font-medium text-red-600 hover:text-red-500 flex items-center">
+                                    <span>Voir les demandes</span>
+                                    <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -241,14 +300,14 @@
 
                 <!-- Tableau des demandes -->
                 <div class="bg-white rounded-lg shadow p-6">
-                    <div class="flex justify-between items-center mb-6">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                         <div>
-                            <h1 class="text-2xl font-bold text-gray-800">Historique des demandes</h1>
-                            <p class="text-gray-600">Toutes vos demandes de congé</p>
+                            <h2 class="text-lg font-semibold text-gray-800">Liste des demandes</h2>
+                            <p class="text-sm text-gray-500">Filtrez et recherchez dans vos demandes</p>
                         </div>
-                        <div class="flex space-x-4">
-                            <div class="relative">
-                                <select id="statusFilter" class="appearance-none bg-white border border-gray-300 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                            <div class="relative w-full sm:w-48">
+                                <select id="statusFilter" class="appearance-none w-full bg-white border border-gray-300 rounded-lg pl-3 pr-8 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                                     <option value="TOUS">Tous les statuts</option>
                                     <option value="EN_ATTENTE">En attente</option>
                                     <option value="APPROUVÉ">Approuvé</option>
@@ -258,8 +317,8 @@
                                     <i class="fas fa-chevron-down text-xs"></i>
                                 </div>
                             </div>
-                            <div class="relative">
-                                <input type="text" id="searchInput" placeholder="Rechercher..." class="pl-8 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
+                            <div class="relative w-full sm:w-64">
+                                <input type="text" id="searchInput" placeholder="Rechercher..." class="w-full pl-8 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                     <i class="fas fa-search text-gray-400"></i>
                                 </div>
@@ -268,22 +327,25 @@
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="min-w-full bg-white border border-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Période</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Durée</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Document</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Période</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Durée</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Document</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                             </thead>
                             <tbody id="demandesTable" class="bg-white divide-y divide-gray-200">
-                            <!-- Les données seront chargées ici -->
                             <tr>
                                 <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
-                                    Chargement en cours...
+                                    <div class="flex justify-center items-center space-x-2">
+                                        <div class="w-5 h-5 bg-gray-200 rounded-full animate-pulse"></div>
+                                        <div class="w-5 h-5 bg-gray-200 rounded-full animate-pulse"></div>
+                                        <div class="w-5 h-5 bg-gray-200 rounded-full animate-pulse"></div>
+                                    </div>
                                 </td>
                             </tr>
                             </tbody>
@@ -325,7 +387,7 @@
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 </div>
 
@@ -338,164 +400,116 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = '../user/index.html';
-            return;
-        }
-
-        // Variables de pagination
-        let currentPage = 1;
-        const itemsPerPage = 10;
-        let totalItems = 0;
-        let allDemandes = [];
-
-        // Éléments du DOM
-        const demandesTable = document.getElementById('demandesTable');
-        const statusFilter = document.getElementById('statusFilter');
-        const searchInput = document.getElementById('searchInput');
-        const paginationInfo = document.getElementById('paginationInfo');
-        const pageNumbers = document.getElementById('pageNumbers');
-        const prevPage = document.getElementById('prevPage');
-        const nextPage = document.getElementById('nextPage');
-        const prevPageMobile = document.getElementById('prevPageMobile');
-        const nextPageMobile = document.getElementById('nextPageMobile');
-
-        // Éléments des statistiques
-        const soldeConges = document.getElementById('soldeConges');
-        const approvedLeaves = document.getElementById('approvedLeaves');
-        const pendingLeaves = document.getElementById('pendingLeaves');
-        const rejectedLeaves = document.getElementById('rejectedLeaves');
-
-        // Charger les données initiales
-        loadDashboardData();
-        loadDemandes();
-
-        // Charger les statistiques du dashboard
-        async function loadDashboardData() {
-            try {
-                // Récupérer le solde de congé
-                const soldeResponse = await fetch('http://localhost:8080/api/solde-conge/mon-solde', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-
-                if (!soldeResponse.ok) throw new Error('Erreur lors du chargement du solde');
-
-                const soldeData = await soldeResponse.json();
-                soldeConges.textContent = soldeData.soldeGlobal || '0';
-
-                // Récupérer les stats des demandes
-                const statsResponse = await fetch('http://localhost:8080/api/demandes-conge/stats-utilisateur', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-
-                if (!statsResponse.ok) throw new Error('Erreur lors du chargement des stats');
-
-                const statsData = await statsResponse.json();
-                approvedLeaves.textContent = statsData.approuvees || '0';
-                pendingLeaves.textContent = statsData.enAttente || '0';
-                rejectedLeaves.textContent = statsData.refusees || '0';
-
-            } catch (error) {
-                console.error('Error:', error);
-                showToast('Erreur lors du chargement des statistiques', 'error');
-            }
-        }
-
-        // Charger les demandes
-        async function fetchDemandes() {
-    try {
-        console.log('Fetching demandes...');
-        const response = await fetch('http://localhost:8080/api/demandes-conge/mes-demandes', {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        console.log('Response status:', response.status);
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Error response:', errorText);
-            throw new Error('Erreur lors de la récupération des demandes');
-        }
-
-        const data = await response.json();
-        console.log('Demandes reçues:', data);
-        return data.map(demande => ({
-            id: demande.id,
-            reference: demande.reference || `CONG-${demande.id.toString().padStart(3, '0')}`,
-            dateDebut: demande.dateDebut,
-            dateFin: demande.dateFin,
-            duree: demande.duree,
-            motif: demande.motif,
-            statut: demande.statut,
-            documentLink: demande.documentLink,
-            remplacerPar: demande.remplacerPar
-        }));
-    } catch (error) {
-        console.error('Error in fetchDemandes:', error);
-        throw error;
+    // Function to get JWT token from localStorage
+    function getToken() {
+      return localStorage.getItem('token');
     }
-}
 
-        // Récupérer les demandes depuis l'API
-        async function fetchDemandes() {
-            const response = await fetch('http://localhost:8080/api/demandes-conge/mes-demandes', {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+    // Function to make authenticated requests
+    async function makeAuthenticatedRequest(url, method = 'GET', body = null) {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`
+      };
+
+      const config = {
+        method: method,
+        headers: headers
+      };
+
+      if (body) {
+        config.body = JSON.stringify(body);
+      }
+
+      const response = await fetch(url, config);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return response.json();
+    }
+
+    // Format current date
+    function formatCurrentDate() {
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const now = new Date();
+        return now.toLocaleDateString('fr-FR', options);
+    }
+
+    // Show toast notification
+    function showToast(message, isError = false) {
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        toastMessage.textContent = message;
+
+        if (isError) {
+            toast.firstElementChild.classList.remove('bg-green-500');
+            toast.firstElementChild.classList.add('bg-red-500');
+        } else {
+            toast.firstElementChild.classList.remove('bg-red-500');
+            toast.firstElementChild.classList.add('bg-green-500');
+        }
+
+        toast.classList.remove('hidden');
+        setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 3000);
+    }
+
+    // Filter by status
+    function filterByStatus(status) {
+        document.getElementById('statusFilter').value = status;
+        loadDemandes();
+    }
+
+    // Load demandes data
+    async function loadDemandes() {
+        try {
+            const token = getToken();
+            if (!token) return;
+
+            const statusFilter = document.getElementById('statusFilter').value;
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+
+            // Show loading state
+            const tableBody = document.getElementById('demandesTable');
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
+                        <div class="flex justify-center items-center space-x-2">
+                            <div class="w-5 h-5 bg-gray-200 rounded-full animate-pulse"></div>
+                            <div class="w-5 h-5 bg-gray-200 rounded-full animate-pulse"></div>
+                            <div class="w-5 h-5 bg-gray-200 rounded-full animate-pulse"></div>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            const response = await fetch('http://localhost:8080/api/demandes-conge/historique', {
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
-            if (!response.ok) {
-                throw new Error('Erreur lors de la récupération des demandes');
+            if (!response.ok) throw new Error('Erreur lors du chargement de l\'historique');
+
+            let demandes = await response.json();
+
+            // Filter data
+            if (statusFilter !== 'TOUS') {
+                demandes = demandes.filter(d => d.statut?.toUpperCase() === statusFilter.toUpperCase());
             }
 
-            const data = await response.json();
-            return data.map(demande => ({
-                id: demande.id,
-                reference: demande.reference || `CONG-${demande.id.toString().padStart(3, '0')}`,
-                dateDebut: demande.dateDebut,
-                dateFin: demande.dateFin,
-                duree: demande.duree,
-                motif: demande.motif,
-                statut: demande.statut,
-                documentLink: demande.documentLink,
-                remplacerPar: demande.remplacerPar
-            }));
-        }
+            if (searchQuery) {
+                demandes = demandes.filter(d =>
+                    (d.reference && d.reference.toLowerCase().includes(searchQuery)) ||
+                    (d.dateDebut && new Date(d.dateDebut).toLocaleDateString('fr-FR').includes(searchQuery)) ||
+                    (d.dateFin && new Date(d.dateFin).toLocaleDateString('fr-FR').includes(searchQuery)));
+            }
 
-        // Filtrer les demandes
-        function filterDemandes() {
-            const status = statusFilter.value;
-            const searchTerm = searchInput.value.toLowerCase();
-
-            return allDemandes.filter(demande => {
-                const matchesStatus = status === 'TOUS' ||
-                                    (status === 'EN_ATTENTE' && demande.statut === 'EN_ATTENTE') ||
-                                    (status === 'APPROUVÉ' && (demande.statut === 'APPROUVÉ' || demande.statut === 'APPROUVE')) ||
-                                    (status === 'REFUSÉ' && (demande.statut === 'REFUSÉ' || demande.statut === 'REFUSE'));
-
-                const matchesSearch =
-                    (demande.reference && demande.reference.toLowerCase().includes(searchTerm)) ||
-                    (demande.motif && demande.motif.toLowerCase().includes(searchTerm)) ||
-                    (demande.remplacerPar && demande.remplacerPar.toLowerCase().includes(searchTerm));
-
-                return matchesStatus && matchesSearch;
-            });
-        }
-
-        // Afficher le tableau
-        function renderTable() {
-            const filteredDemandes = filterDemandes();
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const paginatedDemandes = filteredDemandes.slice(startIndex, startIndex + itemsPerPage);
-
-            if (paginatedDemandes.length === 0) {
-                demandesTable.innerHTML = `
+            // Update table
+            if (demandes.length === 0) {
+                tableBody.innerHTML = `
                     <tr>
                         <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
                             Aucune demande trouvée
@@ -505,48 +519,38 @@
                 return;
             }
 
-            demandesTable.innerHTML = paginatedDemandes.map(demande => {
+            tableBody.innerHTML = demandes.map(demande => {
+                const dateCreation = new Date(demande.dateCreation).toLocaleDateString('fr-FR');
                 const dateDebut = new Date(demande.dateDebut).toLocaleDateString('fr-FR');
                 const dateFin = new Date(demande.dateFin).toLocaleDateString('fr-FR');
 
                 let statutClass = '';
                 let statutIcon = '';
-                let statutText = '';
 
-                switch(demande.statut) {
+                switch(demande.statut?.toUpperCase()) {
                     case 'APPROUVÉ':
                     case 'APPROUVE':
                         statutClass = 'text-green-600 bg-green-100';
-                        statutIcon = '<i class="fas fa-check-circle mr-1"></i>';
-                        statutText = 'Approuvé';
+                        statutIcon = '✓';
                         break;
                     case 'REFUSÉ':
                     case 'REFUSE':
                         statutClass = 'text-red-600 bg-red-100';
-                        statutIcon = '<i class="fas fa-times-circle mr-1"></i>';
-                        statutText = 'Refusé';
+                        statutIcon = '✗';
                         break;
                     case 'EN_ATTENTE':
                         statutClass = 'text-yellow-600 bg-yellow-100';
-                        statutIcon = '<i class="fas fa-clock mr-1"></i>';
-                        statutText = 'En attente';
+                        statutIcon = '⏳';
                         break;
                     default:
                         statutClass = 'text-gray-600 bg-gray-100';
-                        statutText = demande.statut;
                 }
 
                 return `
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            ${demande.reference}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            ${dateDebut} - ${dateFin}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            ${demande.duree} jour(s)
-                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${demande.reference || 'CONG-' + demande.id.toString().padStart(3, '0')}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${dateDebut} - ${dateFin}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${demande.duree} jour(s)</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             ${demande.documentLink ?
                                 `<a href="${demande.documentLink}" class="text-blue-600 hover:underline" target="_blank">
@@ -556,110 +560,130 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statutClass}">
-                                ${statutIcon} ${statutText}
+                                ${statutIcon} ${demande.statut}
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <button onclick="viewDemandeDetails(${demande.id})" class="text-primary-600 hover:text-primary-900 mr-3">
-                                <i class="fas fa-eye"></i> Voir
-                            </button>
-                            ${demande.statut === 'EN_ATTENTE' ? `
-                            <button onclick="editDemande(${demande.id})" class="text-blue-600 hover:text-blue-900 mr-3">
-                                <i class="fas fa-edit"></i> Modifier
-                            </button>
-                            <button onclick="deleteDemande(${demande.id})" class="text-red-600 hover:text-red-900">
-                                <i class="fas fa-trash"></i> Supprimer
-                            </button>
-                            ` : ''}
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            ${demande.statut === 'EN_ATTENTE' ?
+                                `<button onclick="openDemandeDetails(${demande.id})" class="text-blue-600 hover:text-blue-800 mr-2">
+                                    <i class="fas fa-edit"></i> Modifier
+                                </button>
+                                <button onclick="deleteDemande(${demande.id})" class="text-red-600 hover:text-red-800">
+                                    <i class="fas fa-trash"></i> Supprimer
+                                </button>` :
+                                `<button onclick="openDemandeDetails(${demande.id})" class="text-blue-600 hover:text-blue-800">
+                                    <i class="fas fa-eye"></i> Détails
+                                </button>`}
                         </td>
                     </tr>
                 `;
             }).join('');
-        }
 
-        // Mettre à jour la pagination
-        function updatePagination() {
-            const filteredDemandes = filterDemandes();
-            const totalPages = Math.ceil(filteredDemandes.length / itemsPerPage);
+            // Update pagination info
+            updatePaginationInfo(demandes.length);
 
-            // Mettre à jour les informations de pagination
-            const startItem = Math.min((currentPage - 1) * itemsPerPage + 1, filteredDemandes.length);
-            const endItem = Math.min(currentPage * itemsPerPage, filteredDemandes.length);
-
-            paginationInfo.innerHTML = `
-                Affichage de <span class="font-medium">${startItem}</span> à <span class="font-medium">${endItem}</span> sur <span class="font-medium">${filteredDemandes.length}</span> demandes
+        } catch (err) {
+            console.error(err);
+            document.getElementById('demandesTable').innerHTML = `
+                <tr>
+                    <td colspan="6" class="px-6 py-4 text-center text-red-600">Erreur : ${err.message}</td>
+                </tr>
             `;
-
-            // Mettre à jour les boutons de pagination
-            prevPage.disabled = currentPage === 1;
-            nextPage.disabled = currentPage === totalPages;
-            prevPageMobile.disabled = currentPage === 1;
-            nextPageMobile.disabled = currentPage === totalPages;
-
-            // Mettre à jour les numéros de page
-            pageNumbers.innerHTML = '';
-            for (let i = 1; i <= totalPages; i++) {
-                const pageBtn = document.createElement('button');
-                pageBtn.className = `relative inline-flex items-center px-4 py-2 border text-sm font-medium ${i === currentPage ? 'bg-primary-50 border-primary-500 text-primary-600' : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'}`;
-                pageBtn.textContent = i;
-                pageBtn.addEventListener('click', () => {
-                    currentPage = i;
-                    renderTable();
-                    updatePagination();
-                });
-                pageNumbers.appendChild(pageBtn);
-            }
+            showToast('Erreur lors du chargement des demandes', true);
         }
+    }
 
-        // Événements
-        statusFilter.addEventListener('change', () => {
-            currentPage = 1;
-            renderTable();
-            updatePagination();
-        });
+    // Update pagination information
+    function updatePaginationInfo(totalItems) {
+        const paginationInfo = document.getElementById('paginationInfo');
+        if (totalItems > 0) {
+            paginationInfo.innerHTML = `
+                Affichage de <span class="font-medium">1</span> à <span class="font-medium">${totalItems}</span> sur <span class="font-medium">${totalItems}</span> demandes
+            `;
+        } else {
+            paginationInfo.innerHTML = `
+                Affichage de <span class="font-medium">0</span> à <span class="font-medium">0</span> sur <span class="font-medium">0</span> demandes
+            `;
+        }
+    }
 
-        searchInput.addEventListener('input', () => {
-            currentPage = 1;
-            renderTable();
-            updatePagination();
-        });
+    // Load dashboard statistics
+    async function loadDashboardData() {
+        try {
+            const token = getToken();
+            if (!token) return;
 
-        prevPage.addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                renderTable();
-                updatePagination();
-            }
-        });
+            // Récupérer le solde de congé
+            const soldeResponse = await fetch('http://localhost:8080/api/solde-conge/mon-solde', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
 
-        nextPage.addEventListener('click', () => {
-            const filteredDemandes = filterDemandes();
-            const totalPages = Math.ceil(filteredDemandes.length / itemsPerPage);
+            if (!soldeResponse.ok) throw new Error('Erreur lors du chargement du solde');
 
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderTable();
-                updatePagination();
-            }
-        });
+            const soldeData = await soldeResponse.json();
+            document.getElementById('soldeConges').textContent = soldeData.soldeGlobal || '0';
 
-        prevPageMobile.addEventListener('click', () => {
-            if (currentPage > 1) {
-                currentPage--;
-                renderTable();
-                updatePagination();
-            }
-        });
+            // Récupérer les stats des demandes
+            const statsResponse = await fetch('http://localhost:8080/api/demandes-conge/stats-utilisateur', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
 
-        nextPageMobile.addEventListener('click', () => {
-            const filteredDemandes = filterDemandes();
-            const totalPages = Math.ceil(filteredDemandes.length / itemsPerPage);
+            if (!statsResponse.ok) throw new Error('Erreur lors du chargement des stats');
 
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderTable();
-                updatePagination();
-            }
+            const statsData = await statsResponse.json();
+            document.getElementById('approvedLeaves').textContent = statsData.approuvees || '0';
+            document.getElementById('pendingLeaves').textContent = statsData.enAttente || '0';
+            document.getElementById('rejectedLeaves').textContent = statsData.refusees || '0';
+
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('Erreur lors du chargement des données', true);
+        }
+    }
+
+    // Open demande details
+    function openDemandeDetails(demandeId) {
+        localStorage.setItem('currentDemandeId', demandeId);
+        window.location.href = 'demande-details-ChefDep.html';
+    }
+
+    // Delete demande
+    async function deleteDemande(demandeId) {
+        if (!confirm('Êtes-vous sûr de vouloir supprimer cette demande ?')) return;
+
+        try {
+            const token = getToken();
+            if (!token) return window.location.href = '../user/index.html';
+
+            const response = await fetch(`http://localhost:8080/api/demandes-conge/${demandeId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (!response.ok) throw new Error('Erreur lors de la suppression');
+
+            showToast('Demande supprimée avec succès');
+            await loadDemandes();
+            await loadDashboardData();
+        } catch (err) {
+            console.error(err);
+            showToast('Erreur: ' + err.message, true);
+        }
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', async function () {
+        // Set current date
+        document.getElementById('currentDate').textContent = formatCurrentDate();
+
+        const token = getToken();
+        if (!token) return window.location.href = '../user/index.html';
+
+        // Logout button
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('refresh_token');
+            window.location.href = '../user/index.html';
         });
 
         // User menu toggle
@@ -682,58 +706,14 @@
             });
         }
 
-        // Déconnexion
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('refresh_token');
-            window.location.href = '../user/index.html';
-        });
+        // Add event listeners for filters
+        document.getElementById('statusFilter').addEventListener('change', loadDemandes);
+        document.getElementById('searchInput').addEventListener('input', loadDemandes);
+
+        // Load data
+        await loadDashboardData();
+        await loadDemandes();
     });
-
-    // Fonctions globales
-    function viewDemandeDetails(demandeId) {
-        localStorage.setItem('currentDemandeId', demandeId);
-        window.location.href = 'demande-details-chef.html';
-    }
-
-    function editDemande(demandeId) {
-        localStorage.setItem('currentDemandeId', demandeId);
-        window.location.href = 'edit-demande-chef.html';
-    }
-
-    async function deleteDemande(demandeId) {
-        if (!confirm('Êtes-vous sûr de vouloir supprimer cette demande ?')) return;
-
-        try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:8080/api/demandes-conge/${demandeId}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-
-            if (!response.ok) throw new Error('Erreur lors de la suppression');
-
-            showToast('Demande supprimée avec succès');
-            setTimeout(() => window.location.reload(), 1000);
-        } catch (err) {
-            console.error(err);
-            showToast('Erreur lors de la suppression', 'error');
-        }
-    }
-
-    function showToast(message, type = 'success') {
-        const toast = document.getElementById('toast');
-        const toastMessage = document.getElementById('toastMessage');
-
-        toastMessage.textContent = message;
-        toast.classList.remove('bg-green-500', 'bg-red-500');
-        toast.classList.add(type === 'success' ? 'bg-green-500' : 'bg-red-500');
-        toast.classList.remove('hidden');
-
-        setTimeout(() => {
-            toast.classList.add('hidden');
-        }, 3000);
-    }
 </script>
 </body>
 </html>

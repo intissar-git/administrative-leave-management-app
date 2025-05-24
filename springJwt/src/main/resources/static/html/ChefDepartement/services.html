@@ -164,19 +164,15 @@
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1 p-8">
-            <div class="mb-8">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Chefs de Service</h1>
-                        <p class="text-gray-600">Liste des chefs de service et leurs services associés</p>
-                    </div>
-                    <div class="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-full flex items-center">
-                        <i class="fas fa-info-circle mr-2"></i>
+        <div class="flex-1 min-w-0 overflow-auto">
+            <div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-2xl font-semibold text-gray-900">Tableau de bord</h1>
+                    <div class="text-sm text-gray-500">
+                        <i class="fas fa-calendar-alt mr-1"></i>
                         <span id="currentDate"></span>
                     </div>
                 </div>
-            </div>
 
             <!-- Services Section -->
             <div class="mb-10">
@@ -262,90 +258,111 @@
 <script>
     // Set current date
     document.getElementById('currentDate').textContent = formatCurrentDate();
+
     // Fetch and display data
     document.addEventListener('DOMContentLoaded', async function() {
-        try {
-            // Show loading states
-            document.getElementById('servicesContainer').innerHTML = `
-                <div class="animate-pulse bg-white rounded-lg shadow p-6">
-                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-                    <div class="h-3 bg-gray-200 rounded w-1/2 mb-6"></div>
-                    <div class="h-3 bg-gray-200 rounded w-1/4"></div>
-                </div>
-                <div class="animate-pulse bg-white rounded-lg shadow p-6">
-                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-                    <div class="h-3 bg-gray-200 rounded w-1/2 mb-6"></div>
-                    <div class="h-3 bg-gray-200 rounded w-1/4"></div>
-                </div>
-                <div class="animate-pulse bg-white rounded-lg shadow p-6">
-                    <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
-                    <div class="h-3 bg-gray-200 rounded w-1/2 mb-6"></div>
-                    <div class="h-3 bg-gray-200 rounded w-1/4"></div>
-                </div>
-            `;
+    try {
+        // Show loading states
+        document.getElementById('servicesContainer').innerHTML = `
+            <div class="animate-pulse bg-white rounded-lg shadow p-6">
+                <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+                <div class="h-3 bg-gray-200 rounded w-1/2 mb-6"></div>
+                <div class="h-3 bg-gray-200 rounded w-1/4"></div>
+            </div>
+            <div class="animate-pulse bg-white rounded-lg shadow p-6">
+                <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+                <div class="h-3 bg-gray-200 rounded w-1/2 mb-6"></div>
+                <div class="h-3 bg-gray-200 rounded w-1/4"></div>
+            </div>
+            <div class="animate-pulse bg-white rounded-lg shadow p-6">
+                <div class="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+                <div class="h-3 bg-gray-200 rounded w-1/2 mb-6"></div>
+                <div class="h-3 bg-gray-200 rounded w-1/4"></div>
+            </div>
+        `;
 
-            document.getElementById('chefsTableBody').innerHTML = `
-                <tr>
-                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                        <div class="flex justify-center items-center space-x-2">
-                            <i class="fas fa-circle-notch fa-spin text-blue-500"></i>
-                            <span>Chargement des données...</span>
-                        </div>
-                    </td>
-                </tr>
-            `;
+        document.getElementById('chefsTableBody').innerHTML = `
+            <tr>
+                <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                    <div class="flex justify-center items-center space-x-2">
+                        <i class="fas fa-circle-notch fa-spin text-blue-500"></i>
+                        <span>Chargement des données...</span>
+                    </div>
+                </td>
+            </tr>
+        `;
 
-            const users = await makeAuthenticatedRequest('http://localhost:8080/api/users/by-departement/1');
+        // Get current user info to determine department ID
+        const currentUser = await getCurrentUser();
+        const departementId = currentUser.departement?.id;
 
-            // Filter chefs de service (role CHEF_SERVICE)
-            const chefsService = users.filter(user => user.role === 'CHEF_SERVICE');
-
-            // Get unique services
-            const services = [...new Set(users.map(user => user.serviceName))].filter(name => name);
-
-            // Display services count
-            document.getElementById('servicesCount').textContent = services.length;
-
-            // Display chefs count
-            document.getElementById('chefsCount').textContent = chefsService.length;
-
-            // Display services
-            displayServices(services);
-
-            // Display chefs de service
-            displayChefs(chefsService);
-
-        } catch (error) {
-            console.error('Error fetching data:', error);
-
-            // Show error state for services
-            document.getElementById('servicesContainer').innerHTML = `
-                <div class="col-span-3 bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-                    <i class="fas fa-exclamation-triangle text-red-400 text-2xl mb-2"></i>
-                    <p class="text-red-600 font-medium">Erreur de chargement des services</p>
-                    <p class="text-sm text-red-500 mt-1">${error.message || 'Veuillez réessayer plus tard'}</p>
-                    <button onclick="window.location.reload()" class="mt-3 text-sm text-red-600 hover:text-red-800 font-medium">
-                        <i class="fas fa-sync-alt mr-1"></i> Réessayer
-                    </button>
-                </div>
-            `;
-
-            // Show error state for chefs
-            document.getElementById('chefsTableBody').innerHTML = `
-                <tr>
-                    <td colspan="5" class="px-6 py-4 text-center">
-                        <div class="bg-red-50 border border-red-200 rounded-lg p-4 inline-block">
-                            <i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>
-                            <span class="text-red-600">Erreur de chargement des chefs de service</span>
-                            <button onclick="window.location.reload()" class="ml-3 text-sm text-red-600 hover:text-red-800 font-medium">
-                                <i class="fas fa-sync-alt mr-1"></i> Réessayer
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `;
+        if (!departementId) {
+            throw new Error("L'utilisateur actuel n'est pas associé à un département");
         }
-    });
+
+        // Now fetch users by department using the dynamic ID
+        const users = await makeAuthenticatedRequest(`http://localhost:8080/api/users/by-departement/${departementId}`);
+
+        // Filter chefs de service (role CHEF_SERVICE)
+        const chefsService = users.filter(user => user.role === 'CHEF_SERVICE');
+
+        // Get unique services
+        const services = [...new Set(users.map(user => user.serviceName))].filter(name => name);
+
+        // Display services count
+        document.getElementById('servicesCount').textContent = services.length;
+
+        // Display chefs count
+        document.getElementById('chefsCount').textContent = chefsService.length;
+
+        // Display services
+        displayServices(services);
+
+        // Display chefs de service
+        displayChefs(chefsService);
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+
+        // Show error state for services
+        document.getElementById('servicesContainer').innerHTML = `
+            <div class="col-span-3 bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+                <i class="fas fa-exclamation-triangle text-red-400 text-2xl mb-2"></i>
+                <p class="text-red-600 font-medium">Erreur de chargement des services</p>
+                <p class="text-sm text-red-500 mt-1">${error.message || 'Veuillez réessayer plus tard'}</p>
+                <button onclick="window.location.reload()" class="mt-3 text-sm text-red-600 hover:text-red-800 font-medium">
+                    <i class="fas fa-sync-alt mr-1"></i> Réessayer
+                </button>
+            </div>
+        `;
+
+        // Show error state for chefs
+        document.getElementById('chefsTableBody').innerHTML = `
+            <tr>
+                <td colspan="5" class="px-6 py-4 text-center">
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4 inline-block">
+                        <i class="fas fa-exclamation-triangle text-red-400 mr-2"></i>
+                        <span class="text-red-600">Erreur de chargement des chefs de service</span>
+                        <button onclick="window.location.reload()" class="ml-3 text-sm text-red-600 hover:text-red-800 font-medium">
+                            <i class="fas fa-sync-alt mr-1"></i> Réessayer
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }
+});
+
+
+async function getCurrentUser() {
+    try {
+        const response = await makeAuthenticatedRequest('http://localhost:8080/api/users/me');
+        return response;
+    } catch (error) {
+        console.error('Error fetching current user:', error);
+        throw error;
+    }
+}
 
     function displayServices(services) {
         const container = document.getElementById('servicesContainer');
@@ -600,10 +617,10 @@
     });
 
     // Logout functionality
-    document.getElementById('logoutBtn').addEventListener('click', function(e) {
-        e.preventDefault();
+    document.getElementById('logoutBtn').addEventListener('click', function() {
         localStorage.removeItem('token');
-        window.location.href = 'login.html';
+        localStorage.removeItem('refresh_token');
+        window.location.href = '../user/index.html';
     });
 </script>
 </body>

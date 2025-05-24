@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demande de Congé - Chef Département</title>
+    <title>Demande de Congé</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/flatpickr@4.6.13/dist/flatpickr.min.css">
-
     <script>
         tailwind.config = {
             theme: {
@@ -24,7 +24,19 @@
                             700: '#1D4ED8',
                             800: '#1E40AF',
                             900: '#1E3A8A',
-                        }
+                        },
+                        secondary: {
+                            50: '#F0FDFA',
+                            100: '#CCFBF1',
+                            200: '#99F6E4',
+                            300: '#5EEAD4',
+                            400: '#2DD4BF',
+                            500: '#14B8A6',
+                            600: '#0D9488',
+                            700: '#0F766E',
+                            800: '#115E59',
+                            900: '#134E4A',
+                        },
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
@@ -58,11 +70,22 @@
             border-color: #f3f4f6 !important;
             cursor: not-allowed;
         }
+        .form-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid #3B82F6;
+        }
+        .form-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        #toast {
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
 <div class="min-h-screen flex flex-col">
-    <!-- Top Navigation - Garder la même que dans le dashboard chef département -->
+    <!-- Top Navigation -->
     <nav class="bg-white shadow-sm border-b border-gray-200">
         <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -86,7 +109,7 @@
                                 <div class="h-8 w-8 rounded-full bg-primary-700 flex items-center justify-center text-white">
                                     <i class="fas fa-user"></i>
                                 </div>
-                                <span class="ml-2 text-gray-700">Chef Département</span>
+                                <span class="ml-2 text-gray-700">Chef de Departement</span>
                                 <svg class="ml-1 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>
@@ -107,7 +130,7 @@
     </nav>
 
     <div class="flex flex-1">
-        <!-- Sidebar - Version unifiée -->
+        <!-- Sidebar identique au dashboard -->
         <div class="bg-white shadow-sm border-r border-gray-200 w-64 hidden md:block">
             <div class="h-full flex flex-col">
                 <nav class="flex-1 py-4 px-2 space-y-1">
@@ -126,8 +149,8 @@
                         Demandes Chef Service
                     </a>
 
-                    <a href="leave-request-chef.html" class="bg-primary-50 text-primary-700 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <i class="fas fa-file-alt text-primary-600 mr-3"></i>
+                    <a href="leave-request-chef.html" class="bg-primary-50 text-primary-700 hover:bg-primary-100 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-file-alt text-primary-600 group-hover:text-primary-700 mr-3"></i>
                         Demander un congé
                     </a>
 
@@ -148,9 +171,10 @@
                 </nav>
             </div>
         </div>
+
         <!-- Main content -->
         <main class="flex-1 p-8">
-            <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden">
+            <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden form-card">
                 <div class="p-8">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold text-gray-800">
@@ -189,11 +213,20 @@
                             <textarea id="reason" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Veuillez indiquer le motif de votre congé..."></textarea>
                         </div>
 
-                        <div>
-                            <label for="remplacant" class="block text-sm font-medium text-gray-700 mb-1">
-                                <i class="fas fa-user-friends text-blue-500 mr-2"></i> Remplaçant
-                            </label>
-                            <input type="text" id="remplacant" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Nom du remplaçant...">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="remplacant" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <i class="fas fa-user-friends text-blue-500 mr-2"></i> Remplaçant
+                                </label>
+                                <input type="text" id="remplacant" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Nom du remplaçant...">
+                            </div>
+
+                            <div>
+                                <label for="remplacantArab" class="block text-sm font-medium text-gray-700 mb-1">
+                                    <i class="fas fa-user-friends text-blue-500 mr-2"></i> ينوب عليه
+                                </label>
+                                <input type="text" id="remplacantArab" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-right" placeholder="اسم النائب..." dir="rtl">
+                            </div>
                         </div>
 
                         <div class="flex justify-end space-x-4 pt-4">
@@ -209,270 +242,267 @@
             </div>
         </main>
     </div>
-</div>
 
-<!-- Toast notification -->
-<div id="toast" class="fixed top-4 right-4 hidden">
-    <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center">
-        <i class="fas fa-check-circle mr-2"></i>
-        <span id="toastMessage">Demande envoyée avec succès!</span>
+    <!-- Toast notification -->
+    <div id="toast" class="fixed top-4 right-4 hidden">
+        <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span id="toastMessage">Demande envoyée avec succès!</span>
+        </div>
     </div>
-</div>
 
-<!-- Scripts -->
-<script src="https://unpkg.com/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
-<script src="https://unpkg.com/flatpickr@4.6.13/dist/l10n/fr.js"></script>
+    <!-- Scripts -->
+    <script src="https://unpkg.com/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+    <script src="https://unpkg.com/flatpickr@4.6.13/dist/l10n/fr.js"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', async function() {
-        // Récupérer les jours fériés depuis l'API
-        let allHolidays = [];
-        let holidaysData = {};
-
-        try {
-            const token = localStorage.getItem('token');
-            if (!token) throw new Error('Non authentifié');
-
-            const response = await fetch('http://localhost:8080/api/calendar/2025', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (!response.ok) throw new Error('Erreur lors de la récupération des jours fériés');
-
-            const data = await response.json();
-            holidaysData = data;
-
-            // Extraire toutes les dates fériées (nationales et religieuses)
-            const nationalHolidays = Object.values(data.nationalHolidays);
-
-            // Pour les fêtes religieuses qui peuvent durer plusieurs jours
-            const religiousHolidays = data.religiousHolidays.flatMap(holiday => {
-                const dates = [];
-                const startDate = new Date(holiday.startDate);
-                const endDate = new Date(holiday.endDate);
-
-                let currentDate = new Date(startDate);
-                while (currentDate <= endDate) {
-                    dates.push(currentDate.toISOString().split('T')[0]);
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
-                return dates;
-            });
-
-            allHolidays = [...nationalHolidays, ...religiousHolidays];
-
-            // Activer les champs de date maintenant que nous avons les données
-            document.getElementById('startDate').disabled = false;
-            document.getElementById('endDate').disabled = false;
-            document.getElementById('submitBtn').disabled = false;
-
-        } catch (error) {
-            console.error('Erreur:', error);
-            showError('Impossible de charger les jours fériés. Veuillez rafraîchir la page.');
-            return;
-        }
-
-        // Configuration du date picker
-        const datePickerOptions = {
-            locale: 'fr',
-            dateFormat: 'd/m/Y',
-            disable: [
-                function(date) {
-                    // Désactiver les weekends
-                    return (date.getDay() === 0 || date.getDay() === 6);
-                },
-                // Désactiver tous les jours fériés (nationaux + religieux)
-                function(date) {
-                    const dateStr = date.toISOString().split('T')[0];
-                    return allHolidays.includes(dateStr);
-                }
-            ],
-            onDayCreate: function(dObj, dStr, fp, dayElem) {
-                const date = new Date(dayElem.dateObj);
-                const dateStr = date.toISOString().split('T')[0];
-
-                // Marquer les jours fériés nationaux
-                const nationalHoliday = Object.entries(holidaysData.nationalHolidays).find(([name, date]) => date === dateStr);
-                if (nationalHoliday) {
-                    dayElem.classList.add('holiday');
-                    dayElem.title = nationalHoliday[0];
-                    return;
-                }
-
-                // Marquer les jours fériés religieux
-                const religiousHoliday = holidaysData.religiousHolidays.find(holiday => {
-                    const holidayStart = new Date(holiday.startDate).toISOString().split('T')[0];
-                    const holidayEnd = new Date(holiday.endDate).toISOString().split('T')[0];
-                    return dateStr >= holidayStart && dateStr <= holidayEnd;
-                });
-
-                if (religiousHoliday) {
-                    dayElem.classList.add('holiday');
-                    dayElem.title = religiousHoliday.name;
-                }
-
-                // Marquer les weekends
-                if (date.getDay() === 0 || date.getDay() === 6) {
-                    dayElem.classList.add('weekend');
-                }
-            }
-        };
-
-        const startDatePicker = flatpickr('#startDate', {
-            ...datePickerOptions,
-            minDate: 'today',
-            onChange: function(selectedDates, dateStr, instance) {
-                if (selectedDates.length > 0) {
-                    endDatePicker.set('minDate', selectedDates[0]);
-                    calculateDuration();
-                }
-            }
-        });
-
-        const endDatePicker = flatpickr('#endDate', {
-            ...datePickerOptions,
-            minDate: 'today',
-            onChange: function(selectedDates, dateStr, instance) {
-                calculateDuration();
-            }
-        });
-
-        // Calcul de la durée
-        function calculateDuration() {
-            const startDate = startDatePicker.selectedDates[0];
-            const endDate = endDatePicker.selectedDates[0];
-
-            if (!startDate || !endDate) return;
-
-            if (endDate < startDate) {
-                endDatePicker.clear();
-                showError('La date de fin doit être après la date de début');
-                return;
-            }
-
-            let duration = 0;
-            let currentDate = new Date(startDate);
-
-            while (currentDate <= endDate) {
-                const dayOfWeek = currentDate.getDay();
-                const dateStr = currentDate.toISOString().split('T')[0];
-
-                // Ne compter que les jours ouvrables non fériés
-                if (dayOfWeek !== 0 && dayOfWeek !== 6 && !allHolidays.includes(dateStr)) {
-                    duration++;
-                }
-
-                currentDate.setDate(currentDate.getDate() + 1);
-            }
-
-            if (duration > 22) {
-                showError('La durée maximale de congé est de 22 jours');
-                endDatePicker.clear();
-                document.getElementById('durationInfo').classList.add('hidden');
-                return;
-            }
-
-            document.getElementById('durationDays').textContent = duration;
-            document.getElementById('durationInfo').classList.remove('hidden');
-        }
-
-        // Gestion du formulaire
-        document.getElementById('leaveForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Envoi en cours...';
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Récupérer les jours fériés depuis l'API
+            let allHolidays = [];
+            let holidaysData = {};
 
             try {
                 const token = localStorage.getItem('token');
                 if (!token) throw new Error('Non authentifié');
 
-                const response = await fetch('http://localhost:8080/api/demandes-conge', {
-                    method: 'POST',
+                const response = await fetch('http://localhost:8080/api/calendar/2025', {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        dateDebut: startDatePicker.selectedDates[0].toISOString(),
-                        dateFin: endDatePicker.selectedDates[0].toISOString(),
-                        motif: document.getElementById('reason').value,
-                        duree: parseInt(document.getElementById('durationDays').textContent),
-                        remplacerPar: document.getElementById('remplacant').value
-                    })
+                        'Authorization': `Bearer ${token}`
+                    }
                 });
 
-                if (!response.ok) throw new Error('Erreur lors de la soumission');
+                if (!response.ok) throw new Error('Erreur lors de la récupération des jours fériés');
 
-                showToast('Demande envoyée avec succès!');
-                setTimeout(() => {
-                    window.location.href = 'Dash_ChefDep.html';
-                }, 2000);
+                const data = await response.json();
+                holidaysData = data;
+
+                // Extraire toutes les dates fériées (nationales et religieuses)
+                const nationalHolidays = Object.values(data.nationalHolidays);
+
+                // Pour les fêtes religieuses qui peuvent durer plusieurs jours
+                const religiousHolidays = data.religiousHolidays.flatMap(holiday => {
+                    const dates = [];
+                    const startDate = new Date(holiday.startDate);
+                    const endDate = new Date(holiday.endDate);
+
+                    let currentDate = new Date(startDate);
+                    while (currentDate <= endDate) {
+                        dates.push(currentDate.toISOString().split('T')[0]);
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    }
+                    return dates;
+                });
+
+                allHolidays = [...nationalHolidays, ...religiousHolidays];
+
+                // Activer les champs de date maintenant que nous avons les données
+                document.getElementById('startDate').disabled = false;
+                document.getElementById('endDate').disabled = false;
+                document.getElementById('submitBtn').disabled = false;
+
             } catch (error) {
-                showError(error.message);
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i> Soumettre';
+                console.error('Erreur:', error);
+                showError('Impossible de charger les jours fériés. Veuillez rafraîchir la page.');
+                return;
             }
-        });
 
-        // Bouton annuler
-        document.getElementById('cancelBtn').addEventListener('click', function() {
-            window.location.href = 'Dash_ChefDep.html';
-        });
+            // Configuration du date picker
+            const datePickerOptions = {
+                locale: 'fr',
+                dateFormat: 'd/m/Y',
+                disable: [
+                    function(date) {
+                        // Désactiver les weekends
+                        return (date.getDay() === 0 || date.getDay() === 6);
+                    },
+                    // Désactiver tous les jours fériés (nationaux + religieux)
+                    function(date) {
+                        const dateStr = date.toISOString().split('T')[0];
+                        return allHolidays.includes(dateStr);
+                    }
+                ],
+                onDayCreate: function(dObj, dStr, fp, dayElem) {
+                    const date = new Date(dayElem.dateObj);
+                    const dateStr = date.toISOString().split('T')[0];
 
-        // Déconnexion
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('refresh_token');
-            window.location.href = '../user/index.html';
-        });
+                    // Marquer les jours fériés nationaux
+                    const nationalHoliday = Object.entries(holidaysData.nationalHolidays).find(([name, date]) => date === dateStr);
+                    if (nationalHoliday) {
+                        dayElem.classList.add('holiday');
+                        dayElem.title = nationalHoliday[0];
+                        return;
+                    }
 
-        // User menu toggle
-        const userMenuButton = document.getElementById('userMenuBtn');
-        const userMenu = document.getElementById('userMenu');
+                    // Marquer les jours fériés religieux
+                    const religiousHoliday = holidaysData.religiousHolidays.find(holiday => {
+                        const holidayStart = new Date(holiday.startDate).toISOString().split('T')[0];
+                        const holidayEnd = new Date(holiday.endDate).toISOString().split('T')[0];
+                        return dateStr >= holidayStart && dateStr <= holidayEnd;
+                    });
 
-        if (userMenuButton && userMenu) {
-            userMenuButton.addEventListener('click', () => {
-                const expanded = userMenuButton.getAttribute('aria-expanded') === 'true';
-                userMenuButton.setAttribute('aria-expanded', !expanded);
-                userMenu.classList.toggle('hidden');
-            });
+                    if (religiousHoliday) {
+                        dayElem.classList.add('holiday');
+                        dayElem.title = religiousHoliday.name;
+                    }
 
-            // Close the menu when clicking outside
-            document.addEventListener('click', (event) => {
-                if (!userMenuButton.contains(event.target) && !userMenu.contains(event.target)) {
-                    userMenuButton.setAttribute('aria-expanded', 'false');
-                    userMenu.classList.add('hidden');
+                    // Marquer les weekends
+                    if (date.getDay() === 0 || date.getDay() === 6) {
+                        dayElem.classList.add('weekend');
+                    }
+                }
+            };
+
+            const startDatePicker = flatpickr('#startDate', {
+                ...datePickerOptions,
+                minDate: 'today',
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates.length > 0) {
+                        endDatePicker.set('minDate', selectedDates[0]);
+                        calculateDuration();
+                    }
                 }
             });
-        }
 
-        // Fonctions d'affichage des messages
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMessage').textContent = message;
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 3000);
-        }
+            const endDatePicker = flatpickr('#endDate', {
+                ...datePickerOptions,
+                minDate: 'today',
+                onChange: function(selectedDates, dateStr, instance) {
+                    calculateDuration();
+                }
+            });
 
-        function showError(message) {
-            const toast = document.getElementById('toast');
-            toast.querySelector('#toastMessage').textContent = message;
-            toast.classList.remove('hidden', 'bg-green-500');
-            toast.classList.add('bg-gray-500');
-            setTimeout(() => {
-                toast.classList.add('hidden');
-                toast.classList.remove('bg-gray-500');
-                toast.classList.add('bg-green-500');
-            }, 3000);
-        }
+            // Calcul de la durée
+            function calculateDuration() {
+                const startDate = startDatePicker.selectedDates[0];
+                const endDate = endDatePicker.selectedDates[0];
+
+                if (!startDate || !endDate) return;
+
+                if (endDate < startDate) {
+                    endDatePicker.clear();
+                    showError('La date de fin doit être après la date de début');
+                    return;
+                }
+
+                let duration = 0;
+                let currentDate = new Date(startDate);
+
+                while (currentDate <= endDate) {
+                    const dayOfWeek = currentDate.getDay();
+                    const dateStr = currentDate.toISOString().split('T')[0];
+
+                    // Ne compter que les jours ouvrables non fériés
+                    if (dayOfWeek !== 0 && dayOfWeek !== 6 && !allHolidays.includes(dateStr)) {
+                        duration++;
+                    }
+
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+
+                if (duration > 22) {
+                    showError('La durée maximale de congé est de 22 jours');
+                    endDatePicker.clear();
+                    document.getElementById('durationInfo').classList.add('hidden');
+                    return;
+                }
+
+                document.getElementById('durationDays').textContent = duration;
+                document.getElementById('durationInfo').classList.remove('hidden');
+            }
+
+            // Gestion du formulaire
+            document.getElementById('leaveForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Envoi en cours...';
+
+                try {
+                    const token = localStorage.getItem('token');
+                    if (!token) throw new Error('Non authentifié');
+
+                    const response = await fetch('http://localhost:8080/api/demandes-conge', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            dateDebut: startDatePicker.selectedDates[0].toISOString(),
+                            dateFin: endDatePicker.selectedDates[0].toISOString(),
+                            motif: document.getElementById('reason').value,
+                            duree: parseInt(document.getElementById('durationDays').textContent),
+                            remplacerPar: document.getElementById('remplacant').value,
+                            remplacantArab: document.getElementById('remplacantArab').value
+                        })
+                    });
+
+                    if (!response.ok) throw new Error('Erreur lors de la soumission');
+
+                    showToast('Demande envoyée avec succès!');
+                    setTimeout(() => {
+                        window.location.href = 'historiqueChef.html';
+                    }, 2000);
+                } catch (error) {
+                    showError(error.message);
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i> Soumettre';
+                }
+            });
+
+            // Bouton annuler
+            document.getElementById('cancelBtn').addEventListener('click', function() {
+                window.location.href = 'historique-conges.html';
+            });
+
+            // Logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('refresh_token');
+        window.location.href = '../user/index.html';
     });
 
+            // User menu toggle
+            const userMenuButton = document.getElementById('userMenuBtn');
+            const userMenu = document.getElementById('userMenu');
 
+            if (userMenuButton && userMenu) {
+                userMenuButton.addEventListener('click', () => {
+                    const expanded = userMenuButton.getAttribute('aria-expanded') === 'true';
+                    userMenuButton.setAttribute('aria-expanded', !expanded);
+                    userMenu.classList.toggle('hidden');
+                });
 
-</script>
+                // Close menu when clicking outside
+                document.addEventListener('click', (event) => {
+                    if (!userMenuButton.contains(event.target) && !userMenu.contains(event.target)) {
+                        userMenuButton.setAttribute('aria-expanded', 'false');
+                        userMenu.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Fonctions d'affichage des messages
+            function showToast(message) {
+                const toast = document.getElementById('toast');
+                document.getElementById('toastMessage').textContent = message;
+                toast.classList.remove('hidden');
+                setTimeout(() => toast.classList.add('hidden'), 3000);
+            }
+
+            function showError(message) {
+                const toast = document.getElementById('toast');
+                toast.querySelector('#toastMessage').textContent = message;
+                toast.classList.remove('hidden', 'bg-green-500');
+                toast.classList.add('bg-gray-500');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.classList.remove('bg-gray-500');
+                    toast.classList.add('bg-green-500');
+                }, 3000);
+            }
+        });
+    </script>
 </body>
 </html>
