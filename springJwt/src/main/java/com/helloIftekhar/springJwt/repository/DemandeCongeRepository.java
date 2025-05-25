@@ -131,4 +131,3 @@ List<DemandeConge> findByIdEmployeeIn(@Param("employeeIds") List<Long> employeeI
     Page<DemandeConge> findByIdEmployeeIn(@Param("employeeIds") List<Long> employeeIds,
                                           Pageable pageable);
 }
-

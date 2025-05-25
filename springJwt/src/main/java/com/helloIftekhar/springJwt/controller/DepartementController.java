@@ -1,6 +1,7 @@
 package com.helloIftekhar.springJwt.controller;
 
 import com.helloIftekhar.springJwt.dto.DepartementDTO;
+import com.helloIftekhar.springJwt.dto.EmployeesByServiceDTO;
 import com.helloIftekhar.springJwt.service.DepartementService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -67,6 +68,17 @@ public class DepartementController {
     public ResponseEntity<Integer> getNombreEmployesParDepartement(@PathVariable Long id) {
         int nombre = departementService.getNombreEmployesByDepartementId(id);
         return ResponseEntity.ok(nombre);
+    }
+
+
+    //nouuveaux
+
+    @GetMapping("/{departementId}/employes-par-service")
+    public ResponseEntity<List<EmployeesByServiceDTO>> getEmployeesCountByService(
+            @PathVariable Long departementId) {
+
+        List<EmployeesByServiceDTO> result = departementService.getEmployeesCountByService(departementId);
+        return ResponseEntity.ok(result);
     }
 
 }

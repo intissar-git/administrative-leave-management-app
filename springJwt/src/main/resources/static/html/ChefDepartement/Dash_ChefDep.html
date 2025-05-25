@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -7,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
           theme: {
@@ -65,6 +68,9 @@
         .rejected-card {
             border-left-color: #EF4444;
         }
+        .processing-card {
+            border-left-color: #3B82F6;
+        }
         .holiday, .weekend {
             color: #9ca3af !important;
             font-weight: normal;
@@ -73,6 +79,36 @@
         }
         #toast {
             transition: all 0.3s ease;
+        }
+        .chart-container {
+            height: 400px;
+            position: relative;
+        }
+        .recent-requests {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-approved {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+        .status-pending {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+        .status-rejected {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+        .status-processing {
+            background-color: #DBEAFE;
+            color: #1E40AF;
         }
     </style>
 </head>
@@ -293,6 +329,20 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-1 gap-8 mb-8">
+                    <!-- Graphique en cercle des demandes de congé -->
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                            <h3 class="text-lg font-medium leading-6 text-gray-900">Répartition des demandes de congé</h3>
+                        </div>
+                        <div class="px-4 py-5 sm:p-6">
+                            <div class="chart-container">
+                                <canvas id="leaveRequestsPieChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -365,6 +415,108 @@
         }, 3000);
     }
 
+    // Format date for display
+    function formatDateForDisplay(dateString) {
+        if (!dateString) return 'N/A';
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        const date = new Date(dateString);
+        return date.toLocaleDateString('fr-FR', options);
+    }
+
+    // Get status badge class and text
+    function getStatusBadge(status) {
+        switch(status) {
+            case 'APPROUVE':
+                return { class: 'status-approved', text: 'Approuvé' };
+            case 'EN_ATTENTE':
+                return { class: 'status-pending', text: 'En attente' };
+            case 'REFUSE':
+                return { class: 'status-rejected', text: 'Rejeté' };
+            case 'EN_COURS_DE_TRAITEMENT':
+                return { class: 'status-processing', text: 'En traitement' };
+            default:
+                return { class: 'status-pending', text: status };
+        }
+    }
+
+    // Fonction pour créer le graphique en cercle
+    function createLeaveRequestsPieChart(data) {
+        const ctx = document.getElementById('leaveRequestsPieChart').getContext('2d');
+
+        // Couleurs personnalisées
+        const colors = {
+            approuvees: '#10B981',
+            enAttente: '#F59E0B',
+            refusees: '#EF4444'
+        };
+
+        // Données pour le graphique
+        const chartData = {
+            labels: ['Approuvées', 'En attente', 'Rejetées'],
+            datasets: [{
+                data: [
+                    data.approuvees || 0,
+                    data.enAttente || 0,
+                    data.refusees || 0
+                ],
+                backgroundColor: [
+                    colors.approuvees,
+                    colors.enAttente,
+                    colors.refusees
+                ],
+                borderColor: [
+                    '#fff',
+                    '#fff',
+                    '#fff'
+                ],
+                borderWidth: 2
+            }]
+        };
+
+        // Options du graphique
+        const options = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        font: {
+                            family: 'Inter',
+                            size: 14
+                        },
+                        padding: 20,
+                        usePointStyle: true,
+                        pointStyle: 'circle'
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            const total = context.dataset.data.reduce((acc, curr) => acc + curr, 0);
+                            const percentage = total > 0 ? Math.round((context.raw / total) * 100) : 0;
+                            label += context.raw + ' (' + percentage + '%)';
+                            return label;
+                        }
+                    }
+                }
+            },
+            cutout: '60%',
+            radius: '80%'
+        };
+
+        // Créer le graphique
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: chartData,
+            options: options
+        });
+    }
+
     // Fetch dashboard data
     async function fetchDashboardData() {
         try {
@@ -390,6 +542,9 @@
             document.getElementById('approvedLeaves').textContent = chefsStats.approuvees || '0';
             document.getElementById('pendingLeaves').textContent = chefsStats.enAttente || '0';
             document.getElementById('rejectedLeaves').textContent = chefsStats.refusees || '0';
+
+            // Créer le graphique en cercle avec les données
+            createLeaveRequestsPieChart(chefsStats);
 
         } catch (error) {
             console.error('Error fetching dashboard data:', error);
@@ -445,3 +600,4 @@
 </script>
 </body>
 </html>
+

@@ -1,8 +1,10 @@
 package com.helloIftekhar.springJwt.service;
 
 import com.helloIftekhar.springJwt.dto.DepartementDTO;
+import com.helloIftekhar.springJwt.dto.EmployeesByServiceDTO;
 import com.helloIftekhar.springJwt.model.Departement;
 import com.helloIftekhar.springJwt.repository.DepartementRepository;
+import com.helloIftekhar.springJwt.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,11 @@ import java.util.stream.Collectors;
 public class DepartementService {
 
     private final DepartementRepository departementRepository;
+    private final UserRepository userRepository;
 
-    public DepartementService(DepartementRepository departementRepository) {
+    public DepartementService(DepartementRepository departementRepository, UserRepository userRepository) {
         this.departementRepository = departementRepository;
+        this.userRepository = userRepository;
     }
 
     public DepartementDTO createDepartement(DepartementDTO departementDTO) {
@@ -136,6 +140,17 @@ public class DepartementService {
     }
 
 
+//nouuuveaux
+
+
+    public List<EmployeesByServiceDTO> getEmployeesCountByService(Long departementId) {
+        // Vérifier si le département existe
+        if (!departementRepository.existsById(departementId)) {
+            throw new RuntimeException("Département non trouvé avec l'id: " + departementId);
+        }
+
+        return userRepository.countEmployeesByServiceInDepartement(departementId);
+    }
 
 
 }

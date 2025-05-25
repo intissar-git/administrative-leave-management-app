@@ -1,6 +1,7 @@
 
 package com.helloIftekhar.springJwt.repository;
 
+import com.helloIftekhar.springJwt.dto.EmployeesByServiceDTO;
 import com.helloIftekhar.springJwt.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -57,5 +58,16 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // Correction dans UserRepository.java
     @Query("SELECT u FROM User u WHERE u.departement.id = :departementId AND u.role = 'CHEF_SERVICE'")
     List<User> findChefsServiceByDepartementId(@Param("departementId") Long departementId);
+
+
+
+    //nouveauxxx
+
+    @Query("SELECT new com.helloIftekhar.springJwt.dto.EmployeesByServiceDTO(s.id, s.nomService, COUNT(u.id)) " +
+            "FROM User u " +
+            "JOIN u.service s " +
+            "WHERE s.departement.id = :departementId " +
+            "GROUP BY s.id, s.nomService")
+    List<EmployeesByServiceDTO> countEmployeesByServiceInDepartement(@Param("departementId") Long departementId);
 
 }

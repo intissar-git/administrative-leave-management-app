@@ -10,6 +10,8 @@ import com.helloIftekhar.springJwt.model.User;
 import com.helloIftekhar.springJwt.repository.DemandeCongeRepository;
 import com.helloIftekhar.springJwt.repository.UserRepository;
 import com.helloIftekhar.springJwt.service.DemandeCongeService;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.AccessType;
 import org.springframework.http.ResponseEntity;
@@ -184,5 +186,6 @@ public class DemandeCongeController {
         DemandeStatsDTO stats = demandeCongeService.getStatsDemandesChefsByDepartement(departementId);
         return ResponseEntity.ok(stats);
     }
+
 
 }
