@@ -296,7 +296,7 @@
                             Demandes refusées
                         </button>
                         <button class="tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium"
-                                data-filter="EN_COURT_DE_TRAITEMENT">
+                                data-filter="EN_COURS_DE_TRAITEMENT">
                             En cours de traitement
                         </button>
                     </nav>
@@ -610,13 +610,13 @@
                        return 'status-approved';
                    } else if (request.statut === 'REFUSE') {
                        return 'status-rejected';
-                   } else if (request.statut === 'EN_COURT_DE_TRAITEMENT') {
+                   } else if (request.statut === 'EN_COURS_DE_TRAITEMENT') {
                        return 'status-pending';
                    } else {
                        return 'bg-gray-100 text-gray-800';
                    }
                })()}">
-               ${request.statut === 'EN_COURT_DE_TRAITEMENT' ? 'EN COURS DE TRAITEMENT' : request.statut}
+              ${request.statut} <!-- Affiche directement la valeur du statut -->
            </span>
                     </td>
 
@@ -681,7 +681,7 @@
             requestDetailModal.classList.remove('hidden');
 
             // Set visibility of action buttons based on status
-            if (request.statut === 'EN_COURT_DE_TRAITEMENT') {
+            if (request.statut === 'EN_COURS_DE_TRAITEMENT') {
                 approveRequestBtn.classList.remove('hidden');
                 rejectRequestBtn.classList.remove('hidden');
             } else {
@@ -692,29 +692,33 @@
 
         // Filter requests based on search and tab selection
         function filterRequests() {
-            const searchTerm = searchInput.value.toLowerCase();
-            const activeTab = document.querySelector('.tab-btn.active')?.dataset.filter || 'all';
+    const searchTerm = searchInput.value.toLowerCase();
+    const activeTab = document.querySelector('.tab-btn.active')?.dataset.filter || 'all';
 
-            filteredRequests = allRequests.filter(request => {
-                const matchesSearch =
-                    (request.employeeName?.toLowerCase().includes(searchTerm)) ||
-                    (request.role?.toLowerCase().includes(searchTerm)) || // Use request.role
-                    (formatDate(request.dateDebut).toLowerCase().includes(searchTerm)) ||
-                    (request.statut?.toLowerCase().includes(searchTerm)) ||
-                    (formatDate(request.dateFin).toLowerCase().includes(searchTerm));
-
-                const matchesTab =
-                    activeTab === 'all' ||
-                    request.statut === activeTab;
-
-                return matchesSearch && matchesTab;
-            });
-
-            currentPage = 1;
-            renderRequests();
-            updatePagination();
+    filteredRequests = allRequests.filter(request => {
+        // Exclure les demandes avec le statut "EN_ATTENTE" du filtre "all"
+        if (activeTab === 'all' && request.statut === 'EN_ATTENTE') {
+            return false;
         }
 
+        const matchesSearch =
+            (request.employeeName?.toLowerCase().includes(searchTerm)) ||
+            (request.role?.toLowerCase().includes(searchTerm)) ||
+            (formatDate(request.dateDebut).toLowerCase().includes(searchTerm)) ||
+            (request.statut?.toLowerCase().includes(searchTerm)) ||
+            (formatDate(request.dateFin).toLowerCase().includes(searchTerm));
+
+        const matchesTab =
+            activeTab === 'all' ||
+            request.statut === activeTab;
+
+        return matchesSearch && matchesTab;
+    });
+
+    currentPage = 1;
+    renderRequests();
+    updatePagination();
+}
         // Update pagination controls
         function updatePagination() {
             const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
@@ -827,7 +831,7 @@
                         'Date Début': formatDate(request.dateDebut),
                         'Date Fin': formatDate(request.dateFin),
                         'Durée (jours)': request.duree,
-                        'Statut': request.statut === 'EN_COURT_DE_TRAITEMENT' ? 'EN COURS DE TRAITEMENT' : request.statut,
+                        'Statut': request.statut,
                         'Motif': request.motif || 'N/A'
                     }));
 
