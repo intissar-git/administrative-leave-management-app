@@ -22,13 +22,21 @@ public class DemandeCongeResponseDTO {
     private String motifRefus;
     private String remplacantArab;
 
+    private String nomArab;
+    private String prenomArab;
+    private String gradeArab;
+    private String echelleArab;
+    private int soldeGlobal;
+
+
 
     public DemandeCongeResponseDTO() {
     }
 
     public DemandeCongeResponseDTO(Long id, Long idEmployee, String employeeName, String departement,
                                    Date dateCreation, Date dateDebut, Date dateFin,
-                                   String motif, String statut, int duree, String remplacerPar,String role,String serviceName,String remplacantArab) {
+                                   String motif, String statut, int duree, String remplacerPar,String role,String serviceName,String remplacantArab,String nomArab,String prenomArab,String gradeArab,String echelleArab,int soldeGlobal
+) {
         this.id = id;
         this.idEmployee = idEmployee;
         this.employeeName = employeeName;
@@ -43,6 +51,13 @@ public class DemandeCongeResponseDTO {
         this.role=role;
         this.serviceName=serviceName;
         this.remplacantArab=remplacantArab;
+        this.nomArab=nomArab;
+        this.prenomArab=prenomArab;
+        this.gradeArab=gradeArab;
+        this.echelleArab=echelleArab;
+        this.soldeGlobal=soldeGlobal;
+        ;
+
 
     }
     // Getters et Setters

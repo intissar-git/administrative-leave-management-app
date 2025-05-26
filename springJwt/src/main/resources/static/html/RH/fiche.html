@@ -7,13 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        /* Custom styles for Arabic text alignment if needed */
-        /* The 'dir="rtl"' attribute on parent elements handles most of this */
-       .arabic-text {
+        .arabic-text {
             direction: rtl;
         }
-        /* Ensure text justification for main paragraphs as seen in the original document */
-       .main-content-paragraph {
+        .main-content-paragraph {
             text-align: justify;
         }
     </style>
@@ -36,7 +33,6 @@
             />
         </div>
 
-
         <div class="text-left">
             <p class="text-sm text-cyan-700 font-bold">Royaume du Maroc</p>
             <p class="text-sm text-cyan-700 font-bold">Agence du Bassin Hydraulique</p>
@@ -50,9 +46,9 @@
         <div class="flex justify-between mb-1" style="margin-bottom: 40px; " >
             <div class="flex items-start">
                 <p>رقم :</p>
-                <p class="mr-14"> ك.ش.إ/4/2025</p>
+                <p class="mr-14" id="demande-numero">ك.ش.إ/4/2025</p>
             </div>
-            <p class="text-left mr-14 ml-0">    بني ملال، في : 02 ماي 2025   </p>
+            <p class="text-left mr-14 ml-0" id="current-date">بني ملال، في : 02 ماي 2025</p>
         </div>
 
         <h2 class="text-center font-bold text-lg mb-4">مقـــــــــــــرر <br/> عطلة إدارية</h2>
@@ -77,27 +73,27 @@
             2010 وحسب ما تم تغييره وتتميمه بتاريخ 27 ماي 2014.
         </p>
 
-        <p class="mb-5 leading-relaxed main-content-paragraph">
+        <p class="mb-5 leading-relaxed main-content-paragraph" id="demande-info">
             بناء على الطلب المقدم من طرف السيدة.................... بتاريخ 02 ماي 2025.
         </p>
 
         <h3 class="font-bold text-center mb-4">يقرر ما يلي:</h3>
 
-        <p class="mb-3 leading-relaxed main-content-paragraph">
-            <strong>الفصل الأول:</strong> ابتداء من 05 ماي 2025، تمنح رخصة إدارية للسيدة............... تقنية من
+        <p class="mb-3 leading-relaxed main-content-paragraph" id="article-1">
+            <strong>الفصل الأول:</strong> ابتداء من 05 ماي 2025، تمنح رخصة إداريةللسيد(ة)............... تقنية من
             الدرجة الرابعة، بوكالة الحوض المائي لأم الربيع لمدة خمسة (05) أيام عمل تطابق حقها في العطلة لسنة
             2024.
         </p>
 
-        <p class="mb-3 leading-relaxed main-content-paragraph">
+        <p class="mb-3 leading-relaxed main-content-paragraph" id="article-2">
             <strong>الفصل الثاني:</strong> تحتفظ المعنية بالأمر ب (14) يوم عمل كبقية حقها في العطلة برسم سنة 2024 و (22)
             يوم عمل برسم سنة 2025.
         </p>
 
-        <p class="mb-5 leading-relaxed main-content-paragraph">
+        <p class="mb-5 leading-relaxed main-content-paragraph" id="article-3">
             <strong>الفصل الثالث:</strong> ينوب عن المعنية بالأمر طيلة الرخصة السيد(ة)...................
         </p>
-    </div >
+    </div>
 
     <div class="border-t px-4 py-2 flex flex-wrap justify-between text-xs text-cyan-700">
         <div class="flex flex-col">
@@ -132,6 +128,99 @@
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        // Vérifier le token JWT
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        // Récupérer l'ID de la demande depuis l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const demandeId = urlParams.get('id');
+
+        if (!demandeId) {
+            alert('ID de demande non spécifié dans l\'URL');
+            return;
+        }
+
+        try {
+            // Récupérer les données de la demande
+            const response = await fetch(`http://localhost:8080/api/demandes-conge/all-with-employee-info`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    localStorage.removeItem('token');
+                    window.location.href = 'index.html';
+                    return;
+                }
+                throw new Error('Erreur réseau');
+            }
+
+            const data = await response.json();
+            const demande = data.find(item => item.id == demandeId);
+
+            if (!demande) {
+                alert('Demande non trouvée');
+                return;
+            }
+
+            // Fonction pour formater les dates en arabe
+            const formatDateToArabic = (dateStr) => {
+                if (!dateStr) return 'غير محدد';
+
+                const date = new Date(dateStr);
+                const day = date.getDate();
+                const month = date.getMonth() + 1;
+                const year = date.getFullYear();
+
+                const monthNames = [
+                    'يناير', 'فبراير', 'مارس', 'أبريل', 'ماي', 'يونيو',
+                    'يوليوز', 'غشت', 'شتنبر', 'أكتوبر', 'نونبر', 'دجنبر'
+                ];
+
+                return `${day} ${monthNames[month - 1]} ${year}`;
+            };
+
+            // Date actuelle
+            const currentDate = new Date();
+            const currentDay = currentDate.getDate();
+            const currentMonth = currentDate.getMonth() + 1;
+            const currentYear = currentDate.getFullYear();
+            const monthNames = [
+                'يناير', 'فبراير', 'مارس', 'أبريل', 'ماي', 'يونيو',
+                'يوليوز', 'غشت', 'شتنبر', 'أكتوبر', 'نونبر', 'دجنبر'
+            ];
+
+            // Mettre à jour les éléments avec les données dynamiques
+            document.getElementById('demande-numero').textContent = `ك.ش.إ/${demandeId}/${currentYear}`;
+            document.getElementById('current-date').textContent = `بني ملال، في : ${currentDay} ${monthNames[currentMonth - 1]} ${currentYear}`;
+
+            document.getElementById('demande-info').innerHTML =
+                `بناء على الطلب المقدم من طرف السيدة <strong>${demande.prenomArab} ${demande.nomArab}</strong> بتاريخ ${formatDateToArabic(demande.dateCreation)}.`;
+
+            document.getElementById('article-1').innerHTML =
+                `<strong>الفصل الأول:</strong> ابتداء من ${formatDateToArabic(demande.dateDebut)}، تمنح رخصة إدارية للسيد(ة) <strong>${demande.prenomArab} ${demande.nomArab}</strong> ${demande.gradeArab || 'تقنية'} من
+                الدرجة ${demande.echelleArab || 'الرابعة'}، بوكالة الحوض المائي لأم الربيع لمدة (${demande.duree}) أيام عمل تطابق حقها في العطلة لسنة
+                ${currentYear}.`;
+
+            document.getElementById('article-2').innerHTML =
+                `<strong>الفصل الثاني:</strong> تحتفظ المعنية بالأمر ب (${demande.soldeGlobal}) يوم عمل كبقية حقها في العطلة برسم سنة ${currentYear}.`;
+
+            document.getElementById('article-3').innerHTML =
+                `<strong>الفصل الثالث:</strong> ينوب عن المعنية بالأمر طيلة الرخصة السيد(ة) <strong>${demande.remplacantArab || '...................'}</strong>`;
+
+        } catch (error) {
+            console.error('Erreur:', error);
+            alert('Une erreur est survenue lors du chargement des données');
+        }
+    });
+
     document.getElementById('retourBtn').addEventListener('click', function() {
         window.location.href = 'leave-requests.html';
     });
@@ -141,9 +230,8 @@
         const pdf = new jsPDF();
         const ficheAdministrative = document.getElementById('fiche-administrative');
 
-        // Options pour html2canvas (améliorer la qualité si nécessaire)
         const options = {
-            scale: 2, // Augmenter l'échelle pour une meilleure résolution
+            scale: 2,
             logging: false,
             useCORS: true
         };

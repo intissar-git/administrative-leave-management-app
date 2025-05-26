@@ -4,6 +4,7 @@ import com.helloIftekhar.springJwt.dto.DemandeCongeResponseDTO;
 import com.helloIftekhar.springJwt.dto.StatutDemande;
 import com.helloIftekhar.springJwt.model.DemandeConge;
 import com.helloIftekhar.springJwt.model.User;
+import jakarta.persistence.Column;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -79,14 +80,20 @@ public interface DemandeCongeRepository extends JpaRepository<DemandeConge, Long
                                    @Param("motifRefus") String motifRefus);
 
 
+
     @Query("SELECT new com.helloIftekhar.springJwt.dto.DemandeCongeResponseDTO(" +
             "d.id, d.idEmployee, CONCAT(u.firstName, ' ', u.lastName), dep.nomDepartement, " +
-            "d.dateCreation, d.dateDebut, d.dateFin, d.motif, d.statut, d.duree, d.remplacerPar, u.role, s.nomService,d.remplacantArab) " +
+            "d.dateCreation, d.dateDebut, d.dateFin, d.motif, d.statut, d.duree, " +
+            "d.remplacerPar, u.role, s.nomService, d.remplacantArab, u.nomArab, " +
+            "u.prenomArab, u.gradeArab, u.echelleArab, sc.soldeGlobal) " +
             "FROM DemandeConge d " +
             "JOIN User u ON d.idEmployee = u.id " +
             "LEFT JOIN u.departement dep " +
-            "LEFT JOIN u.service s")
+            "LEFT JOIN u.service s " +
+            "LEFT JOIN SoldeConge sc ON sc.employee = u")
     List<DemandeCongeResponseDTO> findAllWithEmployeeInfo();
+
+
     Optional<DemandeConge> findByIdAndIdEmployee(Long id, Long idEmployee);
 
     // Dans DemandeCongeRepository.java
