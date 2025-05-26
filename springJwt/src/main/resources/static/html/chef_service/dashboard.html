@@ -13,25 +13,34 @@
                 extend: {
                     colors: {
                         primary: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            200: '#bae6fd',
-                            300: '#7dd3fc',
-                            400: '#38bdf8',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            800: '#075985',
-                            900: '#0c4a6e',
+                            50: '#EFF6FF',
+                            100: '#DBEAFE',
+                            200: '#BFDBFE',
+                            300: '#93C5FD',
+                            400: '#60A5FA',
+                            500: '#3B82F6',
+                            600: '#2563EB',
+                            700: '#1D4ED8',
+                            800: '#1E40AF',
+                            900: '#1E3A8A',
                         },
                         secondary: {
-                            500: '#10b981'
+                            50: '#F0FDFA',
+                            100: '#CCFBF1',
+                            200: '#99F6E4',
+                            300: '#5EEAD4',
+                            400: '#2DD4BF',
+                            500: '#14B8A6',
+                            600: '#0D9488',
+                            700: '#0F766E',
+                            800: '#115E59',
+                            900: '#134E4A',
                         },
                         danger: {
-                            500: '#ef4444'
+                            500: '#EF4444'
                         },
                         warning: {
-                            500: '#f59e0b'
+                            500: '#F59E0B'
                         }
                     },
                     fontFamily: {
@@ -41,10 +50,57 @@
             }
         }
     </script>
+    <style>
+        .stat-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .employees-card {
+            border-left-color: #6366F1;
+        }
+        .total-card {
+            border-left-color: #3B82F6;
+        }
+        .pending-card {
+            border-left-color: #F59E0B;
+        }
+        .rejected-card {
+            border-left-color: #EF4444;
+        }
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-approved {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+        .status-pending {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+        .status-rejected {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+        .recent-requests {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 font-sans">
 <div class="min-h-screen flex flex-col">
-
     <!-- Navigation -->
     <nav class="bg-white shadow-sm border-b border-gray-200">
         <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,7 +120,6 @@
                 <div class="flex items-center">
                     <div class="relative">
                         <button id="userMenuBtn" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500" aria-expanded="false">
-                            <span class="sr-only">Ouvrir le menu utilisateur</span>
                             <div class="flex items-center">
                                 <div class="h-8 w-8 rounded-full bg-primary-700 flex items-center justify-center text-white">
                                     <span id="userInitials">CS</span>
@@ -76,8 +131,12 @@
                             </div>
                         </button>
                         <div id="userMenu" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu">
-                            <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Votre profil</a>
-                            <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Déconnexion</a>
+                            <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                                <i class="fas fa-user-circle mr-2"></i>Votre profil
+                            </a>
+                            <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Déconnexion
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -90,57 +149,33 @@
         <div class="bg-white shadow-sm border-r border-gray-200 w-64 hidden md:block">
             <div class="h-full flex flex-col">
                 <nav class="flex-1 py-4 px-2 space-y-1">
-
                     <a href="dashboard.html" class="bg-primary-50 text-primary-700 hover:bg-primary-100 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-gray-600 mr-3 h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="7" height="9"/>
-                            <rect x="14" y="3" width="7" height="5"/>
-                            <rect x="14" y="12" width="7" height="9"/>
-                            <rect x="3" y="16" width="7" height="5"/>
-                        </svg>
+                        <i class="fas fa-tachometer-alt text-primary-700 mr-3"></i>
                         Tableau de bord
                     </a>
 
                     <a href="calendar.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-gray-600 mr-3 h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
-                            <line x1="16" x2="16" y1="2" y2="6"/>
-                            <line x1="8" x2="8" y1="2" y2="6"/>
-                            <line x1="3" x2="21" y1="10" y2="10"/>
-                        </svg>
+                        <i class="fas fa-calendar-alt text-gray-500 group-hover:text-gray-600 mr-3"></i>
                         Configuration du Calendrier
                     </a>
+
                     <a href="employees.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-gray-600 mr-3 h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                        </svg>
-                        voir les utilisateurs
+                        <i class="fas fa-users text-gray-500 group-hover:text-gray-600 mr-3"></i>
+                        Voir les utilisateurs
                     </a>
 
                     <a href="historique-conges.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-gray-600 mr-3 h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-                        </svg>
-                        Historique des congees
+                        <i class="fas fa-history text-gray-500 group-hover:text-gray-600 mr-3"></i>
+                        Historique des congés
                     </a>
+
                     <a href="demande_coneege.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-gray-600 mr-3 h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
-                            <line x1="16" x2="16" y1="2" y2="6"></line>
-                            <line x1="8" x2="8" y1="2" y2="6"></line>
-                            <line x1="3" x2="21" y1="10" y2="10"></line>
-                        </svg>
+                        <i class="fas fa-file-signature text-gray-500 group-hover:text-gray-600 mr-3"></i>
                         Gestion des demandes
                     </a>
+
                     <a href="profile.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-gray-600 mr-3 h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                            <polyline points="3.29 7 12 12 20.71 7"></polyline>
-                            <line x1="12" y1="22" y2="12" x2="12"></line>
-                        </svg>
+                        <i class="fas fa-id-card text-gray-500 group-hover:text-gray-600 mr-3"></i>
                         Mon Profil
                     </a>
                 </nav>
@@ -149,58 +184,133 @@
 
         <!-- Main Content -->
         <div class="flex-1 p-8">
-            <div class="mb-8">
-                <h1 class="text-2xl font-bold text-gray-800">Tableau de bord</h1>
-                <p class="text-gray-600">Bienvenue sur votre espace chef de service</p>
+            <div class="mb-8 flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">Tableau de bord</h1>
+                    <p class="text-gray-600">Bienvenue sur votre espace chef de service</p>
+                </div>
+                <div class="text-sm text-gray-500">
+                    <i class="fas fa-calendar-alt mr-1"></i>
+                    <span id="currentDate"></span>
+                </div>
             </div>
 
             <!-- Stats Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="bg-white rounded-lg shadow p-6 flex items-center">
-                    <div class="p-3 rounded-full bg-primary-100 text-primary-700 mr-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
+                <!-- Employés dans mon service -->
+                <div class="stat-card employees-card bg-white rounded-lg shadow overflow-hidden">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-indigo-100 rounded-full p-3">
+                                <i class="fas fa-users text-indigo-600 text-xl"></i>
+                            </div>
+                            <div class="ml-5">
+                                <dt class="text-sm font-medium text-gray-500 truncate">
+                                    Employés dans</br>
+                                    mon service
+                                </dt>
+                                <dd class="flex items-baseline">
+                                    <div id="employeeCount" class="text-2xl font-semibold text-gray-900">
+                                        -
+                                    </div>
+                                </dd>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">Employés dans mon service</h3>
-                        <p id="employeeCount" class="text-2xl font-semibold text-gray-900">-</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow p-6 flex items-center">
-                    <div class="p-3 rounded-full bg-secondary-100 text-secondary-500 mr-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">Demandes totales</h3>
-                        <p id="totalDemandes" class="text-2xl font-semibold text-gray-900">-</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-lg shadow p-6 flex items-center">
-                    <div class="p-3 rounded-full bg-warning-100 text-warning-500 mr-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">En attente</h3>
-                        <p id="enAttente" class="text-2xl font-semibold text-gray-900">-</p>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6">
+                        <div class="text-sm">
+                            <a href="employees.html" class="font-medium text-indigo-600 hover:text-indigo-500 flex items-center">
+                                <span>Voir les employés</span>
+                                <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg shadow p-6 flex items-center">
-                    <div class="p-3 rounded-full bg-danger-100 text-danger-500 mr-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                <!-- Demandes totales -->
+                <div class="stat-card total-card bg-white rounded-lg shadow overflow-hidden">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-blue-100 rounded-full p-3">
+                                <i class="fas fa-file-alt text-blue-600 text-xl"></i>
+                            </div>
+                            <div class="ml-5">
+                                <dt class="text-sm font-medium text-gray-500 truncate">
+                                    Demandes totales
+                                </dt>
+                                <dd class="flex items-baseline">
+                                    <div id="totalDemandes" class="text-2xl font-semibold text-gray-900">
+                                        -
+                                    </div>
+                                </dd>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">Refusées</h3>
-                        <p id="refusees" class="text-2xl font-semibold text-gray-900">-</p>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6">
+                        <div class="text-sm">
+                            <a href="demande_coneege.html" class="font-medium text-blue-600 hover:text-blue-500 flex items-center">
+                                <span>Voir toutes</span>
+                                <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- En attente -->
+                <div class="stat-card pending-card bg-white rounded-lg shadow overflow-hidden">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-yellow-100 rounded-full p-3">
+                                <i class="fas fa-clock text-yellow-600 text-xl"></i>
+                            </div>
+                            <div class="ml-5">
+                                <dt class="text-sm font-medium text-gray-500 truncate">
+                                    En attente
+                                </dt>
+                                <dd class="flex items-baseline">
+                                    <div id="enAttente" class="text-2xl font-semibold text-gray-900">
+                                        -
+                                    </div>
+                                </dd>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6">
+                        <div class="text-sm">
+                            <a href="demande_coneege.html?status=EN_ATTENTE" class="font-medium text-yellow-600 hover:text-yellow-500 flex items-center">
+                                <span>Voir les demandes</span>
+                                <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Refusées -->
+                <div class="stat-card rejected-card bg-white rounded-lg shadow overflow-hidden">
+                    <div class="px-4 py-5 sm:p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 bg-red-100 rounded-full p-3">
+                                <i class="fas fa-times-circle text-red-600 text-xl"></i>
+                            </div>
+                            <div class="ml-5">
+                                <dt class="text-sm font-medium text-gray-500 truncate">
+                                    Refusées
+                                </dt>
+                                <dd class="flex items-baseline">
+                                    <div id="refusees" class="text-2xl font-semibold text-gray-900">
+                                        -
+                                    </div>
+                                </dd>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6">
+                        <div class="text-sm">
+                            <a href="demande_coneege.html?status=REFUSE" class="font-medium text-red-600 hover:text-red-500 flex items-center">
+                                <span>Voir les demandes</span>
+                                <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -209,19 +319,27 @@
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                 <!-- Pie Chart -->
                 <div class="bg-white rounded-lg shadow p-6 lg:col-span-1">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Statut des demandes</h3>
-                    <div class="h-64">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium text-gray-900">Statut des demandes</h3>
+                        <div id="totalRequests" class="text-sm text-gray-500">Total: 0</div>
+                    </div>
+                    <div class="chart-container">
                         <canvas id="demandesChart"></canvas>
+                    </div>
+                    <div id="pieChartPercentages" class="flex justify-center gap-4 mt-4 text-sm text-gray-600">
+                        <!-- Les pourcentages seront ajoutés ici dynamiquement -->
                     </div>
                 </div>
 
                 <!-- Recent Requests -->
                 <div class="bg-white rounded-lg shadow p-6 lg:col-span-2">
-                    <div class="flex justify-between items-center mb-4">
+                    <div class="flex justify-between items-center mb-2">
                         <h3 class="text-lg font-medium text-gray-900">Dernières demandes</h3>
-                        <a href="demande_coneege.html" class="text-sm text-primary-600 hover:text-primary-800">Voir toutes</a>
+                        <a href="demande_coneege.html" class="text-sm text-primary-600 hover:text-primary-800 flex items-center">
+                            Voir toutes <i class="fas fa-chevron-right ml-1"></i>
+                        </a>
                     </div>
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto recent-requests">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                             <tr>
@@ -238,45 +356,17 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Calendar Overview -->
-            <div class="bg-white rounded-lg shadow p-6 mb-8">
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Aperçu du calendrier</h3>
-                <div class="grid grid-cols-7 gap-1 text-center">
-                    <div class="text-xs font-medium text-gray-500 py-2">Lun</div>
-                    <div class="text-xs font-medium text-gray-500 py-2">Mar</div>
-                    <div class="text-xs font-medium text-gray-500 py-2">Mer</div>
-                    <div class="text-xs font-medium text-gray-500 py-2">Jeu</div>
-                    <div class="text-xs font-medium text-gray-500 py-2">Ven</div>
-                    <div class="text-xs font-medium text-gray-500 py-2">Sam</div>
-                    <div class="text-xs font-medium text-gray-500 py-2">Dim</div>
-
-                    <!-- Placeholder for calendar days -->
-                    <div class="py-2"></div>
-                    <div class="py-2"></div>
-                    <div class="py-2">
-                        <span class="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-primary-600 text-white">21</span>
-                    </div>
-                    <div class="py-2">22</div>
-                    <div class="py-2">23</div>
-                    <div class="py-2">24</div>
-                    <div class="py-2">25</div>
-                    <div class="py-2">26</div>
-                    <div class="py-2">27</div>
-                    <div class="py-2">28</div>
-                    <div class="py-2">29</div>
-                    <div class="py-2">30</div>
-                    <div class="py-2">31</div>
-                    <div class="py-2">1</div>
-                    <div class="py-2">2</div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', async function () {
+        // Set current date
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const now = new Date();
+        document.getElementById('currentDate').textContent = now.toLocaleDateString('fr-FR', options);
+
         const token = localStorage.getItem('token');
         if (!token) return window.location.href = '../user/index.html';
 
@@ -339,6 +429,9 @@
             document.getElementById('enAttente').textContent = stats.enAttente;
             document.getElementById('refusees').textContent = stats.refusees;
 
+            // Mettre à jour le total des demandes
+            document.getElementById('totalRequests').textContent = `Total: ${stats.total}`;
+
             // Configurer le graphique
             const ctx = document.getElementById('demandesChart').getContext('2d');
             const demandesChart = new Chart(ctx, {
@@ -348,11 +441,13 @@
                     datasets: [{
                         data: [stats.approuvees, stats.enAttente, stats.refusees],
                         backgroundColor: [
-                            '#10b981',
-                            '#f59e0b',
-                            '#ef4444'
+                            '#10B981', // Vert
+                            '#F59E0B', // Orange
+                            '#EF4444'  // Rouge
                         ],
-                        borderWidth: 1
+                        borderWidth: 1,
+                        borderColor: '#FFFFFF',
+                        hoverOffset: 8
                     }]
                 },
                 options: {
@@ -360,17 +455,43 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20
+                            }
                         }
-                    }
+                    },
+                    cutout: '70%'
                 }
             });
+
+            // Ajouter les pourcentages
+            const pieChartPercentages = document.getElementById('pieChartPercentages');
+            const total = stats.approuvees + stats.enAttente + stats.refusees;
+
+            if (total > 0) {
+                const percentages = [
+                    { label: 'Approuvées', value: stats.approuvees, color: '#10B981' },
+                    { label: 'En attente', value: stats.enAttente, color: '#F59E0B' },
+                    { label: 'Refusées', value: stats.refusees, color: '#EF4444' }
+                ];
+
+                pieChartPercentages.innerHTML = percentages.map(item => {
+                    const percentage = Math.round((item.value / total) * 100);
+                    return `
+                        <div class="flex items-center">
+                            <div class="w-2 h-3 rounded-full mr-1" style="background-color: ${item.color};"></div>
+                            ${percentage}% ${item.label}
+                        </div>
+                    `;
+                }).join('');
+            }
 
             // Récupérer les dernières demandes
             const demandesResponse = await fetch('http://localhost:8080/api/demandes-conge/all-with-employee-info', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-
 
             if (!demandesResponse.ok) {
                 throw new Error('Erreur lors de la récupération des demandes');
@@ -378,10 +499,9 @@
 
             const allDemandes = await demandesResponse.json();
 
-
-      const currentUserDemandes = allDemandes.filter(demande =>
-    demande.idEmployee === currentUser.id
-);
+            const currentUserDemandes = allDemandes.filter(demande =>
+                demande.idEmployee === currentUser.id
+            );
 
             // Filtrer les demandes: seulement celles du même département et service que l'utilisateur
             const filteredDemandes = allDemandes.filter(demande =>
@@ -406,7 +526,7 @@
         if (demandes.length === 0) {
             recentRequestsContainer.innerHTML = `
                 <tr>
-                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">
+                    <td colspan="4" class="px-6 py-4 text-center text-gray-500">
                         Aucune demande récente
                     </td>
                 </tr>
@@ -423,15 +543,15 @@
 
             switch(demande.statut) {
                 case 'EN_ATTENTE':
-                    statusClass = 'bg-yellow-100 text-yellow-800';
+                    statusClass = 'status-pending';
                     statusText = 'En attente';
                     break;
                 case 'APPROUVE':
-                    statusClass = 'bg-green-100 text-green-800';
+                    statusClass = 'status-approved';
                     statusText = 'Approuvé';
                     break;
                 case 'REFUSE':
-                    statusClass = 'bg-red-100 text-red-800';
+                    statusClass = 'status-rejected';
                     statusText = 'Refusé';
                     break;
                 default:
@@ -439,14 +559,8 @@
                     statusText = demande.statut;
             }
 
-            const actions = demande.statut === 'EN_ATTENTE' ? `
-
-            ` : `
-
-            `;
-
             return `
-                <tr>
+                <tr class="hover:bg-gray-50">
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-800 font-medium">
@@ -464,17 +578,14 @@
                         ${demande.duree} jour(s)
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
+                        <span class="status-badge ${statusClass}">
                             ${statusText}
                         </span>
                     </td>
-
                 </tr>
             `;
         }).join('');
     }
-
-
 </script>
 </body>
 </html>
