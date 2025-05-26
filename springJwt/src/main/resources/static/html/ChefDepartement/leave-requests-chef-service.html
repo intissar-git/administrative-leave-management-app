@@ -469,7 +469,7 @@
             }
 
             currentUser = await userResponse.json();
-            document.querySelector('.ml-2.text-gray-700').textContent = currentUser.username || 'Chef Département';
+            document.querySelector('.ml-2.text-gray-700').textContent = 'Chef Département';
 
             const avatarElement = document.querySelector('.h-8.w-8.rounded-full');
             if (currentUser.avatarUrl) {
