@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord Admin - Système de gestion des congés</title>
+    <title>Tableau de bord RH - Système de gestion des congés</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -46,6 +46,30 @@
             }
         }
     </script>
+    <style>
+        /* Card styles inspired by Chef Département */
+        .stat-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid;
+            border-radius: 0.5rem;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .employees-card {
+            border-left-color: #3B82F6;
+        }
+        .departments-card {
+            border-left-color: #6366F1;
+        }
+        .approved-card {
+            border-left-color: #10B981;
+        }
+        .pending-card {
+            border-left-color: #F59E0B;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 font-sans">
 <div class="min-h-screen flex flex-col">
@@ -70,7 +94,7 @@
                             <span class="sr-only">Ouvrir le menu utilisateur</span>
                             <div class="flex items-center">
                                 <div class="h-8 w-8 rounded-full bg-primary-700 flex items-center justify-center text-white">
-                                    A
+                                    <i class="fas fa-user"></i>
                                 </div>
                                 <span class="ml-2 text-gray-700">Ressources Humaines</span>
                                 <svg class="ml-1 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -79,8 +103,8 @@
                             </div>
                         </button>
                         <div id="userMenu" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu">
-                            <a href="mon_profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Votre profil</a>
-                            <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Déconnexion</a>
+                            <a href="mon_profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"><i class="fas fa-user-circle mr-2"></i>Votre profil</a>
+                            <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"><i class="fas fa-sign-out-alt mr-2"></i>Déconnexion</a>
                         </div>
                     </div>
                 </div>
@@ -89,118 +113,582 @@
     </nav>
 
     <div class="flex flex-1">
-        <div class="bg-white shadow-sm border-r border-gray-200 w-64">
+        <!-- Sidebar inspired by Chef Département -->
+        <div class="bg-white shadow-sm border-r border-gray-200 w-64 hidden md:block">
             <div class="h-full flex flex-col">
                 <nav class="flex-1 py-4 px-2 space-y-1">
-                    <a href="rh-dash.html" class="group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 mr-3 h-6 w-6 group-[.active]:text-primary-700" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
-                            <line x1="16" x2="16" y1="2" y2="6"></line>
-                            <line x1="8" x2="8" y1="2" y2="6"></line>
-                            <line x1="3" x2="21" y1="10" y2="10"></line>
-                        </svg>
+                    <a href="rh-dash.html" class="bg-primary-50 text-primary-700 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-tachometer-alt text-primary-700 mr-3"></i>
                         Tableau de bord
                     </a>
-
-                    <a href="employes.html" class="group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 mr-3 h-6 w-6 group-[.active]:text-primary-700" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                        </svg>
-                        Gestion des employes
+                    <a href="employes.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-users text-gray-500 group-hover:text-gray-600 mr-3"></i>
+                        Gestion des employés
                     </a>
-
-                    <a href="leave-requests.html" class="group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 mr-3 h-6 w-6 group-[.active]:text-primary-700" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                            <path d="M9 14l2 2 4-4"></path>
-                        </svg>
+                    <a href="leave-requests.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-file-signature text-gray-500 group-hover:text-gray-600 mr-3"></i>
                         Demandes de Congés
                     </a>
-
-                    <a href="calendarRH.html" class="group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 mr-3 h-6 w-6 group-[.active]:text-primary-700" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="16" x2="16" y1="2" y2="6"></line>
-                            <line x1="8" x2="8" y1="2" y2="6"></line>
-                            <line x1="3" x2="21" y1="10" y2="10"></line>
-                        </svg>
+                    <a href="calendarRH.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-alt text-gray-500 group-hover:text-gray-600 mr-3"></i>
                         Calendrier
                     </a>
-
-                    <a href="historiqueChef.html" class="group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 mr-3 h-6 w-6 group-[.active]:text-primary-700" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0"></path>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
+                    <a href="historiqueChef.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-history text-gray-500 group-hover:text-gray-600 mr-3"></i>
                         Historique
                     </a>
-
-                    <a href="mon_profile.html" class="group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 mr-3 h-6 w-6 group-[.active]:text-primary-700" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                            <polyline points="3.29 7 12 12 20.71 7"></polyline>
-                            <line x1="12" y1="22" y2="12" x2="12"></line>
-                        </svg>
+                    <a href="mon_profile.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-id-card text-gray-500 group-hover:text-gray-600 mr-3"></i>
                         Mon Profil
                     </a>
                 </nav>
             </div>
         </div>
 
-        <main class="flex-1 p-4">
-            <div class="bg-white shadow rounded-md p-6">
-                <h2 class="text-xl font-semibold text-gray-900 mb-4">Tableau de bord</h2>
-                <p class="text-gray-700">Bienvenue sur votre tableau de bord de gestion des congés.</p>
+        <!-- Main Content -->
+        <main class="flex-1 min-w-0 overflow-auto">
+            <div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                <h1 class="text-2xl font-semibold text-gray-900">Tableau de bord RH</h1>
+
+                <!-- Stats Overview -->
+                <div class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                    <!-- Total Employees -->
+                    <div class="stat-card employees-card bg-white rounded-lg shadow overflow-hidden">
+                        <div class="px-4 py-5 sm:p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-primary-100 rounded-full p-3">
+                                    <i class="fas fa-users text-primary-600 text-xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                        Employés totaux
+                                    </dt>
+                                    <dd class="flex items-baseline">
+                                        <div id="totalEmployees" class="text-2xl font-semibold text-gray-900">
+                                            --
+                                        </div>
+                                    </dd>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 sm:px-6">
+                            <div class="text-sm">
+                                <a href="employes.html" class="font-medium text-primary-600 hover:text-primary-500 flex items-center">
+                                    <span>Voir tous les employés</span>
+                                    <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Departments -->
+                    <div class="stat-card departments-card bg-white rounded-lg shadow overflow-hidden">
+                        <div class="px-4 py-5 sm:p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-indigo-100 rounded-full p-3">
+                                    <i class="fas fa-building text-indigo-600 text-xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                        Départements
+                                    </dt>
+                                    <dd class="flex items-baseline">
+                                        <div id="totalDepartments" class="text-2xl font-semibold text-gray-900">
+                                            --
+                                        </div>
+                                    </dd>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 sm:px-6">
+                            <div class="text-sm">
+                                <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500 flex items-center">
+                                    <span>Voir les départements</span>
+                                    <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Approved Leaves -->
+                    <div class="stat-card approved-card bg-white rounded-lg shadow overflow-hidden">
+                        <div class="px-4 py-5 sm:p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-green-100 rounded-full p-3">
+                                    <i class="fas fa-check-circle text-green-600 text-xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                        Congés approuvés
+                                    </dt>
+                                    <dd class="flex items-baseline">
+                                        <div id="approvedLeaves" class="text-2xl font-semibold text-gray-900">
+                                            --
+                                        </div>
+                                    </dd>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 sm:px-6">
+                            <div class="text-sm">
+                                <a href="leave-requests.html" class="font-medium text-green-600 hover:text-green-500 flex items-center">
+                                    <span>Voir les demandes</span>
+                                    <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending Leaves -->
+                    <div class="stat-card pending-card bg-white rounded-lg shadow overflow-hidden">
+                        <div class="px-4 py-5 sm:p-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-yellow-100 rounded-full p-3">
+                                    <i class="fas fa-clock text-yellow-600 text-xl"></i>
+                                </div>
+                                <div class="ml-5 w-0 flex-1">
+                                    <dt class="text-sm font-medium text-gray-500 truncate">
+                                        Congés en attente
+                                    </dt>
+                                    <dd class="flex items-baseline">
+                                        <div id="pendingLeaves" class="text-2xl font-semibold text-gray-900">
+                                            --
+                                        </div>
+                                    </dd>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gray-50 px-4 py-3 sm:px-6">
+                            <div class="text-sm">
+                                <a href="leave-requests.html" class="font-medium text-yellow-600 hover:text-yellow-500 flex items-center">
+                                    <span>Voir les demandes</span>
+                                    <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Employee Roles Distribution -->
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Répartition des rôles</h3>
+                            <p class="mt-1 text-sm text-gray-500">Distribution des employés par rôle</p>
+                        </div>
+                        <div class="px-4 py-5 sm:p-6">
+                            <div id="rolesChart" class="h-80"></div>
+                            <div id="rolesChartPercentages" class="chart-percentages"></div>
+                        </div>
+                    </div>
+
+                    <!-- Department Employees Distribution -->
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Employés par département</h3>
+                            <p class="mt-1 text-sm text-gray-500">Répartition des employés</p>
+                        </div>
+                        <div class="px-4 py-5 sm:p-6">
+                            <div id="departmentsChart" class="h-80"></div>
+                        </div>
+                    </div>
+
+                    <!-- Leave Status Distribution -->
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Statut des demandes</h3>
+                            <p class="mt-1 text-sm text-gray-500">Répartition des demandes de congé</p>
+                        </div>
+                        <div class="px-4 py-5 sm:p-6">
+                            <div id="leavesChart" class="h-80"></div>
+                        </div>
+                    </div>
+
+                    <!-- Departments with Services Distribution -->
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Services par département</h3>
+                            <p class="mt-1 text-sm text-gray-500">Répartition des services et employés</p>
+                        </div>
+                        <div class="px-4 py-5 sm:p-6">
+                            <div id="departmentsServicesChart" class="h-80"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Gestion de la sidebar
-        const currentPath = window.location.pathname.split('/').pop();
-        const sidebarLinks = document.querySelectorAll('.border-r a');
-
-        sidebarLinks.forEach(link => {
-            const linkPath = link.getAttribute('href');
-            if (currentPath === linkPath) {
-                link.classList.add('bg-primary-50', 'text-primary-700', 'active');
-                link.querySelector('svg').classList.add('text-primary-700');
-            } else {
-                link.classList.remove('bg-primary-50', 'text-primary-700', 'active');
-                link.classList.add('text-gray-600', 'hover:bg-gray-50', 'hover:text-gray-900');
-            }
-        });
-
-        // Gestion du menu utilisateur
-        const userMenuBtn = document.getElementById('userMenuBtn');
-        const userMenu = document.getElementById('userMenu');
-
-        userMenuBtn.addEventListener('click', () => {
-            const expanded = userMenuBtn.getAttribute('aria-expanded') === 'true';
-            userMenuBtn.setAttribute('aria-expanded', !expanded);
-            userMenu.classList.toggle('hidden');
-        });
-
-        document.addEventListener('click', (event) => {
-            if (!userMenuBtn.contains(event.target) && !userMenu.contains(event.target)) {
-                userMenuBtn.setAttribute('aria-expanded', 'false');
-                userMenu.classList.add('hidden');
-            }
-        });
-
-        // Gestion de la déconnexion
-        document.getElementById('logoutBtn').addEventListener('click', function(e) {
-            e.preventDefault();
-            // Ici ajouter la logique de déconnexion
-            window.location.href = '../user/index.html'; // Redirection vers la page de login
-        });
+    // Logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('userRole');
+        window.location.href = '../user/index.html';
     });
+
+    // User menu toggle functionality
+    const userMenuButton = document.getElementById('userMenuBtn');
+    const userMenu = document.getElementById('userMenu');
+
+    if (userMenuButton && userMenu) {
+      userMenuButton.addEventListener('click', () => {
+        const expanded = userMenuButton.getAttribute('aria-expanded') === 'true';
+        userMenuButton.setAttribute('aria-expanded', !expanded);
+        userMenu.classList.toggle('hidden');
+      });
+
+      // Close the menu when clicking outside
+      document.addEventListener('click', (event) => {
+        if (!userMenuButton.contains(event.target) && !userMenu.contains(event.target)) {
+          userMenuButton.setAttribute('aria-expanded', 'false');
+          userMenu.classList.add('hidden');
+        }
+      });
+    }
+
+    // Function to get JWT token from localStorage
+    function getToken() {
+      return localStorage.getItem('token');
+    }
+
+    // Function to make authenticated requests
+    async function makeAuthenticatedRequest(url, method = 'GET', body = null) {
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${getToken()}`
+      };
+
+      const config = {
+        method: method,
+        headers: headers
+      };
+
+      if (body) {
+        config.body = JSON.stringify(body);
+      }
+
+      const response = await fetch(url, config);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      return response.json();
+    }
+
+    // Function to fetch dashboard data
+    async function fetchDashboardData() {
+        try {
+            // Fetch employee statistics
+            const employeeStats = await makeAuthenticatedRequest('http://localhost:8080/api/users/statistics');
+            document.getElementById('totalEmployees').textContent = employeeStats.totalUsers || '--';
+
+            // Create roles distribution chart
+            createRolesChart(employeeStats);
+
+            // Fetch departments
+            const departments = await makeAuthenticatedRequest('http://localhost:8080/api/departements/details');
+            document.getElementById('totalDepartments').textContent = departments.length || '--';
+
+            // Create departments distribution chart
+            createDepartmentsChart(departments);
+
+            // Fetch leave statistics
+            const leavesStats = await makeAuthenticatedRequest('http://localhost:8080/api/demandes-conge/stats-globales');
+            document.getElementById('approvedLeaves').textContent = leavesStats.approuvees || '--';
+            document.getElementById('pendingLeaves').textContent = leavesStats.enAttente || '--';
+
+            // Create leaves status distribution chart
+            createLeavesChart(leavesStats);
+
+            // Create departments with services chart (now as donut)
+            createDepartmentsServicesChart(departments);
+
+        } catch (error) {
+            console.error('Error fetching dashboard data:', error);
+        }
+    }
+
+    // Function to create roles distribution chart with single percentage
+    function createRolesChart(data) {
+        const options = {
+            series: Object.values(data.usersByRole),
+            chart: {
+                type: 'donut',
+                height: 350,
+            },
+            labels: Object.keys(data.usersByRole).map(role => {
+                return role === 'ADMIN' ? 'Administrateur' :
+                       role === 'RH' ? 'Manager' :
+                       role === 'CHEF_SERVICE' ? 'Chef de service' :
+                       role === 'CHEF_DEPARTEMENT' ? 'Chef de département' :
+                       'Employé';
+            }),
+            colors: ['#3B82F6', '#10B981', '#F59E0B', '#6366F1', '#EC4899'],
+            legend: {
+                position: 'bottom'
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }],
+            plotOptions: {
+                pie: {
+                    donut: {
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: 'Total',
+                                color: '#6B7280',
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const chart = new ApexCharts(document.querySelector("#rolesChart"), options);
+        chart.render();
+
+        // Calculate and display total percentage
+        const total = Object.values(data.usersByRole).reduce((sum, val) => sum + val, 0);
+        const percentagesContainer = document.getElementById('rolesChartPercentages');
+        percentagesContainer.innerHTML = '';
+
+        if (total > 0) {
+            const percentageItem = document.createElement('div');
+            percentageItem.className = 'chart-percentage-item';
+            percentageItem.innerHTML = `
+                <div class="chart-percentage-color" style="background-color: #3B82F6;"></div>
+                Total: 100% (${total})
+            `;
+            percentagesContainer.appendChild(percentageItem);
+        }
+    }
+
+    // Function to create departments distribution chart
+    function createDepartmentsChart(departmentsData) {
+        const labels = departmentsData.map(dept => dept.nomDepartement);
+        const series = departmentsData.map(dept => dept.nombreUtilisateurs);
+
+        const options = {
+            series: series,
+            chart: {
+                type: 'donut',
+                height: 350,
+            },
+            labels: labels,
+            colors: ['#3B82F6', '#10B981', '#F59E0B', '#6366F1', '#EC4899', '#8B5CF6'],
+            legend: {
+                position: 'bottom'
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }],
+            plotOptions: {
+                pie: {
+                    donut: {
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: 'Total',
+                                color: '#6B7280',
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const chart = new ApexCharts(document.querySelector("#departmentsChart"), options);
+        chart.render();
+    }
+
+    // Function to create leave status distribution chart
+    function createLeavesChart(leavesStats) {
+        const options = {
+            series: [leavesStats.enAttente, leavesStats.refusees, leavesStats.approuvees],
+            chart: {
+                type: 'donut',
+                height: 350,
+            },
+            labels: ['En attente', 'Refusées', 'Approuvées'],
+            colors: ['#F59E0B', '#EF4444', '#10B981'],
+            legend: {
+                position: 'bottom'
+            },
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }],
+            plotOptions: {
+                pie: {
+                    donut: {
+                        labels: {
+                            show: true,
+                            total: {
+                                show: true,
+                                label: 'Total',
+                                color: '#6B7280',
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        const chart = new ApexCharts(document.querySelector("#leavesChart"), options);
+        chart.render();
+    }
+
+    // Function to create departments with services distribution chart as donut
+    async function createDepartmentsServicesChart(departments) {
+        try {
+            // Fetch services for each department
+            const departmentsWithServices = await Promise.all(departments.map(async dept => {
+                const services = await makeAuthenticatedRequest(`http://localhost:8080/api/services-departement/departement/${dept.id}/all`);
+                return {
+                    ...dept,
+                    services: services
+                };
+            }));
+
+            // Prepare data for the chart
+            const series = [];
+            const labels = [];
+            const colors = ['#3B82F6', '#10B981', '#F59E0B', '#6366F1', '#EC4899', '#8B5CF6', '#F97316', '#84CC16'];
+
+            // Flatten all services across departments
+            departmentsWithServices.forEach(dept => {
+                dept.services.forEach(service => {
+                    const existingIndex = labels.findIndex(label => label === `${dept.nomDepartement} - ${service.nomService}`);
+
+                    if (existingIndex >= 0) {
+                        series[existingIndex] += service.nombreUtilisateurs;
+                    } else {
+                        labels.push(`${dept.nomDepartement} - ${service.nomService}`);
+                        series.push(service.nombreUtilisateurs);
+                    }
+                });
+            });
+
+            // Create the donut chart
+            const options = {
+                series: series,
+                chart: {
+                    type: 'donut',
+                    height: 350,
+                },
+                labels: labels,
+                colors: colors,
+                legend: {
+                    position: 'bottom',
+                    markers: {
+                        width: 12,
+                        height: 12,
+                        radius: 12,
+                    }
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }],
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            labels: {
+                                show: true,
+                                total: {
+                                    show: true,
+                                    label: 'Total employés',
+                                    color: '#6B7280',
+                                }
+                            }
+                        }
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return val + " employés";
+                        }
+                    }
+                }
+            };
+
+            const chart = new ApexCharts(document.querySelector("#departmentsServicesChart"), options);
+            chart.render();
+
+        } catch (error) {
+            console.error('Error creating departments with services chart:', error);
+        }
+    }
+
+    // Helper function to format date
+    function formatDate(dateString) {
+      if (!dateString) return 'N/A';
+      const date = new Date(dateString);
+      return date.toLocaleDateString('fr-FR');
+    }
+
+    // Helper function to format status
+    function formatStatus(status) {
+      const statusMap = {
+        'PENDING': 'En attente',
+        'APPROVED': 'Approuvé',
+        'REJECTED': 'Rejeté'
+      };
+      return statusMap[status] || status;
+    }
+
+    // Check authentication before loading data
+    function checkAuthAndLoadData() {
+      if (!getToken()) {
+        // Redirect to login if no token found
+        window.location.href = '../user/index.html';
+      } else {
+        // Initialize dashboard
+        fetchDashboardData();
+      }
+    }
+
+    // Initialize dashboard when page loads
+    document.addEventListener('DOMContentLoaded', checkAuthAndLoadData);
 </script>
 </body>
 </html>
