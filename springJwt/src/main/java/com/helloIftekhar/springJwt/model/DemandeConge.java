@@ -3,7 +3,9 @@ package com.helloIftekhar.springJwt.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 
 @Data
@@ -69,6 +71,21 @@ public class DemandeConge {
         this.remplacerPar = remplacerPar;
         this.motifRefus = motifRefus;
     }
+
+    @PrePersist
+    protected void onCreate() {
+        this.dateCreation = new Date(); // Date actuelle
+    }
+
+    // Méthode pour obtenir la date en arabe (optionnel)
+    public String getDateCreationArabic() {
+        if (dateCreation == null) {
+            return "";
+        }
+        SimpleDateFormat arabicDateFormat = new SimpleDateFormat("dd MMMM yyyy", new Locale("ar"));
+        return arabicDateFormat.format(dateCreation);
+    }
+
 
     // Getters et Setters
     public Long getId() {

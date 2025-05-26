@@ -56,7 +56,7 @@ public class DemandeCongeService {
         return mapToResponseDTO(savedDemande);
     }
 
-    private DemandeCongeResponseDTO mapToResponseDTO(DemandeConge demande) {
+    public DemandeCongeResponseDTO mapToResponseDTO(DemandeConge demande) {
         // If you don't have a builder pattern in your DTO, use regular constructor/setter approach
         DemandeCongeResponseDTO responseDTO = new DemandeCongeResponseDTO();
         responseDTO.setId(demande.getId());

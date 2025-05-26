@@ -13,6 +13,17 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SoldeCongeRepository extends JpaRepository<SoldeConge, Long> {
+
+
+    @Query("SELECT s FROM SoldeConge s WHERE s.employee = :employee AND s.annee = :annee")
+    Optional<SoldeConge> findByEmployeeAndAnnee(@Param("employee") User employee,
+                                                @Param("annee") int annee);
+
+    @Query("SELECT s FROM SoldeConge s WHERE s.employee = :employee ORDER BY s.annee DESC LIMIT 1")
+    Optional<SoldeConge> findLatestByEmployee(@Param("employee") User employee);
+
+
+
     @Query("SELECT NEW com.helloIftekhar.springJwt.dto.SoldeCongeDTO(" +
             "s.id, s.soldeGlobal, s.soldeAnneeCourante, s.soldeAnneePrecedente, s.annee) " +
             "FROM SoldeConge s WHERE s.employee.id = :userId AND s.annee = :year")
@@ -40,4 +51,7 @@ public interface SoldeCongeRepository extends JpaRepository<SoldeConge, Long> {
         String getStatus();
         Long getCount();
     }
+
+
+
 }
