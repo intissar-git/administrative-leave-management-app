@@ -27,7 +27,8 @@ public class DemandeCongeResponseDTO {
     private String gradeArab;
     private String echelleArab;
     private int soldeGlobal;
-
+private int soldeAnneePrecedente;
+private  int soldeAnneeCourante;
 
 
     public DemandeCongeResponseDTO() {
@@ -36,7 +37,7 @@ public class DemandeCongeResponseDTO {
     public DemandeCongeResponseDTO(Long id, Long idEmployee, String employeeName, String departement,
                                    Date dateCreation, Date dateDebut, Date dateFin,
                                    String motif, String statut, int duree, String remplacerPar,String role,String serviceName,String remplacantArab,String nomArab,String prenomArab,String gradeArab,String echelleArab,int soldeGlobal
-) {
+,int soldeAnneePrecedente,int soldeAnneeCourante) {
         this.id = id;
         this.idEmployee = idEmployee;
         this.employeeName = employeeName;
@@ -56,7 +57,8 @@ public class DemandeCongeResponseDTO {
         this.gradeArab=gradeArab;
         this.echelleArab=echelleArab;
         this.soldeGlobal=soldeGlobal;
-        ;
+        this.soldeAnneePrecedente=soldeAnneePrecedente;
+        this.soldeAnneeCourante=soldeAnneeCourante;
 
 
     }

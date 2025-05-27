@@ -46,7 +46,7 @@
         <div class="flex justify-between mb-1" style="margin-bottom: 40px; " >
             <div class="flex items-start">
                 <p>رقم :</p>
-                <p class="mr-14" id="demande-numero">ك.ش.إ/4/2025</p>
+                <p class="mr-14" id="demande-numero">ك.ش.إ/2025</p>
             </div>
             <p class="text-left mr-14 ml-0" id="current-date">بني ملال، في : 02 ماي 2025</p>
         </div>
@@ -74,13 +74,13 @@
         </p>
 
         <p class="mb-5 leading-relaxed main-content-paragraph" id="demande-info">
-            بناء على الطلب المقدم من طرف السيدة.................... بتاريخ 02 ماي 2025.
+            بناء على الطلب المقدم من طرف السيد(ة).................... بتاريخ 02 ماي 2025.
         </p>
 
         <h3 class="font-bold text-center mb-4">يقرر ما يلي:</h3>
 
         <p class="mb-3 leading-relaxed main-content-paragraph" id="article-1">
-            <strong>الفصل الأول:</strong> ابتداء من 05 ماي 2025، تمنح رخصة إداريةللسيد(ة)............... تقنية من
+            <strong>الفصل الأول:</strong> ابتداء من 05 ماي 2025، تمنح رخصة إدارية للسيد(ة)............... تقنية من
             الدرجة الرابعة، بوكالة الحوض المائي لأم الربيع لمدة خمسة (05) أيام عمل تطابق حقها في العطلة لسنة
             2024.
         </p>
@@ -192,6 +192,7 @@
             const currentDay = currentDate.getDate();
             const currentMonth = currentDate.getMonth() + 1;
             const currentYear = currentDate.getFullYear();
+            const previousYear = currentYear - 1;
             const monthNames = [
                 'يناير', 'فبراير', 'مارس', 'أبريل', 'ماي', 'يونيو',
                 'يوليوز', 'غشت', 'شتنبر', 'أكتوبر', 'نونبر', 'دجنبر'
@@ -210,7 +211,7 @@
                 ${currentYear}.`;
 
             document.getElementById('article-2').innerHTML =
-                `<strong>الفصل الثاني:</strong> تحتفظ المعنية بالأمر ب (${demande.soldeGlobal}) يوم عمل كبقية حقها في العطلة برسم سنة ${currentYear}.`;
+                `<strong>الفصل الثاني:</strong> تحتفظ المعنية بالأمر ب (${demande.soldeAnneePrecedente}) يوم عمل كبقية حقها في العطلة برسم سنة ${previousYear} و (${demande.soldeAnneeCourante}) يوم عمل برسم سنة ${currentYear}.`;
 
             document.getElementById('article-3').innerHTML =
                 `<strong>الفصل الثالث:</strong> ينوب عن المعنية بالأمر طيلة الرخصة السيد(ة) <strong>${demande.remplacantArab || '...................'}</strong>`;
