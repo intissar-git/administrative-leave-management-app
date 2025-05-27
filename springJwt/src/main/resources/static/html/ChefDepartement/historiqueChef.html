@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -649,7 +650,21 @@
 
     // Delete demande
     async function deleteDemande(demandeId) {
-        if (!confirm('Êtes-vous sûr de vouloir supprimer cette demande ?')) return;
+         const { isConfirmed } = await Swal.fire({
+        title: 'Confirmation',
+        text: 'Êtes-vous sûr de vouloir supprimer cette demande ?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#0ea5e9', // Couleur primaire de votre thème
+        cancelButtonColor: '#ef4444',   // Couleur rouge
+        confirmButtonText: 'Oui, supprimer',
+        cancelButtonText: 'Annuler',
+        customClass: {
+            popup: 'font-sans' // Pour utiliser la même police que votre application
+        }
+    });
+
+    if (!isConfirmed) return;
 
         try {
             const token = getToken();
@@ -662,12 +677,22 @@
 
             if (!response.ok) throw new Error('Erreur lors de la suppression');
 
-            showToast('Demande supprimée avec succès');
+            await Swal.fire({
+            title: 'Succès',
+            text: 'Demande supprimée avec succès',
+            icon: 'success',
+            confirmButtonColor: '#0ea5e9'
+        });
             await loadDemandes();
             await loadDashboardData();
         } catch (err) {
             console.error(err);
-            showToast('Erreur: ' + err.message, true);
+            Swal.fire({
+            title: 'Erreur',
+            text: err.message,
+            icon: 'error',
+            confirmButtonColor: '#0ea5e9'
+        });
         }
     }
 
