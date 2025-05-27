@@ -273,7 +273,7 @@
 
         const demandeId = localStorage.getItem('currentDemandeId');
         if (!demandeId) {
-            window.location.href = 'historiqueChef.html';
+            window.location.href = 'historiqueRh.html';
             return;
         }
 
@@ -476,7 +476,7 @@
 
                 showToast('Modification enregistrée avec succès!');
                 setTimeout(() => {
-                    window.location.href = 'demande-details-ChefDep.html';
+                    window.location.href = 'demande-details-Rh.html';
                 }, 2000);
             } catch (error) {
                 console.error(error);
