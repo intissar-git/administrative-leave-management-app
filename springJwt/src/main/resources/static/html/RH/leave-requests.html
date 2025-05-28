@@ -641,7 +641,7 @@
 
         // Show request details in modal
         async function showRequestDetails(requestId) {
-            currentRequestId = requestId;
+             currentRequestId = requestId;
             const request = allRequests.find(req => req.id == requestId);
             if (!request) return;
 
@@ -691,34 +691,30 @@
         }
 
         // Filter requests based on search and tab selection
+       // Filter requests based on search and tab selection
         function filterRequests() {
-    const searchTerm = searchInput.value.toLowerCase();
-    const activeTab = document.querySelector('.tab-btn.active')?.dataset.filter || 'all';
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeTab = document.querySelector('.tab-btn.active')?.dataset.filter || 'all';
 
-    filteredRequests = allRequests.filter(request => {
-        // Exclure les demandes avec le statut "EN_ATTENTE" du filtre "all"
-        if (activeTab === 'all' && request.statut === 'EN_ATTENTE') {
-            return false;
+            filteredRequests = allRequests.filter(request => {
+                const matchesSearch =
+                    (request.employeeName?.toLowerCase().includes(searchTerm)) ||
+                    (request.role?.toLowerCase().includes(searchTerm)) ||
+                    (formatDate(request.dateDebut).toLowerCase().includes(searchTerm)) ||
+                    (request.statut?.toLowerCase().includes(searchTerm)) ||
+                    (formatDate(request.dateFin).toLowerCase().includes(searchTerm));
+
+                const matchesTab =
+                    activeTab === 'all' ||
+                    request.statut === activeTab;
+
+                return matchesSearch && matchesTab;
+            });
+
+            currentPage = 1;
+            renderRequests();
+            updatePagination();
         }
-
-        const matchesSearch =
-            (request.employeeName?.toLowerCase().includes(searchTerm)) ||
-            (request.role?.toLowerCase().includes(searchTerm)) ||
-            (formatDate(request.dateDebut).toLowerCase().includes(searchTerm)) ||
-            (request.statut?.toLowerCase().includes(searchTerm)) ||
-            (formatDate(request.dateFin).toLowerCase().includes(searchTerm));
-
-        const matchesTab =
-            activeTab === 'all' ||
-            request.statut === activeTab;
-
-        return matchesSearch && matchesTab;
-    });
-
-    currentPage = 1;
-    renderRequests();
-    updatePagination();
-}
         // Update pagination controls
         function updatePagination() {
             const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
