@@ -85,7 +85,7 @@ public interface DemandeCongeRepository extends JpaRepository<DemandeConge, Long
             "d.id, d.idEmployee, CONCAT(u.firstName, ' ', u.lastName), dep.nomDepartement, " +
             "d.dateCreation, d.dateDebut, d.dateFin, d.motif, d.statut, d.duree, " +
             "d.remplacerPar, u.role, s.nomService, d.remplacantArab, u.nomArab, " +
-            "u.prenomArab, u.gradeArab, u.echelleArab, sc.soldeGlobal) " +
+            "u.prenomArab, u.gradeArab, u.echelleArab, sc.soldeGlobal ,sc.soldeAnneePrecedente,sc.soldeAnneeCourante) " +
             "FROM DemandeConge d " +
             "JOIN User u ON d.idEmployee = u.id " +
             "LEFT JOIN u.departement dep " +
