@@ -12,16 +12,28 @@
                 extend: {
                     colors: {
                         primary: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            200: '#bae6fd',
-                            300: '#7dd3fc',
-                            400: '#38bdf8',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            800: '#075985',
-                            900: '#0c4a6e',
+                            50: '#EFF6FF',
+                            100: '#DBEAFE',
+                            200: '#BFDBFE',
+                            300: '#93C5FD',
+                            400: '#60A5FA',
+                            500: '#3B82F6',
+                            600: '#2563EB',
+                            700: '#1D4ED8',
+                            800: '#1E40AF',
+                            900: '#1E3A8A',
+                        },
+                        secondary: {
+                            50: '#F0FDFA',
+                            100: '#CCFBF1',
+                            200: '#99F6E4',
+                            300: '#5EEAD4',
+                            400: '#2DD4BF',
+                            500: '#14B8A6',
+                            600: '#0D9488',
+                            700: '#0F766E',
+                            800: '#115E59',
+                            900: '#134E4A',
                         }
                     },
                     fontFamily: {
@@ -31,7 +43,28 @@
             }
         }
     </script>
-
+    <style>
+        .card-hover {
+            transition: all 0.3s ease;
+            border-left: 4px solid #3B82F6;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .status-approved {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+        .status-pending {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+        .status-rejected {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 font-sans">
 <div class="min-h-screen flex flex-col">
@@ -54,20 +87,23 @@
                 <div class="flex items-center">
                     <div class="relative">
                         <button id="userMenuBtn" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500" aria-expanded="false">
-                            <span class="sr-only">Ouvrir le menu utilisateur</span>
                             <div class="flex items-center">
-                                <div class="h-8 w-8 rounded-full bg-primary-600 flex items-center justify-center text-white">
+                                <div class="h-8 w-8 rounded-full bg-primary-700 flex items-center justify-center text-white">
                                     <i class="fas fa-user"></i>
                                 </div>
                                 <span class="ml-2 text-gray-700">Chef de Service</span>
-                                <svg class="ml-1 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <svg class="ml-1 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                 </svg>
                             </div>
                         </button>
-                        <div id="userMenu" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu">
-                            <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Votre profil</a>
-                            <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Déconnexion</a>
+                        <div id="userMenu" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+                            <a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-user-circle mr-2"></i>Votre profil
+                            </a>
+                            <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <i class="fas fa-sign-out-alt mr-2"></i>Déconnexion
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -77,85 +113,79 @@
 
     <div class="flex flex-1">
         <!-- Sidebar -->
-        <!-- Sidebar -->
         <div class="bg-white shadow-sm border-r border-gray-200 w-64 flex-shrink-0 hidden md:block">
             <div class="h-full flex flex-col">
                 <nav class="flex-1 py-4 px-2 space-y-1">
                     <a href="dashboard.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-gray-600 mr-3 h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="7" height="9"/>
-                            <rect x="14" y="3" width="7" height="5"/>
-                            <rect x="14" y="12" width="7" height="9"/>
-                            <rect x="3" y="16" width="7" height="5"/>
-                        </svg>
+                        <i class="fas fa-tachometer-alt text-gray-500 group-hover:text-gray-600 mr-3"></i>
                         Tableau de bord
                     </a>
 
                     <a href="calendar.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-gray-600 mr-3 h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
-                            <line x1="16" x2="16" y1="2" y2="6"/>
-                            <line x1="8" x2="8" y1="2" y2="6"/>
-                            <line x1="3" x2="21" y1="10" y2="10"/>
-                        </svg>
-                        Configuration du Calendrier
+                        <i class="fas fa-calendar-alt text-gray-500 group-hover:text-gray-600 mr-3"></i>
+                        Calendrier
                     </a>
+
                     <a href="employees.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-gray-600 mr-3 h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                        </svg>
+                        <i class="fas fa-users text-gray-500 group-hover:text-gray-600 mr-3"></i>
                         Voir les utilisateurs
                     </a>
 
-
-                    <a href="historique-conges.html" class="bg-primary-50 text-primary-700 hover:bg-primary-100 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-primary-600 group-hover:text-primary-700 mr-3 h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-                        </svg>
+                    <a href="historique-conges.html" class="bg-primary-50 text-primary-700 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-history text-primary-700 mr-3"></i>
                         Historique des congés
                     </a>
+
                     <a href="demande_coneege.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-gray-600 mr-3 h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
-                            <line x1="16" x2="16" y1="2" y2="6"></line>
-                            <line x1="8" x2="8" y1="2" y2="6"></line>
-                            <line x1="3" x2="21" y1="10" y2="10"></line>
-                        </svg>
+                        <i class="fas fa-file-signature text-gray-500 group-hover:text-gray-600 mr-3"></i>
                         Gestion des demandes
                     </a>
+
                     <a href="profile.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="text-gray-500 group-hover:text-gray-600 mr-3 h-6 w-6" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-                            <polyline points="3.29 7 12 12 20.71 7"/>
-                            <line x1="12" y1="22" y2="12" x2="12"/>
-                        </svg>
+                        <i class="fas fa-id-card text-gray-500 group-hover:text-gray-600 mr-3"></i>
                         Mon Profil
                     </a>
                 </nav>
             </div>
         </div>
 
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden card-hover">
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-800">
+                                <i class="fas fa-file-alt text-primary-600 mr-2"></i> Détails de la demande
+                            </h2>
+                            <p class="text-gray-600">Informations complètes sur la demande de congé</p>
+                        </div>
+                        <div class="text-sm text-gray-500">
+                            <i class="fas fa-calendar-alt mr-1"></i>
+                            <span id="currentDate"></span>
+                        </div>
+                    </div>
 
-    <main class="flex-1 p-10">
-        <div class="bg-white rounded-lg shadow p-6">
-            <h1 class="text-2xl font-bold text-gray-800 mb-6">Détails de la demande</h1>
+                    <div id="demandeDetails" class="space-y-6">
+                        <!-- Les détails seront chargés ici -->
+                    </div>
 
-            <div id="demandeDetails" class="space-y-4">
-                <!-- Les détails seront chargés ici -->
+                    <div id="actionButtons" class="mt-8 flex justify-end space-x-4">
+                        <!-- Boutons d'action seront ajoutés dynamiquement -->
+                    </div>
+                </div>
             </div>
-
-            <div id="actionButtons" class="mt-6 flex space-x-4">
-                <!-- Boutons d'action seront ajoutés dynamiquement -->
-            </div>
-        </div>
-    </main>
+        </main>
+    </div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', async function () {
+        // Set current date
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const now = new Date();
+        document.getElementById('currentDate').textContent = now.toLocaleDateString('fr-FR', options);
+
         const token = localStorage.getItem('token');
         if (!token) return window.location.href = '../user/index.html';
 
@@ -187,50 +217,94 @@
             const dateDebut = new Date(demande.dateDebut).toLocaleDateString('fr-FR');
             const dateFin = new Date(demande.dateFin).toLocaleDateString('fr-FR');
 
+            // Déterminer la classe CSS pour le statut
+            let statutClass = '';
+            let statutIcon = '';
+
+            switch(demande.statut?.toUpperCase()) {
+                case 'APPROUVÉ':
+                case 'APPROUVE':
+                    statutClass = 'status-approved';
+                    statutIcon = '✓';
+                    break;
+                case 'REFUSÉ':
+                case 'REFUSE':
+                    statutClass = 'status-rejected';
+                    statutIcon = '✗';
+                    break;
+                case 'EN_ATTENTE':
+                    statutClass = 'status-pending';
+                    statutIcon = '⏳';
+                    break;
+                default:
+                    statutClass = 'bg-gray-100 text-gray-800';
+            }
+
             // Afficher les détails
             detailsContainer.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">Référence</h3>
-                        <p class="mt-1 text-sm text-gray-900">${demande.reference || 'CONG-' + demande.id.toString().padStart(3, '0')}</p>
+                <div class="mb-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">
+                        <i class="fas fa-info-circle text-primary-600 mr-2"></i> Informations principales
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500 mb-1">Référence</p>
+                            <p class="font-medium">${demande.reference || 'CONG-' + demande.id.toString().padStart(3, '0')}</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500 mb-1">Date de création</p>
+                            <p class="font-medium">${dateCreation}</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500 mb-1">Statut</p>
+                            <span class="px-3 py-1 rounded-full text-xs font-medium ${statutClass}">
+                                ${statutIcon} ${demande.statut}
+                            </span>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500 mb-1">Durée</p>
+                            <p class="font-medium">${demande.duree} jour(s)</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">Date de création</h3>
-                        <p class="mt-1 text-sm text-gray-900">${dateCreation}</p>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">
+                        <i class="fas fa-calendar-check text-primary-600 mr-2"></i> Période de congé
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500 mb-1">Date de début</p>
+                            <p class="font-medium">${dateDebut}</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500 mb-1">Date de fin</p>
+                            <p class="font-medium">${dateFin}</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">Période</h3>
-                        <p class="mt-1 text-sm text-gray-900">${dateDebut} - ${dateFin}</p>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">
+                        <i class="fas fa-ellipsis-h text-primary-600 mr-2"></i> Détails supplémentaires
+                    </h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500 mb-1">Motif</p>
+                            <p class="font-medium">${demande.motif}</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500 mb-1">Remplacé par</p>
+                            <p class="font-medium">${demande.remplacerPar || 'Non spécifié'}</p>
+                        </div>
+                        ${demande.documentLink ? `
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <p class="text-sm text-gray-500 mb-1">Document</p>
+                            <a href="${demande.documentLink}" class="text-primary-600 hover:underline" target="_blank">
+                                <i class="far fa-eye mr-1"></i> Voir document
+                            </a>
+                        </div>` : ''}
                     </div>
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">Durée</h3>
-                        <p class="mt-1 text-sm text-gray-900">${demande.duree} jour(s)</p>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">Motif</h3>
-                        <p class="mt-1 text-sm text-gray-900">${demande.motif}</p>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">Remplacé par</h3>
-                        <p class="mt-1 text-sm text-gray-900">${demande.remplacerPar || 'Non spécifié'}</p>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">Statut</h3>
-                        <span class="mt-1 px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                            ${demande.statut === 'EN_ATTENTE' ? 'text-yellow-600 bg-yellow-100' :
-                              demande.statut.includes('APPROUV') ? 'text-green-600 bg-green-100' :
-                              demande.statut.includes('REFUS') ? 'text-red-600 bg-red-100' :
-                              'text-gray-600 bg-gray-100'}">
-                            ${demande.statut}
-                        </span>
-                    </div>
-                    ${demande.documentLink ? `
-                    <div>
-                        <h3 class="text-sm font-medium text-gray-500">Document</h3>
-                        <a href="${demande.documentLink}" class="mt-1 text-sm text-blue-600 hover:underline" target="_blank">
-                            <i class="far fa-eye"></i> Voir document
-                        </a>
-                    </div>` : ''}
                 </div>
             `;
 
@@ -238,22 +312,22 @@
             if (demande.statut === 'EN_ATTENTE') {
                 actionButtons.innerHTML = `
                     <button onclick="window.location.href='edit-demande.html'"
-                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            class="px-6 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                         <i class="fas fa-edit mr-2"></i> Modifier
                     </button>
                     <button onclick="deleteDemande(${demande.id})"
-                            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                            class="px-6 py-2 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
                         <i class="fas fa-trash mr-2"></i> Supprimer
                     </button>
                     <button onclick="window.location.href='historique-conges.html'"
-                            class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+                            class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
                         <i class="fas fa-arrow-left mr-2"></i> Retour
                     </button>
                 `;
             } else {
                 actionButtons.innerHTML = `
                     <button onclick="window.location.href='historique-conges.html'"
-                            class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+                            class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
                         <i class="fas fa-arrow-left mr-2"></i> Retour
                     </button>
                 `;
@@ -288,8 +362,7 @@
         }
     }
 
-
-     // Logout functionality
+    // Logout functionality
     document.getElementById('logoutBtn').addEventListener('click', function() {
         localStorage.removeItem('token');
         localStorage.removeItem('refresh_token');
