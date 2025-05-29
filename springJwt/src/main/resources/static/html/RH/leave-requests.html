@@ -178,6 +178,44 @@
             border-bottom-color: #3B82F6;
             color: #3B82F6;
         }
+
+        /* Nouveaux styles pour les alertes */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            max-width: 400px;
+        }
+
+        .alert.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .alert-success {
+            background-color: #D1FAE5;
+            color: #065F46;
+            border: 1px solid #A7F3D0;
+        }
+
+        .alert-error {
+            background-color: #FEE2E2;
+            color: #991B1B;
+            border: 1px solid #FECACA;
+        }
+
+        .alert-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -267,8 +305,7 @@
 
                     <div class="flex space-x-3">
                         <div class="relative">
-                            <input type="text" id="searchInput" placeholder="Rechercher..."
-                                   class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 w-64">
+                            <input type="text" id="searchInput" placeholder="Rechercher..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 w-64">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <i class="fas fa-search text-gray-400"></i>
                             </div>
@@ -283,20 +320,16 @@
                 <!-- Tabs -->
                 <div class="border-b border-gray-200 mb-6">
                     <nav class="-mb-px flex space-x-8">
-                        <button class="tab-btn active border-b-2 border-primary-500 text-primary-600 whitespace-nowrap py-4 px-1 text-sm font-medium"
-                                data-filter="all">
+                        <button class="tab-btn active border-b-2 border-primary-500 text-primary-600 whitespace-nowrap py-4 px-1 text-sm font-medium" data-filter="all">
                             Toutes les demandes
                         </button>
-                        <button class="tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium"
-                                data-filter="APPROUVE">
+                        <button class="tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium" data-filter="APPROUVE">
                             Demandes approuvées
                         </button>
-                        <button class="tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium"
-                                data-filter="REFUSE">
+                        <button class="tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium" data-filter="REFUSE">
                             Demandes refusées
                         </button>
-                        <button class="tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium"
-                                data-filter="EN_COURS_DE_TRAITEMENT">
+                        <button class="tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium" data-filter="EN_COURS_DE_TRAITEMENT">
                             En cours de traitement
                         </button>
                     </nav>
@@ -443,14 +476,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button type="button" id="approveRequestBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
-                    Approuver
-                </button>
-                <button type="button" id="rejectRequestBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
-                    Refuser
-                </button>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" id="approveRequestBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
+                        Approuver
+                    </button>
+                    <button type="button" id="rejectRequestBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
+                        Refuser
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -532,18 +565,22 @@
         const confirmRejectBtn = document.getElementById('confirmRejectBtn');
         const cancelRejectBtn = document.getElementById('cancelRejectBtn');
 
-        let currentRequestId = null; // To store the ID of the request being viewed
+        // Alert element
+        const alertContainer = document.createElement('div');
+        document.body.appendChild(alertContainer);
+
+        let currentRequestId = null;
 
         // Pagination variables
         let currentPage = 1;
         const itemsPerPage = 10;
         let allRequests = [];
         let filteredRequests = [];
-        let employeesMap = new Map(); // Pour stocker les infos des employés
+        let employeesMap = new Map();
 
         // Initialize the page
         async function init() {
-            await loadRequests(); // Load requests, they now contain employee info directly
+            await loadRequests();
             setupEventListeners();
         }
 
@@ -561,13 +598,11 @@
                 }
 
                 const rawRequests = await response.json();
-
-                // Assign to allRequests directly, as employee info is already nested
                 allRequests = rawRequests.map(request => ({
                     ...request,
-                    employeeName: request.employeeName || 'Nom inconnu', // Ensure employeeName exists
-                    employeeRole: request.role || 'Rôle inconnu', // Use 'role' from API for employeeRole
-                    employeeBalance: 'N/A' // This will be fetched dynamically for the detailed view
+                    employeeName: request.employeeName || 'Nom inconnu',
+                    employeeRole: request.role || 'Rôle inconnu',
+                    employeeBalance: 'N/A'
                 }));
 
                 filteredRequests = [...allRequests];
@@ -575,7 +610,7 @@
                 updatePagination();
             } catch (error) {
                 console.error('Error:', error);
-                showError('Erreur lors du chargement des demandes: ' + error.message);
+                showAlert('Erreur lors du chargement des demandes: ' + error.message, 'error');
             }
         }
 
@@ -605,31 +640,30 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-               ${(() => {
-                   if (request.statut === 'APPROUVE') {
-                       return 'status-approved';
-                   } else if (request.statut === 'REFUSE') {
-                       return 'status-rejected';
-                   } else if (request.statut === 'EN_COURS_DE_TRAITEMENT') {
-                       return 'status-pending';
-                   } else {
-                       return 'bg-gray-100 text-gray-800';
-                   }
-               })()}">
-              ${request.statut} <!-- Affiche directement la valeur du statut -->
-           </span>
+                           ${(() => {
+                               if (request.statut === 'APPROUVE') {
+                                   return 'status-approved';
+                               } else if (request.statut === 'REFUSE') {
+                                   return 'status-rejected';
+                               } else if (request.statut === 'EN_COURS_DE_TRAITEMENT') {
+                                   return 'status-pending';
+                               } else {
+                                   return 'bg-gray-100 text-gray-800';
+                               }
+                           })()}">
+                           ${request.statut}
+                        </span>
                     </td>
-
-<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-    ${request.statut === 'APPROUVE' ?
-        `<a href="fiche.html?id=${request.id}" class="text-green-600 hover:text-green-900 mr-3">
-            <i class="fas fa-file-alt"></i> Fiche
-        </a>` :
-        `<button class="text-primary-600 hover:text-primary-900 mr-3 view-btn" data-id="${request.id}">
-            <i class="fas fa-eye"></i>
-        </button>`
-    }
-</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        ${request.statut === 'APPROUVE' ?
+                            `<a href="fiche.html?id=${request.id}" class="text-green-600 hover:text-green-900 mr-3">
+                                <i class="fas fa-file-alt"></i> Fiche
+                            </a>` :
+                            `<button class="text-primary-600 hover:text-primary-900 mr-3 view-btn" data-id="${request.id}">
+                                <i class="fas fa-eye"></i>
+                            </button>`
+                        }
+                    </td>
                 </tr>
             `).join('');
 
@@ -641,7 +675,7 @@
 
         // Show request details in modal
         async function showRequestDetails(requestId) {
-             currentRequestId = requestId;
+            currentRequestId = requestId;
             const request = allRequests.find(req => req.id == requestId);
             if (!request) return;
 
@@ -664,8 +698,8 @@
 
             detailEmployeeAvatar.textContent = request.employeeName ? request.employeeName.charAt(0) : 'U';
             detailEmployeeName.textContent = request.employeeName || 'Non spécifié';
-            detailEmployeeRole.textContent = request.role || 'Non spécifié'; // Use role from the request object
-            detailEmployeeBalance.textContent = `${globalBalance.soldeGlobal || 'N/A'} jours`; // Display global balance here
+            detailEmployeeRole.textContent = request.role || 'Non spécifié';
+            detailEmployeeBalance.textContent = `${globalBalance.soldeGlobal || 'N/A'} jours`;
 
             detailPeriod.textContent = `${formatDate(request.dateDebut)} au ${formatDate(request.dateFin)}`;
             detailDurationCard.textContent = `${request.duree} jours`;
@@ -691,7 +725,6 @@
         }
 
         // Filter requests based on search and tab selection
-       // Filter requests based on search and tab selection
         function filterRequests() {
             const searchTerm = searchInput.value.toLowerCase();
             const activeTab = document.querySelector('.tab-btn.active')?.dataset.filter || 'all';
@@ -715,6 +748,7 @@
             renderRequests();
             updatePagination();
         }
+
         // Update pagination controls
         function updatePagination() {
             const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
@@ -745,7 +779,6 @@
             }
 
             // Bouton pour la première page
-
             if (startPage > 1) {
                 const firstPageBtn = createPageButton(1);
                 pageNumbers.appendChild(firstPageBtn);
@@ -822,7 +855,7 @@
                     const data = filteredRequests.map(request => ({
                         'ID': request.id,
                         'Employé': request.employeeName,
-                        'Rôle': request.role, // Use request.role
+                        'Rôle': request.role,
                         'Remplacé par': request.remplacerPar || 'N/A',
                         'Date Début': formatDate(request.dateDebut),
                         'Date Fin': formatDate(request.dateFin),
@@ -843,53 +876,86 @@
                 document.head.appendChild(script);
             } catch (error) {
                 console.error('Erreur lors de l\'export:', error);
-                alert('Une erreur est survenue lors de l\'export');
+                showAlert('Une erreur est survenue lors de l\'export', 'error');
             }
         }
 
-        // Approve/Reject Request
+        // Approve/Reject Request - NOUVELLE VERSION avec la nouvelle API
         async function updateRequestStatus(status, reason = null) {
             if (!currentRequestId) return;
 
-            const requestBody = {
-                statut: status,
-                motifRefus: reason // Only applicable for rejection
-            };
-
             try {
-                const response = await fetch(`http://localhost:8080/api/demandes-conge/${currentRequestId}/statut`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(requestBody)
-                });
+                let response;
+                if (status === 'APPROUVE') {
+                    // Utilisation de la nouvelle API pour l'approbation
+                    response = await fetch(`http://localhost:8080/api/approbation-conge/approuver/${currentRequestId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({}) // Corps vide ou données supplémentaires si nécessaire
+                    });
+                } else {
+                    // Pour le rejet, on garde l'ancienne API
+                    response = await fetch(`http://localhost:8080/api/demandes-conge/${currentRequestId}/statut`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            statut: status,
+                            motifRefus: reason
+                        })
+                    });
+                }
 
                 if (!response.ok) {
                     const errorText = await response.text();
                     throw new Error(`Erreur lors de la mise à jour du statut de la demande: ${errorText}`);
                 }
 
-                alert(`Demande ${status === 'APPROUVE' ? 'approuvée' : 'refusée'} avec succès!`);
+                // Afficher une alerte de succès
+                showAlert(`Demande ${status === 'APPROUVE' ? 'approuvée' : 'refusée'} avec succès!`, 'success');
+
+                // Fermer les modales
                 requestDetailModal.classList.add('hidden');
                 rejectReasonModal.classList.add('hidden');
-                await loadRequests(); // Reload requests to update the table
+
+                // Recharger les demandes
+                await loadRequests();
             } catch (error) {
                 console.error('Error:', error);
-                alert(`Erreur: ${error.message}`);
+                showAlert(`Erreur: ${error.message}`, 'error');
             }
         }
 
-        // Show error message
-        function showError(message) {
-            requestsTableBody.innerHTML = `
-                <tr>
-                    <td colspan="5" class="px-6 py-4 text-center text-sm text-red-600">
-                        <i class="fas fa-exclamation-circle mr-2"></i> ${message}
-                    </td>
-                </tr>
+        // Fonction pour afficher des alertes stylisées
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type === 'success' ? 'success' : 'error'}`;
+            alert.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} alert-icon"></i>
+                    ${message}
+                </div>
             `;
+
+            alertContainer.appendChild(alert);
+
+            // Ajouter la classe show pour l'animation
+            setTimeout(() => {
+                alert.classList.add('show');
+            }, 10);
+
+            // Supprimer l'alerte après 5 secondes
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => {
+                    alert.remove();
+                }, 300);
+            }, 5000);
         }
 
         // Setup event listeners
@@ -961,7 +1027,7 @@
 
             // Approve and Reject buttons in detail modal
             approveRequestBtn.addEventListener('click', () => {
-                if (confirm('Êtes-vous sûr de vouloir approuver cette demande ?')) {
+                if (confirm('Êtes-vous sûr de vouloir approuver cette demande ? Cette action mettra à jour le solde de congé de l\'employé.')) {
                     updateRequestStatus('APPROUVE');
                 }
             });
@@ -986,7 +1052,7 @@
                 if (reason) {
                     updateRequestStatus('REFUSE', reason);
                 } else {
-                    alert('Veuillez entrer un motif de refus.');
+                    showAlert('Veuillez entrer un motif de refus.', 'error');
                 }
             });
         }

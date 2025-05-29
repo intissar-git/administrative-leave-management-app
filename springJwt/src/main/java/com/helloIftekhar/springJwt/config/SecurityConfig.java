@@ -56,6 +56,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/demandes-conge").authenticated()
                         .requestMatchers("/api/demandes-conge/**").authenticated()
                         .requestMatchers("/api/solde-conge/**").authenticated()
+                        .requestMatchers("/api/approbation-conge/**").hasAuthority("RH")
+
                         .anyRequest()
                         .authenticated()
                 )

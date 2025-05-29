@@ -72,7 +72,11 @@ public class ApprobationCongeController {
         demandeCongeRepository.save(demande);
 
         // 6. Retourner la réponse
-        DemandeCongeResponseDTO response = demandeCongeService.mapToResponseDTO(demande);
+        DemandeCongeResponseDTO response = demandeCongeRepository.findAllWithEmployeeInfo()
+                .stream()
+                .filter(dto -> dto.getId().equals(demandeId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Demande non trouvée"));
         return ResponseEntity.ok(response);
     }
 
