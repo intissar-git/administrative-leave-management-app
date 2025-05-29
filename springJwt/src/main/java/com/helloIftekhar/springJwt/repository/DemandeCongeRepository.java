@@ -60,6 +60,8 @@ public interface DemandeCongeRepository extends JpaRepository<DemandeConge, Long
 
     @Query("SELECT COUNT(d) FROM DemandeConge d WHERE d.statut = 'EN_ATTENTE' OR d.statut = 'EN ATTENTE'")
     long countEnAttente();
+    @Query("SELECT COUNT(d) FROM DemandeConge d WHERE d.statut = 'EN_COURS_DE_TRAITEMENT' OR d.statut = 'EN COURS DE TRAITEMENT'")
+    long countEnCoursDETraitement();
 
     // Pour les stats par utilisateur
     @Query("SELECT COUNT(d) FROM DemandeConge d WHERE (d.statut = 'APPROUVE' OR d.statut = 'APPROUVÉ') AND d.idEmployee = :userId")

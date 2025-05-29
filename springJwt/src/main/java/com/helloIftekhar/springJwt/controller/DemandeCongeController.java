@@ -10,19 +10,13 @@ import com.helloIftekhar.springJwt.model.User;
 import com.helloIftekhar.springJwt.repository.DemandeCongeRepository;
 import com.helloIftekhar.springJwt.repository.UserRepository;
 import com.helloIftekhar.springJwt.service.DemandeCongeService;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.AccessType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/demandes-conge")
@@ -148,6 +142,12 @@ public class DemandeCongeController {
     @GetMapping("/stats-globales")
     public ResponseEntity<DemandeStatsDTO> getGlobalStats() {
         DemandeStatsDTO stats = demandeCongeService.getGlobalDemandesStats();
+        return ResponseEntity.ok(stats);
+    }
+
+    @GetMapping("/stats-globalesRh")
+    public ResponseEntity<DemandeStatsDTO> getGlobalStatsRhh() {
+        DemandeStatsDTO stats = demandeCongeService.getGlobalDemandesStatsRh();
         return ResponseEntity.ok(stats);
     }
 

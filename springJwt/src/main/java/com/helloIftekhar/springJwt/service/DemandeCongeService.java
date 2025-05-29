@@ -89,7 +89,17 @@ public class DemandeCongeService {
         long refusees = demandeCongeRepository.countRefusees();
         long enAttente = demandeCongeRepository.countEnAttente();
 
+
         return new DemandeStatsDTO(approuvees, refusees, enAttente);
+    }
+    //ajouter par RH
+    public DemandeStatsDTO getGlobalDemandesStatsRh() {
+        long approuvees = demandeCongeRepository.countApprouvees();
+        long refusees = demandeCongeRepository.countRefusees();
+        long enAttente = demandeCongeRepository.countEnAttente();
+        long enCoursDeTraitement = demandeCongeRepository.countEnCoursDETraitement();
+
+        return new DemandeStatsDTO(approuvees, refusees, enAttente, enCoursDeTraitement);
     }
 
     public DemandeStatsDTO getUserDemandesStats(Long userId) {

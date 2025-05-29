@@ -47,7 +47,6 @@
         }
     </script>
     <style>
-        /* Card styles inspired by Chef Département */
         .stat-card {
             transition: all 0.3s ease;
             border-left: 4px solid;
@@ -68,6 +67,25 @@
         }
         .pending-card {
             border-left-color: #F59E0B;
+        }
+        .chart-percentages {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+        .chart-percentage-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            color: #4B5563;
+        }
+        .chart-percentage-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            margin-right: 0.5rem;
         }
     </style>
 </head>
@@ -113,7 +131,7 @@
     </nav>
 
     <div class="flex flex-1">
-        <!-- Sidebar inspired by Chef Département -->
+        <!-- Sidebar -->
         <div class="bg-white shadow-sm border-r border-gray-200 w-64 hidden md:block">
             <div class="h-full flex flex-col">
                 <nav class="flex-1 py-4 px-2 space-y-1">
@@ -137,7 +155,6 @@
                         <i class="fas fa-calendar-alt text-gray-500 group-hover:text-gray-600 mr-3"></i>
                         Calendrier
                     </a>
-
                     <a href="historiqueRh.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                         <i class="fas fa-history text-gray-500 group-hover:text-gray-600 mr-3"></i>
                         Historique
@@ -253,12 +270,15 @@
                                 </div>
                                 <div class="ml-5 w-0 flex-1">
                                     <dt class="text-sm font-medium text-gray-500 truncate">
-                                        Congés en attente
+                                        Demandes en cours
                                     </dt>
                                     <dd class="flex items-baseline">
                                         <div id="pendingLeaves" class="text-2xl font-semibold text-gray-900">
                                             --
                                         </div>
+                                        <span class="ml-2 text-sm text-gray-500">
+                                            (<span id="inProgressCount"></span> de traitement)
+                                        </span>
                                     </dd>
                                 </div>
                             </div>
@@ -385,7 +405,7 @@
       return response.json();
     }
 
-    // Function to fetch dashboard data
+   // Function to fetch dashboard data
     async function fetchDashboardData() {
         try {
             // Fetch employee statistics
@@ -403,11 +423,22 @@
             createDepartmentsChart(departments);
 
             // Fetch leave statistics
-            const leavesStats = await makeAuthenticatedRequest('http://localhost:8080/api/demandes-conge/stats-globales');
+            // Modifier l'affichage des congés en cours
+            const leavesStats = await makeAuthenticatedRequest('http://localhost:8080/api/demandes-conge/stats-globalesRh');
             document.getElementById('approvedLeaves').textContent = leavesStats.approuvees || '--';
-            document.getElementById('pendingLeaves').textContent = leavesStats.enAttente || '--';
 
-            // Create leaves status distribution chart
+            // Mettre à jour le nombre de demandes en cours (uniquement en cours de traitement)
+            document.getElementById('pendingLeaves').textContent = leavesStats.enCoursDeTraitement || '--';
+
+            // Supprimer cette ligne incorrecte
+            // const totalPending = (leavesStats.enAttente + leavesStats.enCoursDeTraitement) || 0;
+            // document.getElementById('pendingLeaves').textContent = totalPending || '--';
+
+            // Supprimer ces lignes car nous ne les affichons plus séparément dans la carte "Demandes en cours"
+            // document.getElementById('pendingCount').textContent = leavesStats.enAttente || '--';
+            // document.getElementById('inProgressCount').textContent = leavesStats.enCoursDeTraitement || '--';
+
+            // Create leaves status distribution chart (now includes both enAttente and enCoursDeTraitement)
             createLeavesChart(leavesStats);
 
             // Create departments with services chart (now as donut)
@@ -415,6 +446,8 @@
 
         } catch (error) {
             console.error('Error fetching dashboard data:', error);
+            // Show error to user
+            alert('Erreur lors du chargement des données. Veuillez réessayer.');
         }
     }
 
@@ -533,15 +566,20 @@
     // Function to create leave status distribution chart
     function createLeavesChart(leavesStats) {
         const options = {
-            series: [leavesStats.enAttente, leavesStats.refusees, leavesStats.approuvees],
+            series: [leavesStats.enAttente, leavesStats.enCoursDeTraitement, leavesStats.refusees, leavesStats.approuvees],
             chart: {
                 type: 'donut',
                 height: 350,
             },
-            labels: ['En attente', 'Refusées', 'Approuvées'],
-            colors: ['#F59E0B', '#EF4444', '#10B981'],
+            labels: ['En attente', 'En cours de traitement', 'Refusées', 'Approuvées'],
+            colors: ['#F59E0B', '#F97316', '#EF4444', '#10B981'],
             legend: {
-                position: 'bottom'
+                position: 'bottom',
+                markers: {
+                    width: 12,
+                    height: 12,
+                    radius: 12,
+                }
             },
             responsive: [{
                 breakpoint: 480,
@@ -563,8 +601,18 @@
                                 show: true,
                                 label: 'Total',
                                 color: '#6B7280',
+                                formatter: function (w) {
+                                    return w.globals.seriesTotals.reduce((a, b) => a + b, 0)
+                                }
                             }
                         }
+                    }
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: function(value) {
+                        return value + " demandes";
                     }
                 }
             }
@@ -676,7 +724,8 @@
       const statusMap = {
         'PENDING': 'En attente',
         'APPROVED': 'Approuvé',
-        'REJECTED': 'Rejeté'
+        'REJECTED': 'Rejeté',
+        'EN_COURS_DE_TRAITEMENT': 'En cours de traitement'
       };
       return statusMap[status] || status;
     }

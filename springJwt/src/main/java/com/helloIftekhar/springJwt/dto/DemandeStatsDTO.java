@@ -1,9 +1,18 @@
 package com.helloIftekhar.springJwt.dto;
 
+
+import lombok.*;
+
+
+
+@Getter
+@Setter
 public class DemandeStatsDTO {
+    // Getters et Setters
     private long approuvees;
     private long refusees;
     private long enAttente;
+    private long enCoursDeTraitement;
     private long total;
 
     // Constructeurs
@@ -15,37 +24,13 @@ public class DemandeStatsDTO {
         this.enAttente = enAttente;
         this.total = approuvees + refusees + enAttente;
     }
-
-    // Getters et Setters
-    public long getApprouvees() {
-        return approuvees;
-    }
-
-    public void setApprouvees(long approuvees) {
+    //ajouter par RH
+    public DemandeStatsDTO(long approuvees, long refusees, long enAttente,long enCoursDeTraitement) {
         this.approuvees = approuvees;
-    }
-
-    public long getRefusees() {
-        return refusees;
-    }
-
-    public void setRefusees(long refusees) {
         this.refusees = refusees;
-    }
-
-    public long getEnAttente() {
-        return enAttente;
-    }
-
-    public void setEnAttente(long enAttente) {
         this.enAttente = enAttente;
+        this.enCoursDeTraitement = enCoursDeTraitement;
+        this.total = approuvees + refusees + enAttente + enCoursDeTraitement;
     }
 
-    public long getTotal() {
-        return total;
-    }
-
-    public void setTotal(long total) {
-        this.total = total;
-    }
 }
