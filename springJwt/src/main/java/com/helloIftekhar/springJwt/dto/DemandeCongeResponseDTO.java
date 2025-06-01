@@ -2,18 +2,38 @@ package com.helloIftekhar.springJwt.dto;
 
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 @Data
 public class DemandeCongeResponseDTO {
+    // Getters et Setters
+    @Getter
+    @Setter
     private Long id;
+    @Setter
     private Long idEmployee;
+    @Setter
+    @Getter
     private Date dateCreation;
+    @Getter
+    @Setter
     private Date dateDebut;
+    @Getter
+    @Setter
     private Date dateFin;
+    @Getter
+    @Setter
     private String motif;
+    @Getter
+    @Setter
     private String statut;
+    @Getter
+    @Setter
     private int duree;
+    @Getter
+    @Setter
     private String remplacerPar;
     private String employeeName;
     private String departement;
@@ -29,6 +49,7 @@ public class DemandeCongeResponseDTO {
     private int soldeGlobal;
 private int soldeAnneePrecedente;
 private  int soldeAnneeCourante;
+private String username; // Ajoutez ce champ
 
 
     public DemandeCongeResponseDTO() {
@@ -37,7 +58,7 @@ private  int soldeAnneeCourante;
     public DemandeCongeResponseDTO(Long id, Long idEmployee, String employeeName, String departement,
                                    Date dateCreation, Date dateDebut, Date dateFin,
                                    String motif, String statut, int duree, String remplacerPar,String role,String serviceName,String remplacantArab,String nomArab,String prenomArab,String gradeArab,String echelleArab,int soldeGlobal
-,int soldeAnneePrecedente,int soldeAnneeCourante) {
+,int soldeAnneePrecedente,int soldeAnneeCourante,String username) {
         this.id = id;
         this.idEmployee = idEmployee;
         this.employeeName = employeeName;
@@ -59,80 +80,13 @@ private  int soldeAnneeCourante;
         this.soldeGlobal=soldeGlobal;
         this.soldeAnneePrecedente=soldeAnneePrecedente;
         this.soldeAnneeCourante=soldeAnneeCourante;
+        this.username = username;
 
 
-    }
-    // Getters et Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getIdEmployee() {
         return idEmployee;
-    }
-
-    public void setIdEmployee(Long idEmployee) {
-        this.idEmployee = idEmployee;
-    }
-
-    public Date getDateCreation() {
-        return dateCreation;
-    }
-
-    public void setDateCreation(Date dateCreation) {
-        this.dateCreation = dateCreation;
-    }
-
-    public Date getDateDebut() {
-        return dateDebut;
-    }
-
-    public void setDateDebut(Date dateDebut) {
-        this.dateDebut = dateDebut;
-    }
-
-    public Date getDateFin() {
-        return dateFin;
-    }
-
-    public void setDateFin(Date dateFin) {
-        this.dateFin = dateFin;
-    }
-
-    public String getMotif() {
-        return motif;
-    }
-
-    public void setMotif(String motif) {
-        this.motif = motif;
-    }
-
-    public String getStatut() {
-        return statut;
-    }
-
-    public void setStatut(String statut) {
-        this.statut = statut;
-    }
-
-    public int getDuree() {
-        return duree;
-    }
-
-    public void setDuree(int duree) {
-        this.duree = duree;
-    }
-
-    public String getRemplacerPar() {
-        return remplacerPar;
-    }
-
-    public void setRemplacerPar(String remplacerPar) {
-        this.remplacerPar = remplacerPar;
     }
 
 

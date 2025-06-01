@@ -279,8 +279,9 @@
             }
             const userData = await userResponse.json();
 
+
             // Requête pour le solde de congé de l'utilisateur
-            const soldeResponse = await fetch(`http://localhost:8080/api/solde-conge/mon-solde?username=${username}`, {
+            const soldeResponse = await fetch(`http://localhost:8080/api/solde-conge/employe/${username}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 

@@ -675,55 +675,58 @@
 
         // Show request details in modal
         async function showRequestDetails(requestId) {
-            currentRequestId = requestId;
-            const request = allRequests.find(req => req.id == requestId);
-            if (!request) return;
+    currentRequestId = requestId;
+    const request = allRequests.find(req => req.id == requestId);
+    if (!request) return;
 
-            // Fetch global leave balance for the employee
-            let globalBalance = { soldeGlobal: 'N/A', soldeAnneeCourante: 'N/A', soldeAnneePrecedente: 'N/A' };
-            try {
-                const balanceResponse = await fetch(`http://localhost:8080/api/solde-conge/mon-solde`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                if (balanceResponse.ok) {
-                    globalBalance = await balanceResponse.json();
-                } else {
-                    console.warn('Could not fetch global balance for employee:', request.idEmployee, 'Status:', balanceResponse.status);
-                }
-            } catch (error) {
-                console.error('Error fetching global balance:', error);
+    // Utilisez le username de la demande au lieu d'une variable non définie
+    const employeeUsername = request.username;
+
+    // Fetch global leave balance for the employee
+    let globalBalance = { soldeGlobal: 'N/A', soldeAnneeCourante: 'N/A', soldeAnneePrecedente: 'N/A' };
+    try {
+        const balanceResponse = await fetch(`http://localhost:8080/api/solde-conge/employe/${employeeUsername}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
-
-            detailEmployeeAvatar.textContent = request.employeeName ? request.employeeName.charAt(0) : 'U';
-            detailEmployeeName.textContent = request.employeeName || 'Non spécifié';
-            detailEmployeeRole.textContent = request.role || 'Non spécifié';
-            detailEmployeeBalance.textContent = `${globalBalance.soldeGlobal || 'N/A'} jours`;
-
-            detailPeriod.textContent = `${formatDate(request.dateDebut)} au ${formatDate(request.dateFin)}`;
-            detailDurationCard.textContent = `${request.duree} jours`;
-            detailReasonCard.textContent = request.motif || 'Non spécifié';
-            detailRemplacerPar.textContent = request.remplacerPar || 'Non spécifié';
-            detailDepartement.textContent = request.departement || 'Non spécifié';
-            detailService.textContent = request.service || 'Non spécifié';
-
-            detailGlobalBalance.textContent = globalBalance.soldeGlobal;
-            detailCurrentYearBalance.textContent = globalBalance.soldeAnneeCourante;
-            detailPreviousYearBalance.textContent = globalBalance.soldeAnneePrecedente;
-
-            requestDetailModal.classList.remove('hidden');
-
-            // Set visibility of action buttons based on status
-            if (request.statut === 'EN_COURS_DE_TRAITEMENT') {
-                approveRequestBtn.classList.remove('hidden');
-                rejectRequestBtn.classList.remove('hidden');
-            } else {
-                approveRequestBtn.classList.add('hidden');
-                rejectRequestBtn.classList.add('hidden');
-            }
+        });
+        if (balanceResponse.ok) {
+            globalBalance = await balanceResponse.json();
+        } else {
+            console.warn('Could not fetch global balance for employee:', request.idEmployee, 'Status:', balanceResponse.status);
         }
+    } catch (error) {
+        console.error('Error fetching global balance:', error);
+    }
 
+    // Le reste du code reste inchangé
+    detailEmployeeAvatar.textContent = request.employeeName ? request.employeeName.charAt(0) : 'U';
+    detailEmployeeName.textContent = request.employeeName || 'Non spécifié';
+    detailEmployeeRole.textContent = request.role || 'Non spécifié';
+    detailEmployeeBalance.textContent = `${globalBalance.soldeGlobal || 'N/A'} jours`;
+
+    detailPeriod.textContent = `${formatDate(request.dateDebut)} au ${formatDate(request.dateFin)}`;
+    detailDurationCard.textContent = `${request.duree} jours`;
+    detailReasonCard.textContent = request.motif || 'Non spécifié';
+    detailRemplacerPar.textContent = request.remplacerPar || 'Non spécifié';
+    detailDepartement.textContent = request.departement || 'Non spécifié';
+    detailService.textContent = request.serviceName || 'Non spécifié';
+
+    detailGlobalBalance.textContent = globalBalance.soldeGlobal;
+    detailCurrentYearBalance.textContent = globalBalance.soldeAnneeCourante;
+    detailPreviousYearBalance.textContent = globalBalance.soldeAnneePrecedente;
+
+    requestDetailModal.classList.remove('hidden');
+
+    // Set visibility of action buttons based on status
+    if (request.statut === 'EN_COURS_DE_TRAITEMENT') {
+        approveRequestBtn.classList.remove('hidden');
+        rejectRequestBtn.classList.remove('hidden');
+    } else {
+        approveRequestBtn.classList.add('hidden');
+        rejectRequestBtn.classList.add('hidden');
+    }
+}
         // Filter requests based on search and tab selection
         function filterRequests() {
             const searchTerm = searchInput.value.toLowerCase();
