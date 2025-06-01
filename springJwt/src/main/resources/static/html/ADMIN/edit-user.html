@@ -253,7 +253,10 @@
                                 <input type="text" name="matricule" id="matricule" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
                             </div>
 
-
+                            <div class="sm:col-span-3">
+                                <label for="dateNaissance" class="block text-sm font-medium text-gray-700">Date de Naissance <span class="text-red-500">*</span></label>
+                                <input type="date" name="dateNaissance" id="dateNaissance" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                            </div>
 
                             <div class="sm:col-span-3">
                                 <label for="grade" class="block text-sm font-medium text-gray-700">Grade <span class="text-red-500">*</span></label>
@@ -277,10 +280,19 @@
                                 <input type="text" name="echelleArab" id="echelleArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
                             </div>
 
+                            <!-- Après le champ echelleArab -->
+
                             <div class="sm:col-span-3">
-                                <label for="dateNaissance" class="block text-sm font-medium text-gray-700">Date de Naissance <span class="text-red-500">*</span></label>
-                                <input type="date" name="dateNaissance" id="dateNaissance" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                                <label for="fonction" class="block text-sm font-medium text-gray-700">Fonction <span class="text-red-500">*</span></label>
+                                <input type="text" name="fonction" id="fonction" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
                             </div>
+
+                            <div class="sm:col-span-3">
+                                <label for="fonctionArab" class="block text-sm font-medium text-gray-700">Fonction (Arabe)</label>
+                                <input type="text" name="fonctionArab" id="fonctionArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
+                            </div>
+
+
 
                             <div class="sm:col-span-6">
                                 <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse <span class="text-red-500">*</span></label>
@@ -408,6 +420,8 @@ document.getElementById('echelle').value = user.echelle || '';
 document.getElementById('echelleArab').value = user.echelleArab || '';
 document.getElementById('adresse').value = user.adresse || '';
 document.getElementById('role').value = user.role || '';
+document.getElementById('fonction').value = user.fonction || '';
+document.getElementById('fonctionArab').value = user.fonctionArab || '';
 
         // Sélectionner le département si disponible
         if (user.departement && user.departement.id) {
@@ -525,6 +539,8 @@ document.getElementById('role').value = user.role || '';
     adresse: document.getElementById('adresse').value.trim(),
     echelle: document.getElementById('echelle').value.trim(),
     echelleArab: document.getElementById('echelleArab').value.trim(),
+    fonction: document.getElementById('fonction').value.trim(),      // Nouveau champ
+    fonctionArab: document.getElementById('fonctionArab').value.trim(),
     email: document.getElementById('email').value.trim(),
     role: document.getElementById('role').value,
         departement: {

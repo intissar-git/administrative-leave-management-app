@@ -25,6 +25,8 @@ public class DtoMapper {
         userDTO.setPrenomArab(user.getPrenomArab());
         userDTO.setGradeArab(user.getGradeArab());
         userDTO.setEchelleArab(user.getEchelleArab());
+        userDTO.setFonction(user.getFonction());
+        userDTO.setFonctionArab(user.getFonctionArab());
 
         // Ajouter la gestion du service par chef service
         if (user.getService() != null) {

@@ -112,6 +112,8 @@ public class AuthenticationService {
         user.setPrenomArab(request.getPrenomArab());
         user.setGradeArab(request.getGradeArab());
         user.setEchelleArab(request.getEchelleArab());
+        user.setFonction(request.getFonction());
+        user.setFonctionArab(request.getFonctionArab());
 
         user = repository.save(user);
         createInitialSoldeConge(user);
@@ -246,6 +248,8 @@ public class AuthenticationService {
         existingUser.setPrenomArab(updatedUser.getPrenomArab());
         existingUser.setGradeArab(updatedUser.getGradeArab());
         existingUser.setEchelleArab(updatedUser.getEchelleArab());
+        existingUser.setFonction(updatedUser.getFonction());
+        existingUser.setFonctionArab(updatedUser.getFonctionArab());
 
         // Update role if provided
         if (updatedUser.getRole() != null) {

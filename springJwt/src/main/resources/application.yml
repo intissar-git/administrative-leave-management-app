@@ -34,13 +34,19 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: zouhrihajar77@gmail.com
-    password: qkqk gacu lvwa aqaf
+    password: kmui gsln uubo ewbb  # Mot de passe d'application généré
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
+          ssl:
+            trust: smtp.gmail.com
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+        debug: true  # Active le debug pour le dépannage
 file:
   upload-dir: uploads
 

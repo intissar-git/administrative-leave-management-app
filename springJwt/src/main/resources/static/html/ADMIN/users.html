@@ -282,6 +282,15 @@
                                 <input type="text" name="echelleArab" id="echelleArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
                             </div>
 
+                            <div class="sm:col-span-3">
+                                <label for="fonction" class="block text-sm font-medium text-gray-700">Fonction <span class="text-red-500">*</span></label>
+                                <input type="text" name="fonction" id="fonction" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                            </div>
+                            <div class="sm:col-span-3">
+                                <label for="fonctionArab" class="block text-sm font-medium text-gray-700">Fonction Arab <span class="text-red-500">*</span></label>
+                                <input type="text" name="fonctionArab" id="fonctionArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                            </div>
+
                             <div class="sm:col-span-6">
                                 <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse <span class="text-red-500">*</span></label>
                                 <input type="text" name="adresse" id="adresse" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
@@ -482,6 +491,8 @@
     echelle: document.getElementById('echelle').value.trim(),
     echelleArab: document.getElementById('echelleArab').value.trim(),
     email: document.getElementById('email').value.trim(),
+    fonction: document.getElementById('fonction').value.trim(),
+    fonctionArab: document.getElementById('fonctionArab').value.trim(),
     role: document.getElementById('role').value,
         departement: {
           id: parseInt(document.getElementById('departement').value)

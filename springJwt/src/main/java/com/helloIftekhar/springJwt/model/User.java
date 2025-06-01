@@ -77,6 +77,12 @@ public class User implements UserDetails {
     @Column(name = "echelle_arab")
     private String echelleArab;
 
+    @Column(name = "fonction")
+    private String fonction;
+
+    @Column(name = "fonction_arab")  // Nom de la colonne en base de données
+    private String fonctionArab;
+
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

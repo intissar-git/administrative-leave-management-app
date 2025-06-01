@@ -197,9 +197,7 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Département
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Description
-                            </th>
+
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 Actions
                             </th>
@@ -234,10 +232,7 @@
                     </select>
                     <p id="departmentError" class="mt-1 text-sm text-red-600 hidden">Veuillez sélectionner un département</p>
                 </div>
-                <div class="mb-4">
-                    <label for="serviceDescription" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea id="serviceDescription" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"></textarea>
-                </div>
+
                 <div class="flex justify-end space-x-3 mt-6">
                     <button type="button" id="cancelModalBtn" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50">
                         Annuler
@@ -336,7 +331,7 @@
             document.getElementById('modalTitle').textContent = 'Ajouter un service';
             document.getElementById('serviceId').value = '';
             document.getElementById('serviceName').value = '';
-            document.getElementById('serviceDescription').value = '';
+
             document.getElementById('serviceDepartment').selectedIndex = 0;
             nameError.classList.add('hidden');
             departmentError.classList.add('hidden');
@@ -497,9 +492,7 @@
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="text-sm text-gray-900">${escapeHtml(service.nomDepartement || 'Non spécifié')}</div>
                     </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm text-gray-500 max-w-xs truncate">${escapeHtml(service.description || 'Aucune description')}</div>
-                    </td>
+
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <button onclick="editService('${service.id}', '${escapeHtml(service.nomService || '')}', '${service.departementId}', '${escapeHtml(service.description || '')}')" class="text-primary-600 hover:text-primary-900 mr-3">
                             <i class="fas fa-edit mr-1"></i>Modifier
@@ -516,12 +509,12 @@
         async function saveService() {
             const id = document.getElementById('serviceId').value;
             const name = document.getElementById('serviceName').value;
-            const description = document.getElementById('serviceDescription').value;
+
             const departmentId = document.getElementById('serviceDepartment').value;
 
             const serviceData = {
                 nomService: name,
-                description: description,
+
                 departementId: departmentId
             };
 
@@ -592,7 +585,7 @@
             document.getElementById('modalTitle').textContent = 'Modifier le service';
             document.getElementById('serviceId').value = id;
             document.getElementById('serviceName').value = name;
-            document.getElementById('serviceDescription').value = description;
+
 
             // Set the department select value
             const departmentSelect = document.getElementById('serviceDepartment');

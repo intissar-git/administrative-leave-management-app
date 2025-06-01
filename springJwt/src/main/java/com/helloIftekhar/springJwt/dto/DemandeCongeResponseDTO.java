@@ -49,6 +49,7 @@ public class DemandeCongeResponseDTO {
     private int soldeGlobal;
 private int soldeAnneePrecedente;
 private  int soldeAnneeCourante;
+private  String fonctionArab;
 private String username; // Ajoutez ce champ
 
 
@@ -58,7 +59,7 @@ private String username; // Ajoutez ce champ
     public DemandeCongeResponseDTO(Long id, Long idEmployee, String employeeName, String departement,
                                    Date dateCreation, Date dateDebut, Date dateFin,
                                    String motif, String statut, int duree, String remplacerPar,String role,String serviceName,String remplacantArab,String nomArab,String prenomArab,String gradeArab,String echelleArab,int soldeGlobal
-,int soldeAnneePrecedente,int soldeAnneeCourante,String username) {
+,int soldeAnneePrecedente,int soldeAnneeCourante,String username,String fonctionArab) {
         this.id = id;
         this.idEmployee = idEmployee;
         this.employeeName = employeeName;
@@ -81,6 +82,7 @@ private String username; // Ajoutez ce champ
         this.soldeAnneePrecedente=soldeAnneePrecedente;
         this.soldeAnneeCourante=soldeAnneeCourante;
         this.username = username;
+        this.fonctionArab=fonctionArab;
 
 
     }

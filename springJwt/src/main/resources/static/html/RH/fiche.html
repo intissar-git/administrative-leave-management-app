@@ -199,15 +199,15 @@
             ];
 
             // Mettre à jour les éléments avec les données dynamiques
-            document.getElementById('demande-numero').textContent = `ك.ش.إ/${demandeId}/${currentYear}`;
+            document.getElementById('demande-numero').textContent = `ق.ش.إ/${currentYear}`;
             document.getElementById('current-date').textContent = `بني ملال، في : ${currentDay} ${monthNames[currentMonth - 1]} ${currentYear}`;
 
             document.getElementById('demande-info').innerHTML =
                 `بناء على الطلب المقدم من طرف السيدة <strong>${demande.prenomArab} ${demande.nomArab}</strong> بتاريخ ${formatDateToArabic(demande.dateCreation)}.`;
 
             document.getElementById('article-1').innerHTML =
-                `<strong>الفصل الأول:</strong> ابتداء من ${formatDateToArabic(demande.dateDebut)}، تمنح رخصة إدارية للسيد(ة) <strong>${demande.prenomArab} ${demande.nomArab}</strong> ${demande.gradeArab || 'تقنية'} من
-                الدرجة ${demande.echelleArab || 'الرابعة'}، بوكالة الحوض المائي لأم الربيع لمدة (${demande.duree}) أيام عمل تطابق حقها في العطلة لسنة
+                `<strong>الفصل الأول:</strong> ابتداء من ${formatDateToArabic(demande.dateDebut)}، تمنح رخصة إدارية للسيد(ة) <strong>${demande.prenomArab} ${demande.nomArab}</strong> ${demande.fonctionArab || 'تقنية'} من
+                الدرجة ${demande.gradeArab || 'الرابعة'}، بوكالة الحوض المائي لأم الربيع لمدة (${demande.duree}) أيام عمل تطابق حقها في العطلة لسنة
                 ${currentYear}.`;
 
             document.getElementById('article-2').innerHTML =

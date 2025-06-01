@@ -30,6 +30,10 @@ public class UserDTO {
     private String gradeArab;
     private String echelleArab;
     private String remplacantArab;
-    }
+
+    private String fonction;
+
+    private String fonctionArab;
+}
 
 
