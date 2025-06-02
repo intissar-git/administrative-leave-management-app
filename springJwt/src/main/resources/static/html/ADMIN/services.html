@@ -10,6 +10,37 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <style>
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 1rem;
+        }
+
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .pagination-info {
+            margin-bottom: 1rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+    </style>
 
     <script>
         tailwind.config = {
@@ -187,7 +218,9 @@
                 </div>
 
                 <!-- Services Table -->
-                <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                <div class="pagination-info">Affichage de 1 à 10 sur 26 résultats</div>
+                 <div class="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                     <div class="table-container">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                         <tr>
@@ -207,6 +240,42 @@
                         <!-- Services will be loaded here -->
                         </tbody>
                     </table>
+                     </div>
+                         <!-- Pagination -->
+                         <div class="flex items-center justify-between px-6 py-3 bg-white border-t border-gray-200 sm:rounded-b-lg">
+                             <div class="flex-1 flex justify-between sm:hidden">
+                                 <button id="prevPageMobile" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                     Précédent
+                                 </button>
+                                 <button id="nextPageMobile" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                     Suivant
+                                 </button>
+                             </div>
+                             <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                                 <div>
+                                     <p id="paginationInfo" class="text-sm text-gray-700">
+                                         Affichage de <span class="font-medium">1</span> à <span class="font-medium">10</span> sur <span class="font-medium">20</span> résultats
+                                     </p>
+                                 </div>
+                                 <div>
+                                     <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                         <button id="prevPage" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                             <span class="sr-only">Précédent</span>
+                                             <i class="fas fa-chevron-left"></i>
+                                         </button>
+                                         <div id="pageNumbers" class="flex">
+                                             <!-- Page numbers will be inserted here -->
+                                         </div>
+                                         <button id="nextPage" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                             <span class="sr-only">Suivant</span>
+                                             <i class="fas fa-chevron-right"></i>
+                                         </button>
+                                     </nav>
+                                 </div>
+                             </div>
+
+                     </div>
+                </div>
                 </div>
             </div>
         </div>
@@ -301,6 +370,10 @@
                 }
             });
         }
+
+
+
+
 
         // Modal elements
         const serviceModal = document.getElementById('serviceModal');
@@ -445,65 +518,178 @@
         }
 
         // Load services from API
-        async function loadServices(departmentId = null) {
-            try {
-                let url = departmentId
-                    ? `http://localhost:8080/api/services-departement/departement/${departmentId}/all`
-                    : 'http://localhost:8080/api/services-departement/all';
+       // Pagination variables
+let currentPage = 1;
+const itemsPerPage = 10;
+let totalItems = 0;
+let allServices = [];
 
-                const response = await fetch(url, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
+// Modify the loadServices function to handle pagination
+async function loadServices(departmentId = null) {
+    try {
+        let url = departmentId
+            ? `http://localhost:8080/api/services-departement/departement/${departmentId}/all`
+            : 'http://localhost:8080/api/services-departement/all';
 
-                if (!response.ok) {
-                    throw new Error('Erreur lors du chargement des services');
-                }
-
-                const services = await response.json();
-                renderServices(services);
-            } catch (error) {
-                console.error('Error:', error);
-                servicesTable.innerHTML = `
-                    <tr>
-                        <td colspan="4" class="px-6 py-4 text-center text-red-600">Erreur: ${error.message}</td>
-                    </tr>
-                `;
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
+        });
+
+        if (!response.ok) {
+            throw new Error('Erreur lors du chargement des services');
         }
+
+        allServices = await response.json();
+        totalItems = allServices.length;
+        updatePagination();
+        renderPaginatedServices();
+    } catch (error) {
+        console.error('Error:', error);
+        servicesTable.innerHTML = `
+            <tr>
+                <td colspan="4" class="px-6 py-4 text-center text-red-600">Erreur: ${error.message}</td>
+            </tr>
+        `;
+    }
+}
+
+// Render paginated services
+function renderPaginatedServices() {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+    const paginatedServices = allServices.slice(startIndex, endIndex);
+
+    renderServices(paginatedServices);
+}
+
+// Update pagination controls
+function updatePagination() {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+    // Update pagination info
+    const startItem = (currentPage - 1) * itemsPerPage + 1;
+    const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+    document.getElementById('paginationInfo').innerHTML = `
+        Affichage de <span class="font-medium">${startItem}</span> à <span class="font-medium">${endItem}</span> sur <span class="font-medium">${totalItems}</span> résultats
+    `;
+
+    // Update page numbers
+    const pageNumbersContainer = document.getElementById('pageNumbers');
+    pageNumbersContainer.innerHTML = '';
+
+    // Always show first page
+    addPageNumber(1, currentPage === 1);
+
+    // Show ellipsis if needed
+    if (currentPage > 3) {
+        const ellipsis = document.createElement('span');
+        ellipsis.className = 'relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700';
+        ellipsis.textContent = '...';
+        pageNumbersContainer.appendChild(ellipsis);
+    }
+
+    // Show current page and neighbors
+    const startPage = Math.max(2, currentPage - 1);
+    const endPage = Math.min(totalPages - 1, currentPage + 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+        addPageNumber(i, i === currentPage);
+    }
+
+    // Show ellipsis if needed
+    if (currentPage < totalPages - 2) {
+        const ellipsis = document.createElement('span');
+        ellipsis.className = 'relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700';
+        ellipsis.textContent = '...';
+        pageNumbersContainer.appendChild(ellipsis);
+    }
+
+    // Always show last page if there's more than one page
+    if (totalPages > 1) {
+        addPageNumber(totalPages, currentPage === totalPages);
+    }
+
+    // Enable/disable previous and next buttons
+    document.getElementById('prevPage').disabled = currentPage === 1;
+    document.getElementById('prevPageMobile').disabled = currentPage === 1;
+    document.getElementById('nextPage').disabled = currentPage === totalPages;
+    document.getElementById('nextPageMobile').disabled = currentPage === totalPages;
+}
+
+// Helper function to add a page number button
+function addPageNumber(pageNumber, isCurrent) {
+    const pageNumbersContainer = document.getElementById('pageNumbers');
+    const pageButton = document.createElement('button');
+    pageButton.className = isCurrent
+        ? 'relative inline-flex items-center px-4 py-2 border border-primary-500 bg-primary-50 text-sm font-medium text-primary-600'
+        : 'relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50';
+    pageButton.textContent = pageNumber;
+    pageButton.onclick = () => {
+        currentPage = pageNumber;
+        renderPaginatedServices();
+        updatePagination();
+    };
+    pageNumbersContainer.appendChild(pageButton);
+}
+
+// Event listeners for pagination buttons
+document.getElementById('prevPage').addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        renderPaginatedServices();
+        updatePagination();
+    }
+});
+
+document.getElementById('nextPage').addEventListener('click', () => {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        renderPaginatedServices();
+        updatePagination();
+    }
+});
+
+document.getElementById('prevPageMobile').addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        renderPaginatedServices();
+        updatePagination();
+    }
+});
+
+document.getElementById('nextPageMobile').addEventListener('click', () => {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        renderPaginatedServices();
+        updatePagination();
+    }
+});
 
         // Render services in table
         function renderServices(services) {
-            if (services.length === 0) {
-                servicesTable.innerHTML = `
-                    <tr>
-                        <td colspan="4" class="px-6 py-4 text-center text-gray-500">Aucun service trouvé</td>
-                    </tr>
-                `;
-                return;
-            }
-
-            servicesTable.innerHTML = services.map(service => `
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-gray-900">${escapeHtml(service.nomService || 'Non spécifié')}</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm text-gray-900">${escapeHtml(service.nomDepartement || 'Non spécifié')}</div>
-                    </td>
-
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="editService('${service.id}', '${escapeHtml(service.nomService || '')}', '${service.departementId}', '${escapeHtml(service.description || '')}')" class="text-primary-600 hover:text-primary-900 mr-3">
-                            <i class="fas fa-edit mr-1"></i>Modifier
-                        </button>
-                        <button onclick="showDeleteConfirm('${service.id}', '${escapeHtml(service.nomService || 'Service sans nom')}')" class="text-red-600 hover:text-red-900">
-                            <i class="fas fa-trash mr-1"></i>Supprimer
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
-        }
+    servicesTable.innerHTML = services.map(service => `
+        <tr>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-gray-900">${escapeHtml(service.nomService || 'Non spécifié')}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">${escapeHtml(service.nomDepartement || 'Non spécifié')}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                <button onclick="editService('${service.id}', '${escapeHtml(service.nomService || '')}', '${service.departementId}', '${escapeHtml(service.description || '')}')" class="text-primary-600 hover:text-primary-900 mr-3">
+                    <i class="fas fa-edit mr-1"></i>Modifier
+                </button>
+                <button onclick="showDeleteConfirm('${service.id}', '${escapeHtml(service.nomService || 'Service sans nom')}')" class="text-red-600 hover:text-red-900">
+                    <i class="fas fa-trash mr-1"></i>Supprimer
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
 
         // Save service (add or update)
         async function saveService() {

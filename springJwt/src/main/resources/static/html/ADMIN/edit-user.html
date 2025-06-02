@@ -9,43 +9,43 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-    <script>
-        tailwind.config = {
-          theme: {
-            extend: {
-              colors: {
-                primary: {
-                  50: '#EFF6FF',
-                  100: '#DBEAFE',
-                  200: '#BFDBFE',
-                  300: '#93C5FD',
-                  400: '#60A5FA',
-                  500: '#3B82F6',
-                  600: '#2563EB',
-                  700: '#1D4ED8',
-                  800: '#1E40AF',
-                  900: '#1E3A8A',
-                },
-                secondary: {
-                  50: '#F0FDFA',
-                  100: '#CCFBF1',
-                  200: '#99F6E4',
-                  300: '#5EEAD4',
-                  400: '#2DD4BF',
-                  500: '#14B8A6',
-                  600: '#0D9488',
-                  700: '#0F766E',
-                  800: '#115E59',
-                  900: '#134E4A',
-                },
-              },
-              fontFamily: {
-                sans: ['Inter', 'sans-serif'],
-              },
-            }
-          }
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              50: '#EFF6FF',
+              100: '#DBEAFE',
+              200: '#BFDBFE',
+              300: '#93C5FD',
+              400: '#60A5FA',
+              500: '#3B82F6',
+              600: '#2563EB',
+              700: '#1D4ED8',
+              800: '#1E40AF',
+              900: '#1E3A8A',
+            },
+            secondary: {
+              50: '#F0FDFA',
+              100: '#CCFBF1',
+              200: '#99F6E4',
+              300: '#5EEAD4',
+              400: '#2DD4BF',
+              500: '#14B8A6',
+              600: '#0D9488',
+              700: '#0F766E',
+              800: '#115E59',
+              900: '#134E4A',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
         }
-    </script>
+      }
+    }
+</script>
 </head>
 <body class="bg-gray-50 font-sans">
 <nav class="bg-white shadow-sm border-b border-gray-200">
@@ -164,180 +164,182 @@
     </div>
 
 
-        <!-- Contenu principal -->
-        <div class="flex-1 min-w-0 overflow-auto">
-            <div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h1 class="text-2xl font-semibold text-gray-900">Modifier Utilisateur</h1>
-                        <nav class="flex mt-2" aria-label="Breadcrumb">
-                            <ol class="flex items-center space-x-4">
-                                <li>
-                                    <div>
-                                        <a href="dashbord.html" class="text-gray-400 hover:text-gray-500">
-                                            <svg class="flex-shrink-0 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                                            </svg>
-                                            <span class="sr-only">Accueil</span>
-                                        </a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="flex items-center">
-                                        <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+    <!-- Contenu principal -->
+    <div class="flex-1 min-w-0 overflow-auto">
+        <div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-semibold text-gray-900">Modifier Utilisateur</h1>
+                    <nav class="flex mt-2" aria-label="Breadcrumb">
+                        <ol class="flex items-center space-x-4">
+                            <li>
+                                <div>
+                                    <a href="dashbord.html" class="text-gray-400 hover:text-gray-500">
+                                        <svg class="flex-shrink-0 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                                         </svg>
-                                        <a href="users.html" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Utilisateurs</a>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="flex items-center">
-                                        <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                                        </svg>
-                                        <span class="ml-4 text-sm font-medium text-gray-500">Modifier</span>
-                                    </div>
-                                </li>
-                            </ol>
-                        </nav>
-                    </div>
-                    <a href="liste_users.html" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5 text-gray-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="19" y1="12" x2="5" y2="12"></line>
-                            <polyline points="12 19 5 12 12 5"></polyline>
-                        </svg>
-                        Retour à la liste
-                    </a>
+                                        <span class="sr-only">Accueil</span>
+                                    </a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="flex items-center">
+                                    <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                    <a href="users.html" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700">Utilisateurs</a>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="flex items-center">
+                                    <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                                    </svg>
+                                    <span class="ml-4 text-sm font-medium text-gray-500">Modifier</span>
+                                </div>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <a href="liste_users.html" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5 text-gray-500" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    Retour à la liste
+                </a>
+            </div>
+
+            <div class="mt-8 bg-white shadow overflow-hidden rounded-lg">
+                <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Informations de l'utilisateur</h3>
+                    <p class="mt-1 text-sm text-gray-500">Modifiez les champs nécessaires et enregistrez les changements.</p>
                 </div>
 
-                <div class="mt-8 bg-white shadow overflow-hidden rounded-lg">
-                    <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900">Informations de l'utilisateur</h3>
-                        <p class="mt-1 text-sm text-gray-500">Modifiez les champs nécessaires et enregistrez les changements.</p>
+                <form id="userForm" class="p-6">
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                        <div class="sm:col-span-3">
+                            <label for="firstName" class="block text-sm font-medium text-gray-700">Prénom <span class="text-red-500">*</span></label>
+                            <input type="text" name="firstName" id="firstName" autocomplete="given-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="prenomArab" class="block text-sm font-medium text-gray-700">Prénom (Arabe)</label>
+                            <input type="text" name="prenomArab" id="prenomArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="lastName" class="block text-sm font-medium text-gray-700">Nom <span class="text-red-500">*</span></label>
+                            <input type="text" name="lastName" id="lastName" autocomplete="family-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="nomArab" class="block text-sm font-medium text-gray-700">Nom (Arabe)</label>
+                            <input type="text" name="nomArab" id="nomArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="username" class="block text-sm font-medium text-gray-700">Nom d'utilisateur <span class="text-red-500">*</span></label>
+                            <input type="text" name="username" id="username" autocomplete="username" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required readonly>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
+                            <input type="email" name="email" id="email" autocomplete="email" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="matricule" class="block text-sm font-medium text-gray-700">Matricule <span class="text-red-500">*</span></label>
+                            <input type="text" name="matricule" id="matricule" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="dateNaissance" class="block text-sm font-medium text-gray-700">Date de Naissance <span class="text-red-500">*</span></label>
+                            <input type="date" name="dateNaissance" id="dateNaissance" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="fonction" class="block text-sm font-medium text-gray-700">Fonction <span class="text-red-500">*</span></label>
+                            <input type="text" name="fonction" id="fonction" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="fonctionArab" class="block text-sm font-medium text-gray-700">Fonction (Arabe)</label>
+                            <input type="text" name="fonctionArab" id="fonctionArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="grade" class="block text-sm font-medium text-gray-700">Grade <span class="text-red-500">*</span></label>
+                            <input type="text" name="grade" id="grade" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="gradeArab" class="block text-sm font-medium text-gray-700">Grade (Arabe)</label>
+                            <input type="text" name="gradeArab" id="gradeArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
+                        </div>
+
+
+
+                        <div class="sm:col-span-3">
+                            <label for="echelle" class="block text-sm font-medium text-gray-700">Échelle <span class="text-red-500">*</span></label>
+                            <input type="text" name="echelle" id="echelle" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="echelleArab" class="block text-sm font-medium text-gray-700">Échelle (Arabe)</label>
+                            <input type="text" name="echelleArab" id="echelleArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
+                        </div>
+
+                        <!-- Après le champ echelleArab -->
+
+
+
+
+
+                        <div class="sm:col-span-6">
+                            <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse <span class="text-red-500">*</span></label>
+                            <input type="text" name="adresse" id="adresse" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="role" class="block text-sm font-medium text-gray-700">Rôle <span class="text-red-500">*</span></label>
+                            <select id="role" name="role" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                                <option value="">Sélectionner un rôle</option>
+                                <option value="USER">Utilisateur</option>
+                                <option value="CHEF_SERVICE">Chef de service</option>
+                                <option value="RH">RH</option>
+                                <option value="CHEF_DEPARTEMENT">Chef de departement</option>
+                            </select>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="departement" class="block text-sm font-medium text-gray-700">Département <span class="text-red-500">*</span></label>
+                            <select id="departement" name="departement" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                                <option value="">Chargement des départements...</option>
+                            </select>
+                        </div>
+
+                        <div class="sm:col-span-3">
+                            <label for="service" class="block text-sm font-medium text-gray-700">Service <span class="text-red-500">*</span></label>
+                            <select id="service" name="service" disabled class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                                <option value="">Sélectionnez d'abord un département</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <form id="userForm" class="p-6">
-                        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-                            <div class="sm:col-span-3">
-                                <label for="firstName" class="block text-sm font-medium text-gray-700">Prénom <span class="text-red-500">*</span></label>
-                                <input type="text" name="firstName" id="firstName" autocomplete="given-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
-                            </div>
-
-                            <div class="sm:col-span-3">
-                                <label for="prenomArab" class="block text-sm font-medium text-gray-700">Prénom (Arabe)</label>
-                                <input type="text" name="prenomArab" id="prenomArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
-                            </div>
-
-                            <div class="sm:col-span-3">
-                                <label for="lastName" class="block text-sm font-medium text-gray-700">Nom <span class="text-red-500">*</span></label>
-                                <input type="text" name="lastName" id="lastName" autocomplete="family-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
-                            </div>
-
-                            <div class="sm:col-span-3">
-                                <label for="nomArab" class="block text-sm font-medium text-gray-700">Nom (Arabe)</label>
-                                <input type="text" name="nomArab" id="nomArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
-                            </div>
-
-                            <div class="sm:col-span-3">
-                                <label for="username" class="block text-sm font-medium text-gray-700">Nom d'utilisateur <span class="text-red-500">*</span></label>
-                                <input type="text" name="username" id="username" autocomplete="username" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required readonly>
-                            </div>
-
-                            <div class="sm:col-span-3">
-                                <label for="email" class="block text-sm font-medium text-gray-700">Email <span class="text-red-500">*</span></label>
-                                <input type="email" name="email" id="email" autocomplete="email" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
-                            </div>
-
-                            <div class="sm:col-span-3">
-                                <label for="matricule" class="block text-sm font-medium text-gray-700">Matricule <span class="text-red-500">*</span></label>
-                                <input type="text" name="matricule" id="matricule" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
-                            </div>
-
-                            <div class="sm:col-span-3">
-                                <label for="dateNaissance" class="block text-sm font-medium text-gray-700">Date de Naissance <span class="text-red-500">*</span></label>
-                                <input type="date" name="dateNaissance" id="dateNaissance" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
-                            </div>
-
-                            <div class="sm:col-span-3">
-                                <label for="grade" class="block text-sm font-medium text-gray-700">Grade <span class="text-red-500">*</span></label>
-                                <input type="text" name="grade" id="grade" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
-                            </div>
-
-                            <div class="sm:col-span-3">
-                                <label for="gradeArab" class="block text-sm font-medium text-gray-700">Grade (Arabe)</label>
-                                <input type="text" name="gradeArab" id="gradeArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
-                            </div>
-
-
-
-                            <div class="sm:col-span-3">
-                                <label for="echelle" class="block text-sm font-medium text-gray-700">Échelle <span class="text-red-500">*</span></label>
-                                <input type="text" name="echelle" id="echelle" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
-                            </div>
-
-                            <div class="sm:col-span-3">
-                                <label for="echelleArab" class="block text-sm font-medium text-gray-700">Échelle (Arabe)</label>
-                                <input type="text" name="echelleArab" id="echelleArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
-                            </div>
-
-                            <!-- Après le champ echelleArab -->
-
-                            <div class="sm:col-span-3">
-                                <label for="fonction" class="block text-sm font-medium text-gray-700">Fonction <span class="text-red-500">*</span></label>
-                                <input type="text" name="fonction" id="fonction" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
-                            </div>
-
-                            <div class="sm:col-span-3">
-                                <label for="fonctionArab" class="block text-sm font-medium text-gray-700">Fonction (Arabe)</label>
-                                <input type="text" name="fonctionArab" id="fonctionArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
-                            </div>
-
-
-
-                            <div class="sm:col-span-6">
-                                <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse <span class="text-red-500">*</span></label>
-                                <input type="text" name="adresse" id="adresse" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
-                            </div>
-
-                            <div class="sm:col-span-3">
-                                <label for="role" class="block text-sm font-medium text-gray-700">Rôle <span class="text-red-500">*</span></label>
-                                <select id="role" name="role" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
-                                    <option value="">Sélectionner un rôle</option>
-                                    <option value="USER">Utilisateur</option>
-                                    <option value="CHEF_SERVICE">Chef de service</option>
-                                    <option value="RH">RH</option>
-                                    <option value="CHEF_DEPARTEMENT">Chef de departement</option>
-                                </select>
-                            </div>
-
-                            <div class="sm:col-span-3">
-                                <label for="departement" class="block text-sm font-medium text-gray-700">Département <span class="text-red-500">*</span></label>
-                                <select id="departement" name="departement" class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
-                                    <option value="">Chargement des départements...</option>
-                                </select>
-                            </div>
-
-                            <div class="sm:col-span-3">
-                                <label for="service" class="block text-sm font-medium text-gray-700">Service <span class="text-red-500">*</span></label>
-                                <select id="service" name="service" disabled class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
-                                    <option value="">Sélectionnez d'abord un département</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="mt-8 pt-5 border-t border-gray-200 flex justify-end">
-                            <button type="button" onclick="window.location.href='liste_users.html'" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                                Annuler
-                            </button>
-                            <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-700 hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                                Enregistrer les modifications
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="mt-8 pt-5 border-t border-gray-200 flex justify-end">
+                        <button type="button" onclick="window.location.href='liste_users.html'" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            Annuler
+                        </button>
+                        <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-700 hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            Enregistrer les modifications
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 
 <script>
     // Récupérer le token depuis le stockage local

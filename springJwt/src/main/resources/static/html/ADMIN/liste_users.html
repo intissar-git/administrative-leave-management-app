@@ -233,7 +233,7 @@
                                 <option value="">Tous les rôles</option>
                                 <option value="USER">Utilisateur</option>
                                 <option value="ADMIN">Administrateur</option>
-                                <option value="RH">Manager</option>
+                                <option value="RH">RH</option>
                                 <option value="CHEF_SERVICE">Chef de service</option>
                                 <option value="CHEF_DEPARTEMENT">Chef de departement</option>
                             </select>
@@ -339,7 +339,7 @@
     // Récupérer le token depuis le stockage local
     const token = localStorage.getItem('token');
     if (!token) {
-      window.location.href = '/login.html'; // Rediriger si pas de token
+      window.location.href = '../user/index.html'; // Rediriger si pas de token
     }
 
  // Logout functionality
@@ -507,7 +507,7 @@
     user.role === 'CHEF_DEPARTEMENT' ? 'bg-pink-100 text-pink-800' :
     'bg-green-100 text-green-800'}">
   ${user.role === 'ADMIN' ? 'Administrateur' :
-    user.role === 'RH' ? 'Manager' :
+    user.role === 'RH' ? 'RH' :
     user.role === 'CHEF_SERVICE' ? 'Chef de service' :
     user.role === 'CHEF_DEPARTEMENT' ? 'Chef de département' :
     'Utilisateur'}
@@ -643,7 +643,7 @@ await Swal.fire({
         'Email': user.email,
         'Département': user.departement ? user.departement.nomDepartement : 'Non assigné',
         'Service': user.departement ? user.departement.description : 'Non assigné',
-        'Rôle': user.role === 'ADMIN' ? 'Administrateur' : user.role === 'RH' ? 'Manager' : 'Utilisateur',
+        'Rôle': user.role === 'ADMIN' ? 'Administrateur' : user.role === 'RH' ? 'RH' : 'Utilisateur',
         'Grade': user.grade,
         'Échelle': user.echelle,
         'Date de Naissance': user.dateNaissance,

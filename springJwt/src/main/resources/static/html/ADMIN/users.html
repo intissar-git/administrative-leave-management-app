@@ -224,9 +224,11 @@
                             </div>
 
                             <div class="sm:col-span-3">
-                            <label for="prenomArab" class="block text-sm font-medium text-gray-700">Prénom (Arabe)</label>
-                            <input type="text" name="prenomArab" id="prenomArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
-                             </div>
+                                <label for="prenomArab" class="block text-sm font-medium text-gray-700 text-right" dir="rtl">الاسم</label>
+                                <input type="text" name="prenomArab" id="prenomArab" placeholder="الإسم"
+                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-right focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                                       dir="rtl" style="font-family: 'Traditional Arabic', Arial, sans-serif;">
+                            </div>
 
                             <div class="sm:col-span-3">
                                 <label for="lastName" class="block text-sm font-medium text-gray-700">Nom <span class="text-red-500">*</span></label>
@@ -234,8 +236,10 @@
                             </div>
 
                             <div class="sm:col-span-3">
-                                <label for="nomArab" class="block text-sm font-medium text-gray-700">Nom (Arabe)</label>
-                                <input type="text" name="nomArab" id="nomArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
+                                <label for="nomArab" class="block text-sm font-medium text-gray-700 text-right" dir="rtl">اللقب</label>
+                                <input type="text" name="nomArab" id="nomArab" placeholder="اللقب"
+                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-right focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                                       dir="rtl" style="font-family: 'Traditional Arabic', Arial, sans-serif;">
                             </div>
 
                             <div class="sm:col-span-3">
@@ -253,6 +257,17 @@
                                 <input type="email" name="email" id="email" autocomplete="email" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
                             </div>
 
+                            <div class="sm:col-span-3">
+                                <label for="fonction" class="block text-sm font-medium text-gray-700">Fonction <span class="text-red-500">*</span></label>
+                                <input type="text" name="fonction" id="fonction" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
+                            </div>
+                            <div class="sm:col-span-3">
+                                <label for="fonctionArab" class="block text-sm font-medium text-gray-700 text-right" dir="rtl">الوظيفة</label>
+                                <input type="text" name="fonctionArab" id="fonctionArab" placeholder="الوظيفة"
+                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-right focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                                       dir="rtl" style="font-family: 'Traditional Arabic', Arial, sans-serif;">
+                            </div>
+
 
 
                             <div class="sm:col-span-3">
@@ -260,8 +275,10 @@
                                 <input type="text" name="grade" id="grade" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
                             </div>
                             <div class="sm:col-span-3">
-                                <label for="gradeArab" class="block text-sm font-medium text-gray-700">Grade (Arabe)</label>
-                                <input type="text" name="gradeArab" id="gradeArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
+                                <label for="gradeArab" class="block text-sm font-medium text-gray-700 text-right" dir="rtl">الرتبة</label>
+                                <input type="text" name="gradeArab" id="gradeArab" placeholder="الرتبة"
+                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-right focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                                       dir="rtl" style="font-family: 'Traditional Arabic', Arial, sans-serif;">
                             </div>
                             <div class="sm:col-span-3">
                                 <label for="matricule" class="block text-sm font-medium text-gray-700">Matricule <span class="text-red-500">*</span></label>
@@ -278,18 +295,13 @@
                                 <input type="text" name="echelle" id="echelle" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
                             </div>
                             <div class="sm:col-span-3">
-                                <label for="echelleArab" class="block text-sm font-medium text-gray-700">Échelle (Arabe)</label>
-                                <input type="text" name="echelleArab" id="echelleArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" dir="rtl">
+                                <label for="echelleArab" class="block text-sm font-medium text-gray-700 text-right" dir="rtl">السلم</label>
+                                <input type="text" name="echelleArab" id="echelleArab" placeholder="السلم"
+                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-right focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                                       dir="rtl" style="font-family: 'Traditional Arabic', Arial, sans-serif;">
                             </div>
 
-                            <div class="sm:col-span-3">
-                                <label for="fonction" class="block text-sm font-medium text-gray-700">Fonction <span class="text-red-500">*</span></label>
-                                <input type="text" name="fonction" id="fonction" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
-                            </div>
-                            <div class="sm:col-span-3">
-                                <label for="fonctionArab" class="block text-sm font-medium text-gray-700">Fonction Arab <span class="text-red-500">*</span></label>
-                                <input type="text" name="fonctionArab" id="fonctionArab" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
-                            </div>
+
 
                             <div class="sm:col-span-6">
                                 <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse <span class="text-red-500">*</span></label>
@@ -323,9 +335,13 @@
                         </div>
 
                         <div class="mt-8 pt-5 border-t border-gray-200 flex justify-end">
-                            <button type="button" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
-                                Annuler
-                            </button>
+                            <a href="liste_users.html">
+                                <button
+                                        type="button"
+                                        class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                                    Annuler
+                                </button>
+                            </a>
                             <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-700 hover:bg-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
                                 Enregistrer l'utilisateur
                             </button>
@@ -341,7 +357,7 @@
     // Récupérer le token depuis le stockage local
     const token = localStorage.getItem('token');
     if (!token) {
-      window.location.href = '/login.html'; // Rediriger si pas de token
+      window.location.href = '../user/index.html'; // Rediriger si pas de token
     }
 
 
