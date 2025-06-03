@@ -489,13 +489,13 @@
             }
           });
 
-          if (servicesResponse.ok) {
+           if (servicesResponse.ok) {
             const services = await servicesResponse.json();
 
             // Remplir le select des services
             serviceSelect.innerHTML = '<option value="">Sélectionner un service</option>' +
               services.map(service =>
-                `<option value="${service.id}" ${user.service && user.service.id === service.id ? 'selected' : ''}>${service.nomService || 'Service sans nom'}</option>`
+                `<option value="${service.id}" ${user.departement.id && service.departementId === service.departementId ? 'selected' : ''}>${service.nomService || 'Service sans nom'}</option>`
               ).join('');
 
             serviceSelect.disabled = false;
