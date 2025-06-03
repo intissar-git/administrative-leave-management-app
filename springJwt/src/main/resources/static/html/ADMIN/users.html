@@ -45,6 +45,18 @@
           }
         }
     </script>
+    <style>
+        @font-face {
+            font-family: 'Traditional Arabic';
+            src: url('path-to-your-font/TraditionalArabic.ttf') format('truetype');
+            /* Remplacez par le chemin réel de votre police arabe */
+        }
+        .arabic-field {
+            direction: rtl;
+            font-family: 'Traditional Arabic', Arial, sans-serif;
+            text-align: right;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 font-sans">
 <div class="min-h-screen flex flex-col">
@@ -226,8 +238,8 @@
                             <div class="sm:col-span-3">
                                 <label for="prenomArab" class="block text-sm font-medium text-gray-700 text-right" dir="rtl"><span class="text-red-500">*</span>الاسم</label>
                                 <input type="text" name="prenomArab" id="prenomArab" placeholder="الإسم"
-                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-right focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                                       dir="rtl" style="font-family: 'Traditional Arabic', Arial, sans-serif;">
+                                       class="arabic-field mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                <small class="text-gray-500 text-right block">Veuillez saisir uniquement des caractères arabes</small>
                             </div>
 
                             <div class="sm:col-span-3">
@@ -238,8 +250,8 @@
                             <div class="sm:col-span-3">
                                 <label for="nomArab" class="block text-sm font-medium text-gray-700 text-right" dir="rtl"> <span class="text-red-500">*</span>اللقب</label>
                                 <input type="text" name="nomArab" id="nomArab" placeholder="اللقب"
-                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-right focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                                       dir="rtl" style="font-family: 'Traditional Arabic', Arial, sans-serif;">
+                                       class="arabic-field mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                <small class="text-gray-500 text-right block">Veuillez saisir uniquement des caractères arabes</small>
                             </div>
 
                             <div class="sm:col-span-3">
@@ -264,11 +276,9 @@
                             <div class="sm:col-span-3">
                                 <label for="fonctionArab" class="block text-sm font-medium text-gray-700 text-right" dir="rtl"> <span class="text-red-500">*</span>الوظيفة</label>
                                 <input type="text" name="fonctionArab" id="fonctionArab" placeholder="الوظيفة"
-                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-right focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                                       dir="rtl" style="font-family: 'Traditional Arabic', Arial, sans-serif;">
+                                       class="arabic-field mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                <small class="text-gray-500 text-right block">Veuillez saisir uniquement des caractères arabes</small>
                             </div>
-
-
 
                             <div class="sm:col-span-3">
                                 <label for="grade" class="block text-sm font-medium text-gray-700">Grade <span class="text-red-500">*</span></label>
@@ -277,8 +287,8 @@
                             <div class="sm:col-span-3">
                                 <label for="gradeArab" class="block text-sm font-medium text-gray-700 text-right" dir="rtl"> <span class="text-red-500">*</span>الرتبة</label>
                                 <input type="text" name="gradeArab" id="gradeArab" placeholder="الرتبة"
-                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-right focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                                       dir="rtl" style="font-family: 'Traditional Arabic', Arial, sans-serif;">
+                                       class="arabic-field mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                <small class="text-gray-500 text-right block">Veuillez saisir uniquement des caractères arabes</small>
                             </div>
                             <div class="sm:col-span-3">
                                 <label for="matricule" class="block text-sm font-medium text-gray-700">Numéro PPR <span class="text-red-500">*</span></label>
@@ -297,10 +307,9 @@
                             <div class="sm:col-span-3">
                                 <label for="echelleArab" class="block text-sm font-medium text-gray-700 text-right" dir="rtl">السلم <span class="text-red-500">*</span></label>
                                 <input type="text" name="echelleArab" id="echelleArab" placeholder="السلم"
-                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 text-right focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                                       dir="rtl" style="font-family: 'Traditional Arabic', Arial, sans-serif;">
+                                       class="arabic-field mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                                <small class="text-gray-500 text-right block">Veuillez saisir uniquement des caractères arabes</small>
                             </div>
-
 
 
                             <div class="sm:col-span-6">
@@ -360,8 +369,7 @@
       window.location.href = '../user/index.html'; // Rediriger si pas de token
     }
 
-
- // Logout functionality
+    // Logout functionality
     document.getElementById('logoutBtn').addEventListener('click', function() {
         localStorage.removeItem('token');
         localStorage.removeItem('refresh_token');
@@ -388,6 +396,45 @@
         }
       });
     }
+
+    // Regex pour valider les caractères arabes (inclut les lettres, chiffres arabes et espace)
+    const arabicRegex = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\s]+$/;
+
+    // Liste des champs qui doivent être en arabe
+    const arabicFields = ['prenomArab', 'nomArab', 'fonctionArab', 'gradeArab', 'echelleArab'];
+
+    // Appliquer la validation sur chaque champ arabe
+    arabicFields.forEach(fieldId => {
+      const field = document.getElementById(fieldId);
+
+      if (field) {
+        // Validation lors de la saisie
+        field.addEventListener('input', function(e) {
+          // Remplacer immédiatement tout caractère non arabe
+          if (e.target.value && !arabicRegex.test(e.target.value)) {
+            const cursorPos = e.target.selectionStart - 1;
+            e.target.value = e.target.value.replace(/[^\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF\s]/g, '');
+            // Restaurer la position du curseur
+            e.target.setSelectionRange(cursorPos, cursorPos);
+          }
+        });
+
+        // Validation lors de la perte de focus
+        field.addEventListener('blur', function(e) {
+          if (e.target.value && !arabicRegex.test(e.target.value)) {
+            Swal.fire({
+              title: 'Erreur',
+              text: 'Ce champ doit contenir uniquement des caractères arabes',
+              icon: 'error',
+              confirmButtonColor: '#2563eb',
+              confirmButtonText: 'OK'
+            });
+            e.target.value = '';
+          }
+        });
+      }
+    });
+
     // Éléments du DOM
     const departementSelect = document.getElementById('departement');
     const serviceSelect = document.getElementById('service');
@@ -480,8 +527,36 @@
         }
       });
 
+      // Valider spécifiquement les champs arabes
+      let arabicFieldsValid = true;
+      arabicFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field.value.trim() && !arabicRegex.test(field.value.trim())) {
+          arabicFieldsValid = false;
+          field.classList.add('border-red-500');
+          field.classList.remove('border-gray-300');
+        }
+      });
+
       if (!isValid) {
-        alert('Veuillez remplir tous les champs obligatoires');
+        await Swal.fire({
+          title: 'Erreur',
+          text: 'Veuillez remplir tous les champs obligatoires',
+          icon: 'error',
+          confirmButtonColor: '#2563eb',
+          confirmButtonText: 'OK'
+        });
+        return;
+      }
+
+      if (!arabicFieldsValid) {
+        await Swal.fire({
+          title: 'Erreur',
+          text: 'Les champs en arabe doivent contenir uniquement des caractères arabes',
+          icon: 'error',
+          confirmButtonColor: '#2563eb',
+          confirmButtonText: 'OK'
+        });
         return;
       }
 
@@ -493,23 +568,23 @@
 
       // Préparer les données à envoyer
       const formData = {
-         firstName: document.getElementById('firstName').value.trim(),
-    lastName: document.getElementById('lastName').value.trim(),
-    nomArab: document.getElementById('nomArab').value.trim(),
-    prenomArab: document.getElementById('prenomArab').value.trim(),
-    username: document.getElementById('username').value.trim(),
-    password: document.getElementById('password').value,
-    matricule: document.getElementById('matricule').value.trim(),
-    grade: document.getElementById('grade').value.trim(),
-    gradeArab: document.getElementById('gradeArab').value.trim(),
-    dateNaissance: document.getElementById('dateNaissance').value,
-    adresse: document.getElementById('adresse').value.trim(),
-    echelle: document.getElementById('echelle').value.trim(),
-    echelleArab: document.getElementById('echelleArab').value.trim(),
-    email: document.getElementById('email').value.trim(),
-    fonction: document.getElementById('fonction').value.trim(),
-    fonctionArab: document.getElementById('fonctionArab').value.trim(),
-    role: document.getElementById('role').value,
+        firstName: document.getElementById('firstName').value.trim(),
+        lastName: document.getElementById('lastName').value.trim(),
+        nomArab: document.getElementById('nomArab').value.trim(),
+        prenomArab: document.getElementById('prenomArab').value.trim(),
+        username: document.getElementById('username').value.trim(),
+        password: document.getElementById('password').value,
+        matricule: document.getElementById('matricule').value.trim(),
+        grade: document.getElementById('grade').value.trim(),
+        gradeArab: document.getElementById('gradeArab').value.trim(),
+        dateNaissance: document.getElementById('dateNaissance').value,
+        adresse: document.getElementById('adresse').value.trim(),
+        echelle: document.getElementById('echelle').value.trim(),
+        echelleArab: document.getElementById('echelleArab').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        fonction: document.getElementById('fonction').value.trim(),
+        fonctionArab: document.getElementById('fonctionArab').value.trim(),
+        role: document.getElementById('role').value,
         departement: {
           id: parseInt(document.getElementById('departement').value)
         },
@@ -535,20 +610,26 @@
 
         const data = await response.json();
         await Swal.fire({
-    title: 'Succès',
-    text: 'Utilisateur enregistré avec succès!',
-    icon: 'success',
-    confirmButtonColor: '#2563eb',
-    confirmButtonText: 'OK'
-});
-window.location.href = 'liste_users.html';
+          title: 'Succès',
+          text: 'Utilisateur enregistré avec succès!',
+          icon: 'success',
+          confirmButtonColor: '#2563eb',
+          confirmButtonText: 'OK'
+        });
+        window.location.href = 'liste_users.html';
         userForm.reset();
         serviceSelect.innerHTML = '<option value="">Sélectionnez d\'abord un département</option>';
         serviceSelect.disabled = true;
 
       } catch (error) {
         console.error('Erreur:', error);
-        alert(error.message || 'Une erreur inconnue est survenue');
+        await Swal.fire({
+          title: 'Erreur',
+          text: error.message || 'Une erreur inconnue est survenue',
+          icon: 'error',
+          confirmButtonColor: '#2563eb',
+          confirmButtonText: 'OK'
+        });
       } finally {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnText;
