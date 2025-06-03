@@ -47,6 +47,17 @@ public class CalendarService {
     }
 
     public ReligiousHoliday addReligiousHoliday(ReligiousHolidayDTO dto) {
+        // Vérifier si une fête avec le même nom existe déjà pour la même année
+        boolean exists = religiousHolidayRepository.existsByNameAndYear(
+                dto.getName(),
+                dto.getStartDate().getYear()
+        );
+
+        if (exists) {
+            throw new RuntimeException("Une fête avec le nom '" + dto.getName() +
+                    "' existe déjà pour l'année " + dto.getStartDate().getYear());
+        }
+
         ReligiousHoliday holiday = new ReligiousHoliday();
         holiday.setName(dto.getName());
         holiday.setStartDate(dto.getStartDate());
@@ -54,10 +65,22 @@ public class CalendarService {
         return religiousHolidayRepository.save(holiday);
     }
 
-
     public ReligiousHoliday updateReligiousHoliday(Long id, ReligiousHolidayDTO dto) {
         ReligiousHoliday holiday = religiousHolidayRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Jour férié non trouvé avec l'id : " + id));
+
+        // Vérifier si un autre enregistrement a le même nom pour la même année
+        boolean exists = religiousHolidayRepository.existsByNameAndYearAndIdNot(
+                dto.getName(),
+                dto.getStartDate().getYear(),
+                id
+        );
+
+        if (exists) {
+            throw new RuntimeException("Une autre fête avec le nom '" + dto.getName() +
+                    "' existe déjà pour l'année " + dto.getStartDate().getYear());
+        }
+
         holiday.setName(dto.getName());
         holiday.setStartDate(dto.getStartDate());
         holiday.setEndDate(dto.getEndDate());

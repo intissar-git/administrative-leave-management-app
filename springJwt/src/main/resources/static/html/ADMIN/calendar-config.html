@@ -385,12 +385,22 @@
             <div class="p-6">
                 <h3 class="text-lg font-semibold mb-4">Ajouter une fête religieuse</h3>
                 <form id="holiday-form">
+                    <!-- Dans la partie Add Holiday Modal, remplacez l'input text par un select -->
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-medium mb-2" for="holiday-name">
                             Nom de la fête
                         </label>
-                        <input type="text" id="holiday-name" required
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <select id="holiday-name" required
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Sélectionnez une fête</option>
+                            <option value="Aïd al-Fitr">Aïd al-Fitr (Fin du Ramadan)</option>
+                            <option value="Aïd al-Adha">Aïd al-Adha (Fête du Sacrifice)</option>
+                            <option value="Ras as-Sana">Ras as-Sana (Nouvel An islamique)</option>
+                            <option value="Achoura">Achoura</option>
+                            <option value="Mawlid an-Nabaoui">Mawlid an-Nabaoui (Anniversaire du Prophète)</option>
+                            <option value="1er Moharram">1er Moharram (Nouvel An Hijri)</option>
+                            <option value="Lailat al-Qadr">Lailat al-Qadr (Nuit du Destin)</option>
+                        </select>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 text-sm font-medium mb-2" for="holiday-dates">
@@ -582,8 +592,14 @@
         const dates = datePicker.selectedDates;
 
         if (dates.length !== 2) {
-            alert('Veuillez sélectionner une période valide');
-            return;
+             await Swal.fire({
+            title: 'Erreur',
+            text: 'Veuillez sélectionner une période valide',
+            icon: 'error',
+            confirmButtonColor: '#2563eb',
+            confirmButtonText: 'OK'
+        });
+        return;
         }
 
         const holiday = {
@@ -604,6 +620,7 @@
 
             if (!response.ok) {
                 throw new Error('Erreur lors de l\'ajout de la fête');
+
             }
 
             const data = await response.json();
@@ -623,7 +640,13 @@
             fetchHolidays(currentYear);
         } catch (error) {
             console.error('Error:', error);
-            alert('Une erreur est survenue lors de l\'ajout de la fête');
+            await Swal.fire({
+                    title: 'Erreur',
+                    text: 'Cette fête existe déjà pour cette année',
+                    icon: 'error',
+                    confirmButtonColor: '#2563eb',
+                    confirmButtonText: 'OK'
+                });
         }
     });
 
