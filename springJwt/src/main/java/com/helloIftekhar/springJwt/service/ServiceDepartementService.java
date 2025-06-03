@@ -37,8 +37,9 @@ public class ServiceDepartementService {
         Departement departement = departementRepository.findById(dto.getDepartementId())
                 .orElseThrow(() -> new RuntimeException("Département non trouvé"));
 
-        if (serviceRepository.existsByNomServiceAndDepartementId(dto.getNomService(), dto.getDepartementId())) {
-            throw new RuntimeException("Ce service existe déjà dans ce département");
+        // Vérifier si le nom du service existe déjà dans n'importe quel département
+        if (serviceRepository.existsByNomService(dto.getNomService())) {
+            throw new RuntimeException("Ce nom de service existe déjà dans la base de données");
         }
 
         ServiceDepartement service = ServiceDepartementMapper.toEntity(dto, departement);
@@ -76,10 +77,10 @@ public class ServiceDepartementService {
         Departement newDepartement = departementRepository.findById(dto.getDepartementId())
                 .orElseThrow(() -> new EntityNotFoundException("Département non trouvé avec l'ID: " + dto.getDepartementId()));
 
-        // 3. Vérifier si le nouveau nom existe déjà dans le même département
+        // 3. Vérifier si le nouveau nom existe déjà dans la base de données (sauf pour le service actuel)
         if (!existingService.getNomService().equals(dto.getNomService()) &&
-                serviceRepository.existsByNomServiceAndDepartementId(dto.getNomService(), dto.getDepartementId())) {
-            throw new IllegalStateException("Ce nom de service existe déjà dans ce département");
+                serviceRepository.existsByNomService(dto.getNomService())) {
+            throw new IllegalStateException("Ce nom de service existe déjà dans la base de données");
         }
 
         // 4. Mettre à jour l'entité

@@ -1153,7 +1153,13 @@ editHolidayForm.addEventListener('submit', async (e) => {
     const dates = editDatePicker.selectedDates;
 
     if (dates.length !== 2) {
-        alert('Veuillez sélectionner une période valide');
+        await Swal.fire({
+            title: 'Erreur',
+            text: 'Veuillez sélectionner une période valide',
+            icon: 'error',
+            confirmButtonColor: '#2563eb',
+            confirmButtonText: 'OK'
+        });
         return;
     }
 
@@ -1174,7 +1180,33 @@ editHolidayForm.addEventListener('submit', async (e) => {
         });
 
         if (!response.ok) {
-            throw new Error('Erreur lors de la modification de la fête');
+            const errorData = await response.json();
+
+            // Cas spécifique où le nom de fête existe déjà pour cette année
+            if (response.status === 400 && errorData.message && errorData.message.includes("existe déjà")) {
+                await Swal.fire({
+                    title: 'Conflit',
+                    text: 'Une fête avec ce nom existe déjà pour cette année',
+                    icon: 'error',
+                    confirmButtonColor: '#2563eb',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            // Autres erreurs de validation
+            if (response.status === 400) {
+                await Swal.fire({
+                    title: 'Erreur de validation',
+                    text: errorData.message || 'Données invalides',
+                    icon: 'error',
+                    confirmButtonColor: '#2563eb',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            throw new Error(errorData.message || 'Erreur lors de la modification');
         }
 
         await Swal.fire({
@@ -1190,7 +1222,13 @@ editHolidayForm.addEventListener('submit', async (e) => {
         fetchHolidays(currentYear);
     } catch (error) {
         console.error('Error:', error);
-        alert('Une erreur est survenue lors de la modification de la fête');
+        await Swal.fire({
+            title: 'Erreur',
+            text: 'Une fête avec ce nom existe déjà pour cette année',
+            icon: 'error',
+            confirmButtonColor: '#2563eb',
+            confirmButtonText: 'OK'
+        });
     }
 });
 

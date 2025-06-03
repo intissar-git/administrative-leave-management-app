@@ -12,6 +12,7 @@ public interface ServiceDepartementRepository extends JpaRepository<ServiceDepar
 
     List<ServiceDepartement> findByDepartementId(Long departementId);
 
+    boolean existsByNomService(String nomService);
     boolean existsByNomServiceAndDepartementId(String nomService, Long departementId);
     //  developer par chef service
     @Query("SELECT u FROM User u JOIN FETCH u.service s JOIN FETCH s.departement WHERE s.id = :serviceId AND s.departement.id = :departementId")
