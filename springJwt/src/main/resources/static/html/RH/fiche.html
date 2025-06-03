@@ -236,9 +236,9 @@
                 `بناء على الطلب المقدم من طرف السيدة <strong>${demande.prenomArab} ${demande.nomArab}</strong> بتاريخ ${formatDateToArabic(demande.dateCreation)}.`;
 
             document.getElementById('article-1').innerHTML =
-                `<strong>الفصل الأول:</strong> ابتداء من ${formatDateToArabic(demande.dateDebut)}، تمنح رخصة إدارية للسيد(ة) <strong>${demande.prenomArab} ${demande.nomArab}</strong>
-                 ${demande.gradeArab || 'الرابعة'}، بوكالة الحوض المائي لأم الربيع لمدة (${demande.duree}) أيام عمل تطابق حقها في العطلة لسنة
-                ${currentYear}.`;
+    `<strong>الفصل الأول:</strong> ابتداء من ${formatDateToArabic(demande.dateDebut)}، تمنح رخصة إدارية للسيد(ة) <strong>${demande.prenomArab} ${demande.nomArab}</strong>
+     ${demande.fonctionArab ? demande.fonctionArab + ' من ' + demande.gradeArab : 'الرابعة'}، بوكالة الحوض المائي لأم الربيع لمدة (${demande.duree}) أيام عمل تطابق حقها في العطلة لسنة
+    ${currentYear}.`;
 
             document.getElementById('article-2').innerHTML =
                 `<strong>الفصل الثاني:</strong> تحتفظ المعنية بالأمر ب (${demande.soldeAnneePrecedente}) يوم عمل كبقية حقها في العطلة برسم سنة ${previousYear} و (${demande.soldeAnneeCourante}) يوم عمل برسم سنة ${currentYear}.`;
