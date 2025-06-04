@@ -587,34 +587,52 @@
 
         // Load requests from API
         async function loadRequests() {
-            try {
-                const response = await fetch('http://localhost:8080/api/demandes-conge/all-with-employee-info', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('Erreur lors du chargement des demandes');
-                }
-
-                const rawRequests = await response.json();
-                allRequests = rawRequests.map(request => ({
-                    ...request,
-                    employeeName: request.employeeName || 'Nom inconnu',
-                    employeeRole: request.role || 'Rôle inconnu',
-                    employeeBalance: 'N/A'
-                }));
-
-                filteredRequests = [...allRequests];
-                renderRequests();
-                updatePagination();
-            } catch (error) {
-                console.error('Error:', error);
-                showAlert('Erreur lors du chargement des demandes: ' + error.message, 'error');
+    try {
+        // Récupérer les informations de l'utilisateur connecté
+        const userResponse = await fetch('http://localhost:8080/api/users/me', {
+            headers: {
+                'Authorization': `Bearer ${token}`
             }
+        });
+
+        if (!userResponse.ok) {
+            throw new Error('Erreur lors de la récupération des informations utilisateur');
         }
 
+        const currentUser = await userResponse.json();
+        const currentUsername = currentUser.username;
+
+        // Récupérer toutes les demandes
+        const response = await fetch('http://localhost:8080/api/demandes-conge/all-with-employee-info', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Erreur lors du chargement des demandes');
+        }
+
+        const rawRequests = await response.json();
+
+        // Filtrer pour exclure les demandes de l'utilisateur connecté
+        allRequests = rawRequests
+            .filter(request => request.username !== currentUsername)
+            .map(request => ({
+                ...request,
+                employeeName: request.employeeName || 'Nom inconnu',
+                employeeRole: request.role || 'Rôle inconnu',
+                employeeBalance: 'N/A'
+            }));
+
+        filteredRequests = [...allRequests];
+        renderRequests();
+        updatePagination();
+    } catch (error) {
+        console.error('Error:', error);
+        showAlert('Erreur lors du chargement des demandes: ' + error.message, 'error');
+    }
+}
         // Render requests to the table
         function renderRequests() {
             const startIndex = (currentPage - 1) * itemsPerPage;
