@@ -133,7 +133,7 @@
 
                 <a href="departments.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                     <i class="fas fa-building text-gray-500 group-hover:text-gray-600 mr-3"></i>
-                    Gestion des départements
+                    Gestion des divisions
                 </a>
 
                 <a href="services.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
@@ -305,7 +305,7 @@
                                 <option value="USER">Utilisateur</option>
                                 <option value="CHEF_SERVICE">Chef de service</option>
                                 <option value="RH">RH</option>
-                                <option value="CHEF_DEPARTEMENT">Chef de departement</option>
+                                <option value="CHEF_DEPARTEMENT">Chef de division</option>
                             </select>
                         </div>
 
@@ -319,7 +319,7 @@
                         <div class="sm:col-span-3">
                             <label for="service" class="block text-sm font-medium text-gray-700">Service <span class="text-red-500">*</span></label>
                             <select id="service" name="service" disabled class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm" required>
-                                <option value="">Sélectionnez d'abord un département</option>
+                                <option value="">Sélectionnez d'abord une division</option>
                             </select>
                         </div>
                     </div>
@@ -419,9 +419,9 @@
         const departments = await deptResponse.json();
 
         // Remplir le select des départements
-        departementSelect.innerHTML = '<option value="">Sélectionner un département</option>' +
+        departementSelect.innerHTML = '<option value="">Sélectionner une division</option>' +
           departments.map(dept =>
-            `<option value="${dept.id}">${dept.nomDepartement || 'Département sans nom'}</option>`
+            `<option value="${dept.id}">${dept.nomDepartement || 'Division sans nom'}</option>`
           ).join('');
 
         // Charger les données de l'utilisateur
@@ -491,7 +491,7 @@
       const departementId = e.target.value;
 
       if (!departementId) {
-        serviceSelect.innerHTML = '<option value="">Sélectionnez d\'abord un département</option>';
+        serviceSelect.innerHTML = '<option value="">Sélectionnez d\'abord une division</option>';
         serviceSelect.disabled = true;
         return;
       }

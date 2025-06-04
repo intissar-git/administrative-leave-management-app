@@ -146,7 +146,7 @@
                     </a>
                     <a href="departments.html" class="bg-primary-50 text-primary-700 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                         <i class="fas fa-building text-primary-700 mr-3"></i>
-                        Gestion des départements
+                        Gestion des divisions
                     </a>
                     <a href="services.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
                         <i class="fas fa-cogs text-gray-500 group-hover:text-gray-600 mr-3"></i>
@@ -172,9 +172,9 @@
         <div class="flex-1 min-w-0 overflow-auto">
             <div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
                 <div class="flex justify-between items-center mb-6">
-                    <h1 class="text-2xl font-semibold text-gray-900">Gestion des Départements</h1>
+                    <h1 class="text-2xl font-semibold text-gray-900">Gestion des Divisions</h1>
                     <button id="addDepartmentBtn" class="bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg flex items-center">
-                        <i class="fas fa-plus mr-2"></i> Ajouter un département
+                        <i class="fas fa-plus mr-2"></i> Ajouter une division
                     </button>
                 </div>
 
@@ -239,15 +239,15 @@
 <div id="departmentModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white rounded-lg shadow-xl w-full max-w-md form-card">
         <div class="p-6">
-            <h2 id="modalTitle" class="text-xl font-semibold text-gray-800 mb-4">Ajouter un département</h2>
+            <h2 id="modalTitle" class="text-xl font-semibold text-gray-800 mb-4">Ajouter une division</h2>
             <form id="departmentForm">
                 <input type="hidden" id="departmentId">
                 <div class="mb-4">
                     <label for="departmentName" class="block text-sm font-medium text-gray-700 mb-1">
-                        <i class="fas fa-building text-primary-600 mr-2"></i> Nom du département *
+                        <i class="fas fa-building text-primary-600 mr-2"></i> Nom de la division *
                     </label>
                     <input type="text" id="departmentName" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500" required>
-                    <p id="nameError" class="mt-1 text-sm text-red-600 hidden">Le nom du département est requis</p>
+                    <p id="nameError" class="mt-1 text-sm text-red-600 hidden">Le nom de la division est requis</p>
                 </div>
                 <div class="mb-4">
                     <label for="departmentDescription" class="block text-sm font-medium text-gray-700 mb-1">
