@@ -182,9 +182,9 @@
                     <div class="flex justify-between items-center mb-6">
                         <div>
                             <h2 class="text-2xl font-bold text-gray-800">
-                                <i class="fas fa-edit text-blue-500 mr-2"></i> Modifier la demande de congé
+                                <i class="fas fa-edit text-primary-600 mr-2"></i> Modifier la demande de congé
                             </h2>
-                            <p class="text-gray-600">Mettez à jour les détails de votre demande</p>
+                            <p class="text-gray-600 mt-1">Modifiez les détails de votre demande de congé</p>
                         </div>
                     </div>
 
@@ -194,54 +194,60 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="editStartDate" class="block text-sm font-medium text-gray-700 mb-1">
-                                    <i class="fas fa-calendar-day text-blue-500 mr-2"></i> Date de début
+                                    <i class="fas fa-calendar-day text-primary-600 mr-2"></i> Date de début
                                 </label>
-                                <input type="text" id="editStartDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Sélectionnez une date">
+                                <input type="text" id="editStartDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 transition duration-150" placeholder="Sélectionnez une date">
                             </div>
 
                             <div>
                                 <label for="editEndDate" class="block text-sm font-medium text-gray-700 mb-1">
-                                    <i class="fas fa-calendar-day text-blue-500 mr-2"></i> Date de fin
+                                    <i class="fas fa-calendar-day text-primary-600 mr-2"></i> Date de fin
                                 </label>
-                                <input type="text" id="editEndDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Sélectionnez une date">
+                                <input type="text" id="editEndDate" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 transition duration-150" placeholder="Sélectionnez une date">
                             </div>
                         </div>
 
                         <div id="editDurationInfo" class="duration-info p-4 rounded-lg">
-                            <p class="text-blue-800 font-medium">
-                                <i class="fas fa-clock text-blue-500 mr-2"></i>
+                            <p class="text-primary-800 font-medium">
+                                <i class="fas fa-clock text-primary-600 mr-2"></i>
                                 Durée du congé: <span id="editDurationDays">0</span> jours (hors weekends et jours fériés)
                             </p>
                         </div>
 
                         <div>
                             <label for="editReason" class="block text-sm font-medium text-gray-700 mb-1">
-                                <i class="fas fa-comment-dots text-blue-500 mr-2"></i> Motif
+                                <i class="fas fa-comment-dots text-primary-600 mr-2"></i> Motif
                             </label>
-                            <textarea id="editReason" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Veuillez indiquer le motif de votre congé..."></textarea>
+                            <textarea id="editReason" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 transition duration-150" placeholder="Veuillez indiquer le motif de votre congé..."></textarea>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="remplacant" class="block text-sm font-medium text-gray-700 mb-1">
-                                    <i class="fas fa-user-friends text-blue-500 mr-2"></i> Remplaçant
+                                    <i class="fas fa-user-friends text-primary-600 mr-2"></i> Remplaçant
                                 </label>
-                                <input type="text" id="remplacant" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Nom du remplaçant...">
+                                <input type="text" id="remplacant" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 transition duration-150" placeholder="Nom du remplaçant...">
                             </div>
 
                             <div>
                                 <label for="remplacantArab" class="block text-sm font-medium text-gray-700 mb-1">
-                                    <i class="fas fa-user-friends text-blue-500 mr-2"></i> ينوب عليه
+                                    <i class="fas fa-user-friends text-primary-600 mr-2"></i> ينوب عليه
                                 </label>
-                                <input type="text" id="remplacantArab" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-right" placeholder="اسم النائب..." dir="rtl">
+                                <input type="text" id="remplacantArab"
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary-500 focus:border-primary-500 text-right arabic-input transition duration-150"
+                                       placeholder="اسم النائب..."
+                                       dir="rtl"
+                                       pattern="[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF ]+"
+                                       title="الرجاء إدخال أحرف عربية فقط"
+                                       oninput="validateArabicInput(this)">
                             </div>
                         </div>
 
                         <div class="flex justify-end space-x-4 pt-4">
-                            <button type="button" id="editCancelBtn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">
-                                <i class="fas fa-arrow-left mr-2"></i> Annuler
+                            <button type="button" id="editCancelBtn" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition duration-150">
+                                <i class="fas fa-times mr-2"></i> Annuler
                             </button>
-                            <button type="submit" id="editSubmitBtn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                            <button type="submit" id="editSubmitBtn" class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition duration-150">
                                 <i class="fas fa-save mr-2"></i> Enregistrer
                             </button>
                         </div>
@@ -250,251 +256,313 @@
             </div>
         </main>
     </div>
-</div>
 
-<!-- Toast notification -->
-<div id="toast" class="fixed top-4 right-4 hidden">
-    <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center">
-        <i class="fas fa-check-circle mr-2"></i>
-        <span id="toastMessage"></span>
+    <!-- Toast notification -->
+    <div id="toast" class="fixed top-4 right-4 hidden">
+        <div class="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center">
+            <i class="fas fa-check-circle mr-2"></i>
+            <span id="toastMessage">Modification enregistrée avec succès!</span>
+        </div>
     </div>
-</div>
 
-<!-- Scripts -->
-<script src="https://unpkg.com/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
-<script src="https://unpkg.com/flatpickr@4.6.13/dist/l10n/fr.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', async function() {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            window.location.href = '../user/index.html';
-            return;
+    <!-- Scripts -->
+    <script src="https://unpkg.com/flatpickr@4.6.13/dist/flatpickr.min.js"></script>
+    <script src="https://unpkg.com/flatpickr@4.6.13/dist/l10n/fr.js"></script>
+    <script>
+        // Fonction de validation pour le champ arabe
+        function validateArabicInput(input) {
+            // Expression régulière pour les caractères arabes et espaces
+            const arabicRegex = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF ]+$/;
+
+            if (!arabicRegex.test(input.value)) {
+                // Supprimer les caractères non arabes
+                input.value = input.value.replace(/[^\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF ]/g, '');
+
+                // Afficher un message d'erreur
+                const toast = document.getElementById('toast');
+                document.getElementById('toastMessage').textContent = 'Caractères en arabes uniquement.';
+                toast.classList.remove('hidden', 'bg-green-500');
+                toast.classList.add('bg-red-500');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                    toast.classList.remove('bg-red-500');
+                    toast.classList.add('bg-green-500');
+                }, 3000);
+            }
         }
 
-        const demandeId = localStorage.getItem('currentDemandeId');
-        if (!demandeId) {
-            window.location.href = 'historiqueRh.html';
-            return;
-        }
+        document.addEventListener('DOMContentLoaded', async function() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '../user/index.html';
+                return;
+            }
 
-        // Récupérer les jours fériés depuis l'API
-        let allHolidays = [];
-        let holidaysData = {};
+            const demandeId = localStorage.getItem('currentDemandeId');
+            if (!demandeId) {
+                window.location.href = 'historique-conges.html';
+                return;
+            }
 
-        try {
-            const response = await fetch('http://localhost:8080/api/calendar/2025', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            // Récupérer les jours fériés depuis l'API
+            let allHolidays = [];
+            let holidaysData = {};
 
-            if (!response.ok) throw new Error('Erreur lors de la récupération des jours fériés');
+            try {
+                const response = await fetch('http://localhost:8080/api/calendar/2025', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
 
-            const data = await response.json();
-            holidaysData = data;
+                if (!response.ok) throw new Error('Erreur lors de la récupération des jours fériés');
 
-            // Extraire toutes les dates fériées (nationales et religieuses)
-            const nationalHolidays = Object.values(data.nationalHolidays);
+                const data = await response.json();
+                holidaysData = data;
 
-            // Pour les fêtes religieuses qui peuvent durer plusieurs jours
-            const religiousHolidays = data.religiousHolidays.flatMap(holiday => {
-                const dates = [];
-                const startDate = new Date(holiday.startDate);
-                const endDate = new Date(holiday.endDate);
+                // Extraire toutes les dates fériées (nationales et religieuses)
+                const nationalHolidays = Object.values(data.nationalHolidays);
 
-                let currentDate = new Date(startDate);
-                while (currentDate <= endDate) {
-                    dates.push(currentDate.toISOString().split('T')[0]);
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
-                return dates;
-            });
+                // Pour les fêtes religieuses qui peuvent durer plusieurs jours
+                const religiousHolidays = data.religiousHolidays.flatMap(holiday => {
+                    const dates = [];
+                    const startDate = new Date(holiday.startDate);
+                    const endDate = new Date(holiday.endDate);
 
-            allHolidays = [...nationalHolidays, ...religiousHolidays];
-        } catch (error) {
-            console.error('Erreur:', error);
-            showToast('Impossible de charger les jours fériés. Veuillez rafraîchir la page.', true);
-            return;
-        }
+                    let currentDate = new Date(startDate);
+                    while (currentDate <= endDate) {
+                        dates.push(currentDate.toISOString().split('T')[0]);
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    }
+                    return dates;
+                });
 
-        // Configuration du date picker
-        const datePickerOptions = {
-            locale: 'fr',
-            dateFormat: 'd/m/Y',
-            disable: [
-                function(date) {
-                    // Désactiver les weekends
-                    return (date.getDay() === 0 || date.getDay() === 6);
-                },
-                // Désactiver tous les jours fériés (nationaux + religieux)
-                function(date) {
+                allHolidays = [...nationalHolidays, ...religiousHolidays];
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                showError('Impossible de charger les jours fériés. Veuillez rafraîchir la page.');
+                return;
+            }
+
+            // Configuration du date picker
+            const datePickerOptions = {
+                locale: 'fr',
+                dateFormat: 'd/m/Y',
+                disable: [
+                    function(date) {
+                        // Désactiver les weekends
+                        return (date.getDay() === 0 || date.getDay() === 6);
+                    },
+                    // Désactiver tous les jours fériés (nationaux + religieux)
+                    function(date) {
+                        const dateStr = date.toISOString().split('T')[0];
+                        return allHolidays.includes(dateStr);
+                    }
+                ],
+                onDayCreate: function(dObj, dStr, fp, dayElem) {
+                    const date = new Date(dayElem.dateObj);
                     const dateStr = date.toISOString().split('T')[0];
-                    return allHolidays.includes(dateStr);
-                }
-            ],
-            onDayCreate: function(dObj, dStr, fp, dayElem) {
-                const date = new Date(dayElem.dateObj);
-                const dateStr = date.toISOString().split('T')[0];
 
-                // Marquer les jours fériés nationaux
-                const nationalHoliday = Object.entries(holidaysData.nationalHolidays).find(([name, date]) => date === dateStr);
-                if (nationalHoliday) {
-                    dayElem.classList.add('holiday');
-                    dayElem.title = nationalHoliday[0];
+                    // Marquer les jours fériés nationaux
+                    const nationalHoliday = Object.entries(holidaysData.nationalHolidays).find(([name, date]) => date === dateStr);
+                    if (nationalHoliday) {
+                        dayElem.classList.add('holiday');
+                        dayElem.title = nationalHoliday[0];
+                        return;
+                    }
+
+                    // Marquer les jours fériés religieux
+                    const religiousHoliday = holidaysData.religiousHolidays.find(holiday => {
+                        const holidayStart = new Date(holiday.startDate).toISOString().split('T')[0];
+                        const holidayEnd = new Date(holiday.endDate).toISOString().split('T')[0];
+                        return dateStr >= holidayStart && dateStr <= holidayEnd;
+                    });
+
+                    if (religiousHoliday) {
+                        dayElem.classList.add('holiday');
+                        dayElem.title = religiousHoliday.name;
+                    }
+
+                    // Marquer les weekends
+                    if (date.getDay() === 0 || date.getDay() === 6) {
+                        dayElem.classList.add('weekend');
+                    }
+                }
+            };
+
+            const editStartDatePicker = flatpickr('#editStartDate', {
+                ...datePickerOptions,
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates.length > 0) {
+                        editEndDatePicker.set('minDate', selectedDates[0]);
+                        calculateEditDuration();
+                    }
+                }
+            });
+
+            const editEndDatePicker = flatpickr('#editEndDate', {
+                ...datePickerOptions,
+                onChange: function(selectedDates, dateStr, instance) {
+                    calculateEditDuration();
+                }
+            });
+
+            // Charger les données de la demande
+            try {
+                const response = await fetch(`http://localhost:8080/api/demandes-conge/${demandeId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!response.ok) throw new Error('Erreur lors du chargement de la demande');
+
+                const demande = await response.json();
+
+                // Remplir le formulaire avec les données existantes
+                document.getElementById('demandeId').value = demande.id;
+
+                const startDate = new Date(demande.dateDebut);
+                const endDate = new Date(demande.dateFin);
+
+                editStartDatePicker.setDate(startDate);
+                editEndDatePicker.setDate(endDate);
+
+                document.getElementById('editReason').value = demande.motif;
+                document.getElementById('remplacant').value = demande.remplacerPar;
+                document.getElementById('remplacantArab').value = demande.remplacantArab;
+
+                // Calculer et afficher la durée initiale
+                calculateEditDuration();
+
+            } catch (error) {
+                console.error(error);
+                showError('Erreur lors du chargement de la demande');
+            }
+
+            // Calcul de la durée
+            function calculateEditDuration() {
+                const startDate = editStartDatePicker.selectedDates[0];
+                const endDate = editEndDatePicker.selectedDates[0];
+
+                if (!startDate || !endDate) return;
+
+                // Vérifier que la date de fin est après la date de début
+                if (endDate < startDate) {
+                    editEndDatePicker.clear();
+                    showError('La date de fin doit être après la date de début');
                     return;
                 }
 
-                // Marquer les jours fériés religieux
-                const religiousHoliday = holidaysData.religiousHolidays.find(holiday => {
-                    const holidayStart = new Date(holiday.startDate).toISOString().split('T')[0];
-                    const holidayEnd = new Date(holiday.endDate).toISOString().split('T')[0];
-                    return dateStr >= holidayStart && dateStr <= holidayEnd;
-                });
+                let duration = 0;
+                let currentDate = new Date(startDate);
 
-                if (religiousHoliday) {
-                    dayElem.classList.add('holiday');
-                    dayElem.title = religiousHoliday.name;
+                while (currentDate <= endDate) {
+                    const dayOfWeek = currentDate.getDay();
+                    const dateStr = currentDate.toISOString().split('T')[0];
+
+                    // Ne compter que les jours ouvrables non fériés
+                    if (dayOfWeek !== 0 && dayOfWeek !== 6 && !allHolidays.includes(dateStr)) {
+                        duration++;
+                    }
+
+                    currentDate.setDate(currentDate.getDate() + 1);
                 }
 
-                // Marquer les weekends
-                if (date.getDay() === 0 || date.getDay() === 6) {
-                    dayElem.classList.add('weekend');
+                if (duration > 22) {
+                    showError('La durée maximale de congé est de 22 jours');
+                    editEndDatePicker.clear();
+                    return;
                 }
-            }
-        };
 
-        const editStartDatePicker = flatpickr('#editStartDate', {
-            ...datePickerOptions,
-            onChange: function(selectedDates, dateStr, instance) {
-                if (selectedDates.length > 0) {
-                    editEndDatePicker.set('minDate', selectedDates[0]);
-                    calculateEditDuration();
+                document.getElementById('editDurationDays').textContent = duration;
+            }
+
+            // Gestion du formulaire
+            document.getElementById('editLeaveForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                // Validation supplémentaire du champ arabe
+                const arabicInput = document.getElementById('remplacantArab');
+                const arabicRegex = /^[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF ]+$/;
+
+                if (!arabicRegex.test(arabicInput.value)) {
+                    showError('Caractères en arabes uniquement.');
+                    arabicInput.focus();
+                    return;
                 }
-            }
-        });
 
-        const editEndDatePicker = flatpickr('#editEndDate', {
-            ...datePickerOptions,
-            onChange: function(selectedDates, dateStr, instance) {
-                calculateEditDuration();
-            }
-        });
+                const submitBtn = document.getElementById('editSubmitBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Enregistrement...';
 
-        // Charger les données de la demande
-        try {
-            const response = await fetch(`http://localhost:8080/api/demandes-conge/${demandeId}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
+                try {
+                    const response = await fetch(`http://localhost:8080/api/demandes-conge/${demandeId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            dateDebut: editStartDatePicker.selectedDates[0].toISOString(),
+                            dateFin: editEndDatePicker.selectedDates[0].toISOString(),
+                            motif: document.getElementById('editReason').value,
+                            duree: parseInt(document.getElementById('editDurationDays').textContent),
+                            remplacerPar: document.getElementById('remplacant').value,
+                            remplacantArab: document.getElementById('remplacantArab').value
+                        })
+                    });
+
+                    if (!response.ok) throw new Error('Erreur lors de la modification');
+
+                    showToast('Modification enregistrée avec succès!');
+                    setTimeout(() => {
+                        window.location.href = 'demande-details.html';
+                    }, 2000);
+                } catch (error) {
+                    showError(error.message);
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-save mr-2"></i> Enregistrer';
+                }
             });
 
-            if (!response.ok) throw new Error('Erreur lors du chargement de la demande');
+            // Bouton annuler
+            document.getElementById('editCancelBtn').addEventListener('click', function() {
+                window.location.href = 'demande-details.html';
+            });
 
-            const demande = await response.json();
+            // Déconnexion
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                localStorage.removeItem('token');
+                localStorage.removeItem('refresh_token');
+                window.location.href = '../user/index.html';
+            });
 
-            // Remplir le formulaire avec les données existantes
-            document.getElementById('demandeId').value = demande.id;
-
-            const startDate = new Date(demande.dateDebut);
-            const endDate = new Date(demande.dateFin);
-
-            editStartDatePicker.setDate(startDate);
-            editEndDatePicker.setDate(endDate);
-
-            document.getElementById('editReason').value = demande.motif;
-            document.getElementById('remplacant').value = demande.remplacerPar;
-            document.getElementById('remplacantArab').value = demande.remplacantArab;
-
-            // Calculer et afficher la durée initiale
-            calculateEditDuration();
-
-        } catch (error) {
-            console.error(error);
-            showToast('Erreur lors du chargement de la demande', true);
-        }
-
-        // Calcul de la durée
-        function calculateEditDuration() {
-            const startDate = editStartDatePicker.selectedDates[0];
-            const endDate = editEndDatePicker.selectedDates[0];
-
-            if (!startDate || !endDate) return;
-
-            // Vérifier que la date de fin est après la date de début
-            if (endDate < startDate) {
-                editEndDatePicker.clear();
-                showToast('La date de fin doit être après la date de début', true);
-                return;
+            // Fonctions d'affichage des messages
+            function showToast(message) {
+                const toast = document.getElementById('toast');
+                document.getElementById('toastMessage').textContent = message;
+                toast.classList.remove('hidden');
+                setTimeout(() => toast.classList.add('hidden'), 3000);
             }
 
-            let duration = 0;
-            let currentDate = new Date(startDate);
-
-            while (currentDate <= endDate) {
-                const dayOfWeek = currentDate.getDay();
-                const dateStr = currentDate.toISOString().split('T')[0];
-
-                // Ne compter que les jours ouvrables non fériés
-                if (dayOfWeek !== 0 && dayOfWeek !== 6 && !allHolidays.includes(dateStr)) {
-                    duration++;
-                }
-
-                currentDate.setDate(currentDate.getDate() + 1);
-            }
-
-            if (duration > 22) {
-                showToast('La durée maximale de congé est de 22 jours', true);
-                editEndDatePicker.clear();
-                return;
-            }
-
-            document.getElementById('editDurationDays').textContent = duration;
-        }
-
-        // Gestion du formulaire
-        document.getElementById('editLeaveForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            const submitBtn = document.getElementById('editSubmitBtn');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Enregistrement...';
-
-            try {
-                const response = await fetch(`http://localhost:8080/api/demandes-conge/${demandeId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        dateDebut: editStartDatePicker.selectedDates[0].toISOString(),
-                        dateFin: editEndDatePicker.selectedDates[0].toISOString(),
-                        motif: document.getElementById('editReason').value,
-                        duree: parseInt(document.getElementById('editDurationDays').textContent),
-                        remplacerPar: document.getElementById('remplacant').value,
-                        remplacantArab: document.getElementById('remplacantArab').value
-                    })
-                });
-
-                if (!response.ok) throw new Error('Erreur lors de la modification');
-
-                showToast('Modification enregistrée avec succès!');
+            function showError(message) {
+                const toast = document.getElementById('toast');
+                toast.querySelector('#toastMessage').textContent = message;
+                toast.classList.remove('hidden', 'bg-green-500');
+                toast.classList.add('bg-red-500');
                 setTimeout(() => {
-                    window.location.href = 'edit-Demande-Rh.html';
-                }, 2000);
-            } catch (error) {
-                console.error(error);
-                showToast('Erreur: ' + error.message, true);
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-save mr-2"></i> Enregistrer';
+                    toast.classList.add('hidden');
+                    toast.classList.remove('bg-red-500');
+                    toast.classList.add('bg-green-500');
+                }, 3000);
             }
         });
 
-        // Bouton annuler
-        document.getElementById('editCancelBtn').addEventListener('click', function() {
-            window.location.href = 'edit-Demande-ChefDep.html';
-        });
-
-        // Logout button
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
             localStorage.removeItem('token');
             localStorage.removeItem('refresh_token');
+            localStorage.removeItem('userRole');
             window.location.href = '../user/index.html';
         });
 
@@ -517,28 +585,6 @@
                 }
             });
         }
-
-        // Show toast notification
-        function showToast(message, isError = false) {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
-
-            toastMessage.textContent = message;
-
-            if (isError) {
-                toast.firstElementChild.classList.remove('bg-green-500');
-                toast.firstElementChild.classList.add('bg-red-500');
-            } else {
-                toast.firstElementChild.classList.remove('bg-red-500');
-                toast.firstElementChild.classList.add('bg-green-500');
-            }
-
-            toast.classList.remove('hidden');
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 3000);
-        }
-    });
-</script>
+    </script>
 </body>
 </html>
