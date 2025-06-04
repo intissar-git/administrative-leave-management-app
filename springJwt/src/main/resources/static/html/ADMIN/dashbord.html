@@ -8,6 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script>
         tailwind.config = {
@@ -234,12 +236,18 @@
         <!-- Main Content -->
         <div class="flex-1 min-w-0 overflow-auto">
             <div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-                <div class="flex justify-between items-center mb-6">
-                    <h1 class="text-2xl font-semibold text-gray-900">Tableau de bord</h1>
-                    <div class="text-sm text-gray-500">
-                        <i class="fas fa-calendar-alt mr-1"></i>
-                        <span id="currentDate"></span>
+                <!-- En-tête amélioré avec bouton d'exportation -->
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h1 class="text-2xl font-semibold text-gray-900">Tableau de bord</h1>
+                        <div class="text-sm text-gray-500 mt-1">
+                            <i class="fas fa-calendar-alt mr-1"></i>
+                            <span id="currentDate"></span>
+                        </div>
                     </div>
+                    <button id="exportPdfBtn" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                        <i class="fas fa-file-export mr-2"></i> Exporter PDF
+                    </button>
                 </div>
 
                 <!-- Stats Cards -->
@@ -546,6 +554,99 @@
 
       return response.json();
     }
+
+    // Function to export dashboard as PDF
+    async function exportDashboardToPDF() {
+        try {
+            // Show loading state
+            const exportBtn = document.getElementById('exportPdfBtn');
+            const originalText = exportBtn.innerHTML;
+            exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Préparation du PDF...';
+            exportBtn.disabled = true;
+
+            // Use html2canvas to capture the dashboard
+            const dashboardElement = document.querySelector('.flex-1.min-w-0.overflow-auto');
+
+            // Create a clone of the dashboard to avoid affecting the original
+            const clone = dashboardElement.cloneNode(true);
+            clone.style.position = 'absolute';
+            clone.style.left = '-9999px';
+            document.body.appendChild(clone);
+
+            // Hide elements that shouldn't be in the PDF
+            const elementsToHide = clone.querySelectorAll('a, button, .chart-title .total-count');
+            elementsToHide.forEach(el => {
+                el.style.display = 'none';
+            });
+
+            // Add a title to the PDF
+            const title = document.createElement('h1');
+            title.textContent = 'Tableau de bord - Système de gestion des congés';
+            title.style.textAlign = 'center';
+            title.style.fontSize = '20px';
+            title.style.marginBottom = '20px';
+            clone.insertBefore(title, clone.firstChild);
+
+            // Add current date to the PDF
+            const dateElement = document.createElement('p');
+            dateElement.textContent = 'Exporté le: ' + new Date().toLocaleDateString('fr-FR', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+            dateElement.style.textAlign = 'center';
+            dateElement.style.marginBottom = '20px';
+            clone.insertBefore(dateElement, clone.firstChild);
+
+            // Use html2canvas to capture the clone
+            const canvas = await html2canvas(clone, {
+                scale: 2,
+                logging: false,
+                useCORS: true,
+                allowTaint: true
+            });
+
+            // Remove the clone
+            document.body.removeChild(clone);
+
+            // Create PDF
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const imgData = canvas.toDataURL('image/png');
+            const imgWidth = 210; // A4 width in mm
+            const pageHeight = 295; // A4 height in mm
+            const imgHeight = canvas.height * imgWidth / canvas.width;
+            let heightLeft = imgHeight;
+            let position = 0;
+
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            while (heightLeft >= 0) {
+                position = heightLeft - imgHeight;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+
+            // Save the PDF
+            pdf.save('tableau-de-bord-conges-' + new Date().toISOString().slice(0, 10) + '.pdf');
+
+            // Restore button state
+            exportBtn.innerHTML = originalText;
+            exportBtn.disabled = false;
+
+        } catch (error) {
+            console.error('Error exporting to PDF:', error);
+            alert('Une erreur est survenue lors de l\'exportation du PDF.');
+
+            // Restore button state in case of error
+            const exportBtn = document.getElementById('exportPdfBtn');
+            exportBtn.innerHTML = '<i class="fas fa-file-export mr-2"></i> Exporter le tableau';
+            exportBtn.disabled = false;
+        }
+    }
+
+    // Add event listener for PDF export button
+    document.getElementById('exportPdfBtn').addEventListener('click', exportDashboardToPDF);
 
     // Function to fetch dashboard data
     async function fetchDashboardData() {

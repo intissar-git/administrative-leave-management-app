@@ -616,12 +616,11 @@ async function getCurrentUser() {
         menu.classList.toggle('hidden');
     });
 
-    // Logout functionality
-    document.getElementById('logoutBtn').addEventListener('click', function() {
-        localStorage.removeItem('token');
-        localStorage.removeItem('refresh_token');
-        window.location.href = '../user/index.html';
-    });
+    logoutBtn.addEventListener('click', async () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('refresh_token');
+            window.location.href = '../user/index.html';
+        });
 </script>
 </body>
 </html>
