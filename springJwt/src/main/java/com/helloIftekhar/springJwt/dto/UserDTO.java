@@ -34,6 +34,7 @@ public class UserDTO {
     private String fonction;
 
     private String fonctionArab;
+    private String password;
 }
 
 

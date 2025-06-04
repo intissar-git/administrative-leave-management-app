@@ -9,6 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -87,6 +89,21 @@
             border-radius: 3px;
             margin-right: 0.5rem;
         }
+
+        @media print {
+  body * {
+    visibility: hidden;
+  }
+  main, main * {
+    visibility: visible;
+  }
+  main {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -103,11 +120,19 @@
                             <line x1="3" x2="21" y1="10" y2="10"></line>
                             <path d="m9 16 2 2 4-4"></path>
                         </svg>
+
                         <span class="text-xl font-semibold text-gray-900">Gestion des congés</span>
+                        <button onclick="exportToPDF()" class="ml-4 px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors duration-200">
+                            <i class="fas fa-file-pdf mr-2"></i>Exporter PDF
+                        </button>
                     </div>
                 </div>
                 <div class="flex items-center">
+
+
                     <div class="relative">
+
+
                         <button id="userMenuBtn" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500" aria-expanded="false">
                             <span class="sr-only">Ouvrir le menu utilisateur</span>
                             <div class="flex items-center">
@@ -169,7 +194,9 @@
 
         <!-- Main Content -->
         <main class="flex-1 min-w-0 overflow-auto">
+
             <div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+
                 <h1 class="text-2xl font-semibold text-gray-900">Tableau de bord RH</h1>
 
                 <!-- Stats Overview -->
@@ -743,6 +770,113 @@
 
     // Initialize dashboard when page loads
     document.addEventListener('DOMContentLoaded', checkAuthAndLoadData);
+
+
+
+
+
+
+
+
+
+
+
+
+function exportToPDF() {
+  // Afficher un indicateur de chargement
+  const loadingIndicator = document.createElement('div');
+  loadingIndicator.innerHTML = `
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <div class="flex items-center">
+          <svg class="animate-spin -ml-1 mr-3 h-8 w-8 text-primary-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span class="text-lg font-medium">Génération du PDF...</span>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(loadingIndicator);
+
+  // Sélectionnez le contenu principal à exporter (exclut la sidebar et le header)
+  const element = document.querySelector('main');
+
+  const opt = {
+    margin: [10, 5, 10, 5], // [top, left, bottom, right]
+    filename: `tableau-de-bord-RH_${new Date().toLocaleDateString('fr-FR')}.pdf`,
+    image: {
+      type: 'jpeg',
+      quality: 0.95
+    },
+    html2canvas: {
+      scale: 2,
+      logging: false,
+      useCORS: true,
+      allowTaint: true,
+      scrollX: 0,
+      scrollY: 0,
+      windowWidth: document.documentElement.scrollWidth
+    },
+    jsPDF: {
+      unit: 'mm',
+      format: 'a3',
+      orientation: 'portrait',
+      compress: true
+    },
+    pagebreak: {
+      mode: ['avoid-all', 'css', 'legacy']
+    }
+  };
+
+  // Générer le PDF
+  html2pdf()
+    .set(opt)
+    .from(element)
+    .toPdf()
+    .get('pdf')
+    .then((pdf) => {
+      // Personnalisation supplémentaire du PDF
+      const totalPages = pdf.internal.getNumberOfPages();
+      for (let i = 1; i <= totalPages; i++) {
+        pdf.setPage(i);
+        pdf.setFontSize(10);
+        pdf.setTextColor(100);
+        pdf.text(
+          `Page ${i} sur ${totalPages}`,
+          pdf.internal.pageSize.getWidth() - 30,
+          pdf.internal.pageSize.getHeight() - 10
+        );
+      }
+    })
+    .save()
+    .then(() => {
+      // Supprimer l'indicateur de chargement
+      document.body.removeChild(loadingIndicator);
+
+      // Afficher une notification
+      const notification = document.createElement('div');
+      notification.innerHTML = `
+        <div class="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-md shadow-lg flex items-center">
+          <i class="fas fa-check-circle mr-2"></i>
+          PDF exporté avec succès !
+        </div>
+      `;
+      document.body.appendChild(notification);
+      setTimeout(() => notification.remove(), 3000);
+    })
+    .catch((err) => {
+      document.body.removeChild(loadingIndicator);
+      console.error('Erreur lors de l\'export:', err);
+      alert('Une erreur est survenue lors de l\'export PDF');
+    });
+}
+
+
+
+
+
 </script>
 </body>
 </html>

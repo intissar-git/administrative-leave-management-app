@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -189,10 +190,6 @@
             opacity: 0;
             transform: translateY(-20px);
             transition: all 0.3s ease;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            max-width: 400px;
         }
 
         .alert.show {
@@ -203,18 +200,11 @@
         .alert-success {
             background-color: #D1FAE5;
             color: #065F46;
-            border: 1px solid #A7F3D0;
         }
 
         .alert-error {
             background-color: #FEE2E2;
             color: #991B1B;
-            border: 1px solid #FECACA;
-        }
-
-        .alert-icon {
-            margin-right: 0.75rem;
-            font-size: 1.25rem;
         }
     </style>
 </head>
@@ -311,9 +301,8 @@
                             </div>
                         </div>
 
-                        <button id="exportExcelBtn" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                            <i class="fas fa-file-excel mr-2"></i>
-                            Exporter Excel
+                        <button id="exportBtn" class="flex items-center px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors">
+                            <i class="fas fa-file-export mr-2"></i> Exporter
                         </button>
                     </div>
                 </div>
@@ -446,7 +435,7 @@
                                     <span class="detail-value" id="detailRemplacerPar"></span>
                                 </div>
                                 <div class="detail-item">
-                                    <span class="detail-label">Division</span>
+                                    <span class="detail-label">Département</span>
                                     <span class="detail-value" id="detailDepartement"></span>
                                 </div>
                                 <div class="detail-item">
@@ -587,52 +576,34 @@
 
         // Load requests from API
         async function loadRequests() {
-    try {
-        // Récupérer les informations de l'utilisateur connecté
-        const userResponse = await fetch('http://localhost:8080/api/users/me', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
+            try {
+                const response = await fetch('http://localhost:8080/api/demandes-conge/all-with-employee-info', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
 
-        if (!userResponse.ok) {
-            throw new Error('Erreur lors de la récupération des informations utilisateur');
+                if (!response.ok) {
+                    throw new Error('Erreur lors du chargement des demandes');
+                }
+
+                const rawRequests = await response.json();
+                allRequests = rawRequests.map(request => ({
+                    ...request,
+                    employeeName: request.employeeName || 'Nom inconnu',
+                    employeeRole: request.role || 'Rôle inconnu',
+                    employeeBalance: 'N/A'
+                }));
+
+                filteredRequests = [...allRequests];
+                renderRequests();
+                updatePagination();
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Erreur lors du chargement des demandes: ' + error.message);
+            }
         }
 
-        const currentUser = await userResponse.json();
-        const currentUsername = currentUser.username;
-
-        // Récupérer toutes les demandes
-        const response = await fetch('http://localhost:8080/api/demandes-conge/all-with-employee-info', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Erreur lors du chargement des demandes');
-        }
-
-        const rawRequests = await response.json();
-
-        // Filtrer pour exclure les demandes de l'utilisateur connecté
-        allRequests = rawRequests
-            .filter(request => request.username !== currentUsername)
-            .map(request => ({
-                ...request,
-                employeeName: request.employeeName || 'Nom inconnu',
-                employeeRole: request.role || 'Rôle inconnu',
-                employeeBalance: 'N/A'
-            }));
-
-        filteredRequests = [...allRequests];
-        renderRequests();
-        updatePagination();
-    } catch (error) {
-        console.error('Error:', error);
-        showAlert('Erreur lors du chargement des demandes: ' + error.message, 'error');
-    }
-}
         // Render requests to the table
         function renderRequests() {
             const startIndex = (currentPage - 1) * itemsPerPage;
@@ -676,7 +647,7 @@
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         ${request.statut === 'APPROUVE' ?
                             `<a href="fiche.html?id=${request.id}" class="text-green-600 hover:text-green-900 mr-3">
-                                <i class="fas fa-file-alt"></i> PV
+                                <i class="fas fa-file-alt"></i> Fiche
                             </a>` :
                             `<button class="text-primary-600 hover:text-primary-900 mr-3 view-btn" data-id="${request.id}">
                                 <i class="fas fa-eye"></i>
@@ -694,64 +665,65 @@
 
         // Show request details in modal
         async function showRequestDetails(requestId) {
-    currentRequestId = requestId;
-    const request = allRequests.find(req => req.id == requestId);
-    if (!request) return;
+            currentRequestId = requestId;
+            const request = allRequests.find(req => req.id == requestId);
+            if (!request) return;
 
-    // Utilisez le username de la demande au lieu d'une variable non définie
-    const employeeUsername = request.username;
-
-    // Fetch global leave balance for the employee
-    let globalBalance = { soldeGlobal: 'N/A', soldeAnneeCourante: 'N/A', soldeAnneePrecedente: 'N/A' };
-    try {
-        const balanceResponse = await fetch(`http://localhost:8080/api/solde-conge/employe/${employeeUsername}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
+            // Fetch global leave balance for the employee
+            let globalBalance = { soldeGlobal: 'N/A', soldeAnneeCourante: 'N/A', soldeAnneePrecedente: 'N/A' };
+            try {
+                const balanceResponse = await fetch(`http://localhost:8080/api/solde-conge/mon-solde`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (balanceResponse.ok) {
+                    globalBalance = await balanceResponse.json();
+                } else {
+                    console.warn('Could not fetch global balance for employee:', request.idEmployee, 'Status:', balanceResponse.status);
+                }
+            } catch (error) {
+                console.error('Error fetching global balance:', error);
             }
-        });
-        if (balanceResponse.ok) {
-            globalBalance = await balanceResponse.json();
-        } else {
-            console.warn('Could not fetch global balance for employee:', request.idEmployee, 'Status:', balanceResponse.status);
+
+            detailEmployeeAvatar.textContent = request.employeeName ? request.employeeName.charAt(0) : 'U';
+            detailEmployeeName.textContent = request.employeeName || 'Non spécifié';
+            detailEmployeeRole.textContent = request.role || 'Non spécifié';
+            detailEmployeeBalance.textContent = `${globalBalance.soldeGlobal || 'N/A'} jours`;
+
+            detailPeriod.textContent = `${formatDate(request.dateDebut)} au ${formatDate(request.dateFin)}`;
+            detailDurationCard.textContent = `${request.duree} jours`;
+            detailReasonCard.textContent = request.motif || 'Non spécifié';
+            detailRemplacerPar.textContent = request.remplacerPar || 'Non spécifié';
+            detailDepartement.textContent = request.departement || 'Non spécifié';
+            detailService.textContent = request.service || 'Non spécifié';
+
+            detailGlobalBalance.textContent = globalBalance.soldeGlobal;
+            detailCurrentYearBalance.textContent = globalBalance.soldeAnneeCourante;
+            detailPreviousYearBalance.textContent = globalBalance.soldeAnneePrecedente;
+
+            requestDetailModal.classList.remove('hidden');
+
+            // Set visibility of action buttons based on status
+            if (request.statut === 'EN_COURS_DE_TRAITEMENT') {
+                approveRequestBtn.classList.remove('hidden');
+                rejectRequestBtn.classList.remove('hidden');
+            } else {
+                approveRequestBtn.classList.add('hidden');
+                rejectRequestBtn.classList.add('hidden');
+            }
         }
-    } catch (error) {
-        console.error('Error fetching global balance:', error);
-    }
 
-    // Le reste du code reste inchangé
-    detailEmployeeAvatar.textContent = request.employeeName ? request.employeeName.charAt(0) : 'U';
-    detailEmployeeName.textContent = request.employeeName || 'Non spécifié';
-    detailEmployeeRole.textContent = request.role || 'Non spécifié';
-    detailEmployeeBalance.textContent = `${globalBalance.soldeGlobal || 'N/A'} jours`;
-
-    detailPeriod.textContent = `${formatDate(request.dateDebut)} au ${formatDate(request.dateFin)}`;
-    detailDurationCard.textContent = `${request.duree} jours`;
-    detailReasonCard.textContent = request.motif || 'Non spécifié';
-    detailRemplacerPar.textContent = request.remplacerPar || 'Non spécifié';
-    detailDepartement.textContent = request.departement || 'Non spécifié';
-    detailService.textContent = request.serviceName || 'Non spécifié';
-
-    detailGlobalBalance.textContent = globalBalance.soldeGlobal;
-    detailCurrentYearBalance.textContent = globalBalance.soldeAnneeCourante;
-    detailPreviousYearBalance.textContent = globalBalance.soldeAnneePrecedente;
-
-    requestDetailModal.classList.remove('hidden');
-
-    // Set visibility of action buttons based on status
-    if (request.statut === 'EN_COURS_DE_TRAITEMENT') {
-        approveRequestBtn.classList.remove('hidden');
-        rejectRequestBtn.classList.remove('hidden');
-    } else {
-        approveRequestBtn.classList.add('hidden');
-        rejectRequestBtn.classList.add('hidden');
-    }
-}
         // Filter requests based on search and tab selection
         function filterRequests() {
             const searchTerm = searchInput.value.toLowerCase();
             const activeTab = document.querySelector('.tab-btn.active')?.dataset.filter || 'all';
 
             filteredRequests = allRequests.filter(request => {
+                if (activeTab === 'all' && request.statut === 'EN_ATTENTE') {
+                    return false;
+                }
+
                 const matchesSearch =
                     (request.employeeName?.toLowerCase().includes(searchTerm)) ||
                     (request.role?.toLowerCase().includes(searchTerm)) ||
@@ -801,6 +773,7 @@
             }
 
             // Bouton pour la première page
+
             if (startPage > 1) {
                 const firstPageBtn = createPageButton(1);
                 pageNumbers.appendChild(firstPageBtn);
@@ -877,7 +850,7 @@
                     const data = filteredRequests.map(request => ({
                         'ID': request.id,
                         'Employé': request.employeeName,
-                        'Rôle': request.role,
+                        'Rôle': request.role, // Use request.role
                         'Remplacé par': request.remplacerPar || 'N/A',
                         'Date Début': formatDate(request.dateDebut),
                         'Date Fin': formatDate(request.dateFin),
@@ -898,86 +871,96 @@
                 document.head.appendChild(script);
             } catch (error) {
                 console.error('Erreur lors de l\'export:', error);
-                showAlert('Une erreur est survenue lors de l\'export', 'error');
+                alert('Une erreur est survenue lors de l\'export');
             }
         }
 
-        // Approve/Reject Request - NOUVELLE VERSION avec la nouvelle API
-        async function updateRequestStatus(status, reason = null) {
-            if (!currentRequestId) return;
+        // Approve/Reject Request
+            // Approve/Reject Request
+async function updateRequestStatus(status, reason = null) {
+    if (!currentRequestId) return;
 
-            try {
-                let response;
-                if (status === 'APPROUVE') {
-                    // Utilisation de la nouvelle API pour l'approbation
-                    response = await fetch(`http://localhost:8080/api/approbation-conge/approuver/${currentRequestId}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({}) // Corps vide ou données supplémentaires si nécessaire
-                    });
-                } else {
-                    // Pour le rejet, on garde l'ancienne API
-                    response = await fetch(`http://localhost:8080/api/demandes-conge/${currentRequestId}/statut`, {
-                        method: 'PATCH',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({
-                            statut: status,
-                            motifRefus: reason
-                        })
-                    });
-                }
+    try {
+        if (status === 'APPROUVE') {
+            // Utiliser le endpoint spécifique pour l'approbation
+            const response = await fetch(`http://localhost:8080/api/approbation-conge/approuver/${currentRequestId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    // Vous pouvez ajouter ici d'autres données nécessaires pour l'approbation
+                    // Par exemple, un commentaire ou une raison d'approbation
+                })
+            });
 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Erreur lors de la mise à jour du statut de la demande: ${errorText}`);
-                }
-
-                // Afficher une alerte de succès
-                showAlert(`Demande ${status === 'APPROUVE' ? 'approuvée' : 'refusée'} avec succès!`, 'success');
-
-                // Fermer les modales
-                requestDetailModal.classList.add('hidden');
-                rejectReasonModal.classList.add('hidden');
-
-                // Recharger les demandes
-                await loadRequests();
-            } catch (error) {
-                console.error('Error:', error);
-                showAlert(`Erreur: ${error.message}`, 'error');
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Erreur lors de l'approbation de la demande: ${errorText}`);
             }
+
+            showAlert('Demande approuvée avec succès!', 'success');
+        } else if (status === 'REFUSE') {
+            // Pour le refus, vous pouvez garder l'ancien endpoint
+            const response = await fetch(`http://localhost:8080/api/demandes-conge/${currentRequestId}/statut`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    statut: status,
+                    motifRefus: reason
+                })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Erreur lors du refus de la demande: ${errorText}`);
+            }
+
+            showAlert('Demande refusée avec succès!', 'success');
         }
 
-        // Fonction pour afficher des alertes stylisées
-        function showAlert(message, type) {
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${type === 'success' ? 'success' : 'error'}`;
-            alert.innerHTML = `
-                <div class="flex items-center">
-                    <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} alert-icon"></i>
-                    ${message}
-                </div>
+        requestDetailModal.classList.add('hidden');
+        rejectReasonModal.classList.add('hidden');
+        await loadRequests(); // Reload requests to update the table
+    } catch (error) {
+        console.error('Error:', error);
+        showAlert(`Erreur: ${error.message}`, 'error');
+    }
+}
+
+// Fonction pour afficher des alertes
+function showAlert(message, type) {
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type === 'success' ? 'success' : 'error'}`;
+    alert.innerHTML = `
+        <div class="flex items-center">
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+            ${message}
+        </div>
+    `;
+
+    document.body.appendChild(alert);
+    alert.classList.add('show');
+
+    setTimeout(() => {
+        alert.classList.remove('show');
+        setTimeout(() => alert.remove(), 300);
+    }, 3000);
+}
+
+        // Show error message
+        function showError(message) {
+            requestsTableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="px-6 py-4 text-center text-sm text-red-600">
+                        <i class="fas fa-exclamation-circle mr-2"></i> ${message}
+                    </td>
+                </tr>
             `;
-
-            alertContainer.appendChild(alert);
-
-            // Ajouter la classe show pour l'animation
-            setTimeout(() => {
-                alert.classList.add('show');
-            }, 10);
-
-            // Supprimer l'alerte après 5 secondes
-            setTimeout(() => {
-                alert.classList.remove('show');
-                setTimeout(() => {
-                    alert.remove();
-                }, 300);
-            }, 5000);
         }
 
         // Setup event listeners
@@ -1049,10 +1032,21 @@
 
             // Approve and Reject buttons in detail modal
             approveRequestBtn.addEventListener('click', () => {
-                if (confirm('Êtes-vous sûr de vouloir approuver cette demande ? Cette action mettra à jour le solde de congé de l\'employé.')) {
-                    updateRequestStatus('APPROUVE');
-                }
-            });
+    Swal.fire({
+        title: 'Confirmer l\'approbation',
+        text: 'Êtes-vous sûr de vouloir approuver cette demande ?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Oui, approuver',
+        cancelButtonText: 'Annuler'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            updateRequestStatus('APPROUVE');
+        }
+    });
+});
 
             rejectRequestBtn.addEventListener('click', () => {
                 requestDetailModal.classList.add('hidden'); // Hide detail modal first
@@ -1074,7 +1068,7 @@
                 if (reason) {
                     updateRequestStatus('REFUSE', reason);
                 } else {
-                    showAlert('Veuillez entrer un motif de refus.', 'error');
+                    alert('Veuillez entrer un motif de refus.');
                 }
             });
         }
