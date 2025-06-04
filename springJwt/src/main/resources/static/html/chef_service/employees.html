@@ -245,7 +245,7 @@
                     <div class="sm:col-span-6">
                         <label for="search" class="block text-sm font-medium text-gray-700">Recherche</label>
                         <div class="mt-1 relative rounded-md shadow-sm">
-                            <input type="text" name="search" id="search" class="focus:ring-primary-500 focus:border-primary-500 block w-full pl-3 pr-10 py-2 sm:text-sm border-gray-300 rounded-md" placeholder="Nom, prénom, matricule...">
+                            <input type="text" name="search" id="search" class="focus:ring-primary-500 focus:border-primary-500 block w-full pl-3 pr-10 py-2 sm:text-sm border-gray-300 rounded-md" placeholder="Nom, prénom, Numéro PPR...">
                         </div>
                     </div>
                 </div>
@@ -257,8 +257,8 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Matricule</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom & Prénom</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Numéro PPR</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Département</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
@@ -449,7 +449,6 @@
         elements.usersTableBody.innerHTML = users.length > 0 ?
             users.map(user => `
                 <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${user.matricule || 'N/A'}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-800 font-medium">
@@ -460,6 +459,7 @@
                             </div>
                         </div>
                     </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${user.matricule || 'N/A'}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${user.email || 'N/A'}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         ${user.departement?.nomDepartement || 'Non assigné'}
@@ -530,12 +530,11 @@
         const { utils, writeFile } = await import('https://cdn.sheetjs.com/xlsx-0.20.0/package/xlsx.mjs');
 
         const data = state.filteredUsers.map(user => ({
-            Matricule: user.matricule,
-            Nom: user.lastName,
-            Prénom: user.firstName,
-            Email: user.email,
-            Département: user.departement?.nomDepartement,
-            Service: user.service?.nomService
+            'Nom & Prénom': `${user.lastName || ''} ${user.firstName || ''}`.trim(),
+            'Matricule': user.matricule,
+            'Email': user.email,
+            'Département': user.departement?.nomDepartement,
+            'Service': user.service?.nomService
         }));
 
         const worksheet = utils.json_to_sheet(data);
