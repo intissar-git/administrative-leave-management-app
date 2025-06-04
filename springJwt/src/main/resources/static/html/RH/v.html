@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demandes de Congés - Système de gestion des congés</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#EFF6FF',
+                            100: '#DBEAFE',
+                            200: '#BFDBFE',
+                            300: '#93C5FD',
+                            400: '#60A5FA',
+                            500: '#3B82F6',
+                            600: '#2563EB',
+                            700: '#1D4ED8',
+                            800: '#1E40AF',
+                            900: '#1E3A8A',
+                        },
+                        secondary: {
+                            50: '#F0FDFA',
+                            100: '#CCFBF1',
+                            200: '#99F6E4',
+                            300: '#5EEAD4',
+                            400: '#2DD4BF',
+                            500: '#14B8A6',
+                            600: '#0D9488',
+                            700: '#0F766E',
+                            800: '#115E59',
+                            900: '#134E4A',
+                        },
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        .status-approved {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+        .status-rejected {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+        .status-pending {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+
+        .request-detail-card {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .request-detail-card {
+                flex-direction: row;
+            }
+        }
+
+        .left-section {
+            flex: 1;
+            max-width: 300px;
+            padding: 1.5rem;
+            background-color: #F9FAFB;
+            border-radius: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .right-section {
+            flex: 2;
+            padding: 1.5rem;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #3B82F6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+        }
+
+        .detail-label {
+            font-weight: 500;
+            color: #6B7280;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            color: #111827;
+        }
+
+        .leave-balance-card {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background-color: #F9FAFB;
+            border-radius: 0.5rem;
+        }
+
+        .leave-balance-card .title {
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 1rem;
+        }
+
+        .balance-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .balance-item {
+            text-align: center;
+        }
+
+        .balance-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #3B82F6;
+        }
+
+        .balance-label {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+
+        .balance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .balance-grid-item {
+            padding: 1rem;
+            background-color: white;
+            border-radius: 0.5rem;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .balance-grid-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #3B82F6;
+        }
+
+        .balance-grid-label {
+            font-size: 0.875rem;
+            color: #6B7280;
+        }
+
+        .tab-btn.active {
+            border-bottom-color: #3B82F6;
+            color: #3B82F6;
+        }
+
+        /* Nouveaux styles pour les alertes */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+        }
+
+        .alert.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .alert-success {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+
+        .alert-error {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+<div class="min-h-screen flex flex-col">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary-700 mr-2">
+                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                            <line x1="16" x2="16" y1="2" y2="6"></line>
+                            <line x1="8" x2="8" y1="2" y2="6"></line>
+                            <line x1="3" x2="21" y1="10" y2="10"></line>
+                            <path d="m9 16 2 2 4-4"></path>
+                        </svg>
+                        <span class="text-xl font-semibold text-gray-900">Gestion des congés</span>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <button id="userMenuBtn" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500" aria-expanded="false">
+                            <span class="sr-only">Ouvrir le menu utilisateur</span>
+                            <div class="flex items-center">
+                                <div class="h-8 w-8 rounded-full bg-primary-700 flex items-center justify-center text-white">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <span class="ml-2 text-gray-700">Ressources Humaines</span>
+                                <svg class="ml-1 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </button>
+                        <div id="userMenu" class="hidden origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10" role="menu">
+                            <a href="mon_profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"><i class="fas fa-user-circle mr-2"></i>Votre profil</a>
+                            <a href="#" id="logoutBtn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"><i class="fas fa-sign-out-alt mr-2"></i>Déconnexion</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex flex-1">
+        <!-- Sidebar -->
+        <div class="bg-white shadow-sm border-r border-gray-200 w-64 hidden md:block">
+            <div class="h-full flex flex-col">
+                <nav class="flex-1 py-4 px-2 space-y-1">
+                    <a href="rh-dash.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-tachometer-alt text-gray-500 group-hover:text-gray-600 mr-3"></i>
+                        Tableau de bord
+                    </a>
+                    <a href="employes.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-users text-gray-500 group-hover:text-gray-600 mr-3"></i>
+                        Gestion des employés
+                    </a>
+                    <a href="leave-requests.html" class="bg-primary-50 text-primary-700 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-file-signature text-primary-700 mr-3"></i>
+                        Demandes de Congés
+                    </a>
+                    <a href="leave-request-rh.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-file-alt text-gray-500 group-hover:text-gray-600 mr-3"></i>
+                        Demander un congé
+                    </a>
+                    <a href="calendarRH.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-calendar-alt text-gray-500 group-hover:text-gray-600 mr-3"></i>
+                        Calendrier
+                    </a>
+                    <a href="historiqueRh.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-history text-gray-500 group-hover:text-gray-600 mr-3"></i>
+                        Historique
+                    </a>
+                    <a href="mon_profile.html" class="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+                        <i class="fas fa-id-card text-gray-500 group-hover:text-gray-600 mr-3"></i>
+                        Mon Profil
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="flex-1 min-w-0 overflow-auto">
+            <div class="py-6 max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-2xl font-semibold text-gray-900">Demandes de Congés</h1>
+
+                    <div class="flex space-x-3">
+                        <div class="relative">
+                            <input type="text" id="searchInput" placeholder="Rechercher..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500 w-64">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                        </div>
+
+                        <button id="exportBtn" class="flex items-center px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors">
+                            <i class="fas fa-file-export mr-2"></i> Exporter
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="border-b border-gray-200 mb-6">
+                    <nav class="-mb-px flex space-x-8">
+                        <button class="tab-btn active border-b-2 border-primary-500 text-primary-600 whitespace-nowrap py-4 px-1 text-sm font-medium" data-filter="all">
+                            Toutes les demandes
+                        </button>
+                        <button class="tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium" data-filter="APPROUVE">
+                            Demandes approuvées
+                        </button>
+                        <button class="tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium" data-filter="REFUSE">
+                            Demandes refusées
+                        </button>
+                        <button class="tab-btn border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 text-sm font-medium" data-filter="EN_COURS_DE_TRAITEMENT">
+                            En cours de traitement
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Requests Table -->
+                <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Employé
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Période
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Durée
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Statut
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="requestsTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Requests will be loaded here dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="mt-4 flex items-center justify-between">
+                    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                        <div>
+                            <p class="text-sm text-gray-700" id="paginationInfo">
+                                Affichage de <span class="font-medium">1</span> à <span class="font-medium">10</span> sur <span class="font-medium">20</span> résultats
+                            </p>
+                        </div>
+                        <div>
+                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                <button id="prevPage" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    <span class="sr-only">Précédent</span>
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <div id="pageNumbers" class="flex">
+                                    <!-- Page numbers will be added here dynamically -->
+                                </div>
+                                <button id="nextPage" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                                    <span class="sr-only">Suivant</span>
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Request Detail Modal -->
+<div id="requestDetailModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start w-full">
+                    <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modalTitle">
+                                Détails de la demande
+                            </h3>
+                            <button type="button" class="text-gray-400 hover:text-gray-500" id="closeModalBtn">
+                                <span class="sr-only">Fermer</span>
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="request-detail-card">
+                            <div class="left-section">
+                                <div class="avatar" id="detailEmployeeAvatar"></div>
+                                <h4 class="text-lg font-semibold text-gray-900 text-center" id="detailEmployeeName"></h4>
+                                <p class="text-sm text-gray-500 text-center" id="detailEmployeeRole"></p>
+                                <div class="mt-4 px-3 py-1 rounded-full bg-primary-100 text-primary-700 font-medium text-sm">
+                                    Solde: <span id="detailEmployeeBalance"></span>
+                                </div>
+                            </div>
+                            <div class="right-section">
+                                <p class="text-lg font-semibold text-gray-900 mb-4">Détails de la demande</p>
+
+                                <div class="detail-item">
+                                    <span class="detail-label">Période</span>
+                                    <span class="detail-value" id="detailPeriod"></span>
+                                </div>
+                                <hr class="my-3 border-gray-200">
+                                <div class="detail-item">
+                                    <span class="detail-label">Durée</span>
+                                    <span class="detail-value" id="detailDurationCard"></span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Motif</span>
+                                    <span class="detail-value" id="detailReasonCard"></span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Remplacé par</span>
+                                    <span class="detail-value" id="detailRemplacerPar"></span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Département</span>
+                                    <span class="detail-value" id="detailDepartement"></span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label">Service</span>
+                                    <span class="detail-value" id="detailService"></span>
+                                </div>
+
+                                <div class="leave-balance-card">
+                                    <div class="title">Solde de Congé</div>
+                                    <div class="balance-info">
+                                        <div class="balance-item">
+                                            <div class="balance-value" id="detailGlobalBalance"></div>
+                                            <div class="balance-label">Solde global</div>
+                                        </div>
+                                    </div>
+                                    <div class="balance-grid">
+                                        <div class="balance-grid-item">
+                                            <div class="balance-grid-value" id="detailCurrentYearBalance"></div>
+                                            <div class="balance-grid-label">Année en cours</div>
+                                        </div>
+                                        <div class="balance-grid-item">
+                                            <div class="balance-grid-value" id="detailPreviousYearBalance"></div>
+                                            <div class="balance-grid-label">Report année précédente</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" id="approveRequestBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
+                        Approuver
+                    </button>
+                    <button type="button" id="rejectRequestBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
+                        Refuser
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reject Reason Modal -->
+<div id="rejectReasonModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Motif de refus</h3>
+                    <button type="button" class="text-gray-400 hover:text-gray-500" id="closeRejectReasonModalBtn">
+                        <span class="sr-only">Fermer</span>
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="mt-2">
+                    <p class="text-sm text-gray-500">Veuillez indiquer le motif du refus de la demande.</p>
+                    <textarea id="rejectReasonInput" class="mt-3 shadow-sm focus:ring-primary-500 focus:border-primary-500 block w-full sm:text-sm border-gray-300 rounded-md" rows="4" placeholder="Motif du refus..."></textarea>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button type="button" id="confirmRejectBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
+                    Confirmer le refus
+                </button>
+                <button type="button" id="cancelRejectBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-colors">
+                    Annuler
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '../user/index.html';
+            return;
+        }
+
+        // DOM Elements
+        const requestsTableBody = document.getElementById('requestsTableBody');
+        const searchInput = document.getElementById('searchInput');
+        const exportBtn = document.getElementById('exportBtn');
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const requestDetailModal = document.getElementById('requestDetailModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userMenu = document.getElementById('userMenu');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // New modal elements
+        const detailEmployeeAvatar = document.getElementById('detailEmployeeAvatar');
+        const detailEmployeeName = document.getElementById('detailEmployeeName');
+        const detailEmployeeRole = document.getElementById('detailEmployeeRole');
+        const detailEmployeeBalance = document.getElementById('detailEmployeeBalance');
+        const detailPeriod = document.getElementById('detailPeriod');
+        const detailDurationCard = document.getElementById('detailDurationCard');
+        const detailReasonCard = document.getElementById('detailReasonCard');
+        const detailRemplacerPar = document.getElementById('detailRemplacerPar');
+        const detailDepartement = document.getElementById('detailDepartement');
+        const detailService = document.getElementById('detailService');
+        const detailGlobalBalance = document.getElementById('detailGlobalBalance');
+        const detailCurrentYearBalance = document.getElementById('detailCurrentYearBalance');
+        const detailPreviousYearBalance = document.getElementById('detailPreviousYearBalance');
+        const approveRequestBtn = document.getElementById('approveRequestBtn');
+        const rejectRequestBtn = document.getElementById('rejectRequestBtn');
+
+        // Reject reason modal elements
+        const rejectReasonModal = document.getElementById('rejectReasonModal');
+        const closeRejectReasonModalBtn = document.getElementById('closeRejectReasonModalBtn');
+        const rejectReasonInput = document.getElementById('rejectReasonInput');
+        const confirmRejectBtn = document.getElementById('confirmRejectBtn');
+        const cancelRejectBtn = document.getElementById('cancelRejectBtn');
+
+        // Alert element
+        const alertContainer = document.createElement('div');
+        document.body.appendChild(alertContainer);
+
+        let currentRequestId = null;
+
+        // Pagination variables
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let allRequests = [];
+        let filteredRequests = [];
+        let employeesMap = new Map();
+
+        // Initialize the page
+        async function init() {
+            await loadRequests();
+            setupEventListeners();
+        }
+
+        // Load requests from API
+        async function loadRequests() {
+            try {
+                const response = await fetch('http://localhost:8080/api/demandes-conge/all-with-employee-info', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur lors du chargement des demandes');
+                }
+
+                const rawRequests = await response.json();
+                allRequests = rawRequests.map(request => ({
+                    ...request,
+                    employeeName: request.employeeName || 'Nom inconnu',
+                    employeeRole: request.role || 'Rôle inconnu',
+                    employeeBalance: 'N/A'
+                }));
+
+                filteredRequests = [...allRequests];
+                renderRequests();
+                updatePagination();
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Erreur lors du chargement des demandes: ' + error.message);
+            }
+        }
+
+        // Render requests to the table
+        function renderRequests() {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const paginatedRequests = filteredRequests.slice(startIndex, startIndex + itemsPerPage);
+
+            requestsTableBody.innerHTML = paginatedRequests.map(request => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                <span class="text-gray-600">${request.employeeName ? request.employeeName.charAt(0) : 'U'}</span>
+                            </div>
+                            <div class="ml-4">
+                                <div class="text-sm font-medium text-gray-900">${request.employeeName || 'Non spécifié'}</div>
+                                <div class="text-sm text-gray-500">${request.role || 'Rôle non spécifié'}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">${formatDate(request.dateDebut)} - ${formatDate(request.dateFin)}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm text-gray-900">${request.duree} jours</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                           ${(() => {
+                               if (request.statut === 'APPROUVE') {
+                                   return 'status-approved';
+                               } else if (request.statut === 'REFUSE') {
+                                   return 'status-rejected';
+                               } else if (request.statut === 'EN_COURS_DE_TRAITEMENT') {
+                                   return 'status-pending';
+                               } else {
+                                   return 'bg-gray-100 text-gray-800';
+                               }
+                           })()}">
+                           ${request.statut}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        ${request.statut === 'APPROUVE' ?
+                            `<a href="fiche.html?id=${request.id}" class="text-green-600 hover:text-green-900 mr-3">
+                                <i class="fas fa-file-alt"></i> Fiche
+                            </a>` :
+                            `<button class="text-primary-600 hover:text-primary-900 mr-3 view-btn" data-id="${request.id}">
+                                <i class="fas fa-eye"></i>
+                            </button>`
+                        }
+                    </td>
+                </tr>
+            `).join('');
+
+            // Add event listeners to view buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', () => showRequestDetails(btn.dataset.id));
+            });
+        }
+
+        // Show request details in modal
+        async function showRequestDetails(requestId) {
+            currentRequestId = requestId;
+            const request = allRequests.find(req => req.id == requestId);
+            if (!request) return;
+
+            // Fetch global leave balance for the employee
+            let globalBalance = { soldeGlobal: 'N/A', soldeAnneeCourante: 'N/A', soldeAnneePrecedente: 'N/A' };
+            try {
+                const balanceResponse = await fetch(`http://localhost:8080/api/solde-conge/mon-solde`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (balanceResponse.ok) {
+                    globalBalance = await balanceResponse.json();
+                } else {
+                    console.warn('Could not fetch global balance for employee:', request.idEmployee, 'Status:', balanceResponse.status);
+                }
+            } catch (error) {
+                console.error('Error fetching global balance:', error);
+            }
+
+            detailEmployeeAvatar.textContent = request.employeeName ? request.employeeName.charAt(0) : 'U';
+            detailEmployeeName.textContent = request.employeeName || 'Non spécifié';
+            detailEmployeeRole.textContent = request.role || 'Non spécifié';
+            detailEmployeeBalance.textContent = `${globalBalance.soldeGlobal || 'N/A'} jours`;
+
+            detailPeriod.textContent = `${formatDate(request.dateDebut)} au ${formatDate(request.dateFin)}`;
+            detailDurationCard.textContent = `${request.duree} jours`;
+            detailReasonCard.textContent = request.motif || 'Non spécifié';
+            detailRemplacerPar.textContent = request.remplacerPar || 'Non spécifié';
+            detailDepartement.textContent = request.departement || 'Non spécifié';
+            detailService.textContent = request.service || 'Non spécifié';
+
+            detailGlobalBalance.textContent = globalBalance.soldeGlobal;
+            detailCurrentYearBalance.textContent = globalBalance.soldeAnneeCourante;
+            detailPreviousYearBalance.textContent = globalBalance.soldeAnneePrecedente;
+
+            requestDetailModal.classList.remove('hidden');
+
+            // Set visibility of action buttons based on status
+            if (request.statut === 'EN_COURS_DE_TRAITEMENT') {
+                approveRequestBtn.classList.remove('hidden');
+                rejectRequestBtn.classList.remove('hidden');
+            } else {
+                approveRequestBtn.classList.add('hidden');
+                rejectRequestBtn.classList.add('hidden');
+            }
+        }
+
+        // Filter requests based on search and tab selection
+        function filterRequests() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeTab = document.querySelector('.tab-btn.active')?.dataset.filter || 'all';
+
+            filteredRequests = allRequests.filter(request => {
+                if (activeTab === 'all' && request.statut === 'EN_ATTENTE') {
+                    return false;
+                }
+
+                const matchesSearch =
+                    (request.employeeName?.toLowerCase().includes(searchTerm)) ||
+                    (request.role?.toLowerCase().includes(searchTerm)) ||
+                    (formatDate(request.dateDebut).toLowerCase().includes(searchTerm)) ||
+                    (request.statut?.toLowerCase().includes(searchTerm)) ||
+                    (formatDate(request.dateFin).toLowerCase().includes(searchTerm));
+
+                const matchesTab =
+                    activeTab === 'all' ||
+                    request.statut === activeTab;
+
+                return matchesSearch && matchesTab;
+            });
+
+            currentPage = 1;
+            renderRequests();
+            updatePagination();
+        }
+
+        // Update pagination controls
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
+            const paginationInfo = document.getElementById('paginationInfo');
+            const pageNumbers = document.getElementById('pageNumbers');
+            const prevBtn = document.getElementById('prevPage');
+            const nextBtn = document.getElementById('nextPage');
+
+            const startItem = (currentPage - 1) * itemsPerPage + 1;
+            const endItem = Math.min(currentPage * itemsPerPage, filteredRequests.length);
+
+            paginationInfo.innerHTML = `
+                Affichage de <span class="font-medium">${startItem}</span> à <span class="font-medium">${endItem}</span>
+                sur <span class="font-medium">${filteredRequests.length}</span> résultats
+            `;
+
+            pageNumbers.innerHTML = '';
+
+            // Afficher un maximum de 5 pages autour de la page courante
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, currentPage + 2);
+
+            if (currentPage <= 3) {
+                endPage = Math.min(5, totalPages);
+            }
+            if (currentPage >= totalPages - 2) {
+                startPage = Math.max(1, totalPages - 4);
+            }
+
+            // Bouton pour la première page
+
+            if (startPage > 1) {
+                const firstPageBtn = createPageButton(1);
+                pageNumbers.appendChild(firstPageBtn);
+                if (startPage > 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700';
+                    ellipsis.textContent = '...';
+                    pageNumbers.appendChild(ellipsis);
+                }
+            }
+
+            // Boutons pour les pages autour de la page courante
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = createPageButton(i);
+                pageNumbers.appendChild(pageBtn);
+            }
+
+            // Bouton pour la dernière page
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700';
+                    ellipsis.textContent = '...';
+                    pageNumbers.appendChild(ellipsis);
+                }
+                const lastPageBtn = createPageButton(totalPages);
+                pageNumbers.appendChild(lastPageBtn);
+            }
+
+            // Désactiver les boutons précédent/suivant si nécessaire
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+        }
+
+        function createPageButton(pageNumber) {
+            const pageBtn = document.createElement('button');
+            pageBtn.className = `relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                pageNumber === currentPage
+                    ? 'border-primary-500 bg-primary-50 text-primary-600'
+                    : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50'
+            }`;
+            pageBtn.textContent = pageNumber;
+            pageBtn.addEventListener('click', () => {
+                currentPage = pageNumber;
+                renderRequests();
+                updatePagination();
+            });
+            return pageBtn;
+        }
+
+        // Format date for display
+        function formatDate(dateString) {
+            if (!dateString) return 'Non spécifié';
+            try {
+                const date = new Date(dateString);
+                return date.toLocaleDateString('fr-FR', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                });
+            } catch (e) {
+                return dateString; // Retourne la chaîne originale si le parsing échoue
+            }
+        }
+
+        // Export to Excel
+        async function exportToExcel() {
+            try {
+                // Charger la bibliothèque SheetJS dynamiquement
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+                script.onload = async () => {
+                    // Préparer les données
+                    const data = filteredRequests.map(request => ({
+                        'ID': request.id,
+                        'Employé': request.employeeName,
+                        'Rôle': request.role, // Use request.role
+                        'Remplacé par': request.remplacerPar || 'N/A',
+                        'Date Début': formatDate(request.dateDebut),
+                        'Date Fin': formatDate(request.dateFin),
+                        'Durée (jours)': request.duree,
+                        'Statut': request.statut,
+                        'Motif': request.motif || 'N/A'
+                    }));
+
+                    // Créer un workbook
+                    const wb = XLSX.utils.book_new();
+                    const ws = XLSX.utils.json_to_sheet(data);
+                    XLSX.utils.book_append_sheet(wb, ws, 'Demandes de Congés');
+
+                    // Générer le fichier Excel
+                    const date = new Date().toISOString().slice(0, 10);
+                    XLSX.writeFile(wb, `Demandes_Conges_${date}.xlsx`);
+                };
+                document.head.appendChild(script);
+            } catch (error) {
+                console.error('Erreur lors de l\'export:', error);
+                alert('Une erreur est survenue lors de l\'export');
+            }
+        }
+
+        // Approve/Reject Request
+            // Approve/Reject Request
+async function updateRequestStatus(status, reason = null) {
+    if (!currentRequestId) return;
+
+    try {
+        if (status === 'APPROUVE') {
+            // Utiliser le endpoint spécifique pour l'approbation
+            const response = await fetch(`http://localhost:8080/api/approbation-conge/approuver/${currentRequestId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    // Vous pouvez ajouter ici d'autres données nécessaires pour l'approbation
+                    // Par exemple, un commentaire ou une raison d'approbation
+                })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Erreur lors de l'approbation de la demande: ${errorText}`);
+            }
+
+            showAlert('Demande approuvée avec succès!', 'success');
+        } else if (status === 'REFUSE') {
+            // Pour le refus, vous pouvez garder l'ancien endpoint
+            const response = await fetch(`http://localhost:8080/api/demandes-conge/${currentRequestId}/statut`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    statut: status,
+                    motifRefus: reason
+                })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`Erreur lors du refus de la demande: ${errorText}`);
+            }
+
+            showAlert('Demande refusée avec succès!', 'success');
+        }
+
+        requestDetailModal.classList.add('hidden');
+        rejectReasonModal.classList.add('hidden');
+        await loadRequests(); // Reload requests to update the table
+    } catch (error) {
+        console.error('Error:', error);
+        showAlert(`Erreur: ${error.message}`, 'error');
+    }
+}
+
+// Fonction pour afficher des alertes
+function showAlert(message, type) {
+    const alert = document.createElement('div');
+    alert.className = `alert alert-${type === 'success' ? 'success' : 'error'}`;
+    alert.innerHTML = `
+        <div class="flex items-center">
+            <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+            ${message}
+        </div>
+    `;
+
+    document.body.appendChild(alert);
+    alert.classList.add('show');
+
+    setTimeout(() => {
+        alert.classList.remove('show');
+        setTimeout(() => alert.remove(), 300);
+    }, 3000);
+}
+
+        // Show error message
+        function showError(message) {
+            requestsTableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="px-6 py-4 text-center text-sm text-red-600">
+                        <i class="fas fa-exclamation-circle mr-2"></i> ${message}
+                    </td>
+                </tr>
+            `;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Tab buttons
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabButtons.forEach(b => {
+                        b.classList.remove('active', 'border-primary-500', 'text-primary-600');
+                        b.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+                    });
+
+                    btn.classList.add('active', 'border-primary-500', 'text-primary-600');
+                    btn.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
+
+                    filterRequests();
+                });
+            });
+
+            // Search input
+            searchInput.addEventListener('input', debounce(filterRequests, 300));
+
+            // Export button
+            exportBtn.addEventListener('click', exportToExcel);
+
+            // Close request detail modal button
+            closeModalBtn.addEventListener('click', () => {
+                requestDetailModal.classList.add('hidden');
+            });
+
+            // User menu
+            userMenuBtn.addEventListener('click', () => {
+                const expanded = userMenuBtn.getAttribute('aria-expanded') === 'true';
+                userMenuBtn.setAttribute('aria-expanded', !expanded);
+                userMenu.classList.toggle('hidden');
+            });
+
+            // Logout button
+            logoutBtn.addEventListener('click', () => {
+                localStorage.removeItem('token');
+                window.location.href = '../user/index.html';
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (event) => {
+                if (!userMenuBtn.contains(event.target) && !userMenu.contains(event.target)) {
+                    userMenuBtn.setAttribute('aria-expanded', 'false');
+                    userMenu.classList.add('hidden');
+                }
+            });
+
+            // Pagination buttons
+            document.getElementById('prevPage').addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderRequests();
+                    updatePagination();
+                }
+            });
+
+            document.getElementById('nextPage').addEventListener('click', () => {
+                const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderRequests();
+                    updatePagination();
+                }
+            });
+
+            // Approve and Reject buttons in detail modal
+            approveRequestBtn.addEventListener('click', () => {
+                if (confirm('Êtes-vous sûr de vouloir approuver cette demande ?')) {
+                    updateRequestStatus('APPROUVE');
+                }
+            });
+
+            rejectRequestBtn.addEventListener('click', () => {
+                requestDetailModal.classList.add('hidden'); // Hide detail modal first
+                rejectReasonModal.classList.remove('hidden'); // Show reject reason modal
+                rejectReasonInput.value = ''; // Clear previous reason
+            });
+
+            // Reject reason modal buttons
+            closeRejectReasonModalBtn.addEventListener('click', () => {
+                rejectReasonModal.classList.add('hidden');
+            });
+
+            cancelRejectBtn.addEventListener('click', () => {
+                rejectReasonModal.classList.add('hidden');
+            });
+
+            confirmRejectBtn.addEventListener('click', () => {
+                const reason = rejectReasonInput.value.trim();
+                if (reason) {
+                    updateRequestStatus('REFUSE', reason);
+                } else {
+                    alert('Veuillez entrer un motif de refus.');
+                }
+            });
+        }
+
+        // Fonction debounce pour optimiser les recherches
+        function debounce(func, wait) {
+            let timeout;
+            return function() {
+                const context = this, args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    func.apply(context, args);
+                }, wait);
+            };
+        }
+
+        // Initialize the page
+        init();
+    });
+</script>
+</body>
+</html>
