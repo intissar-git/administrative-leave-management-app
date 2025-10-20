@@ -1,125 +1,137 @@
 # stage_technique
 
-[![Licence](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)  
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)  
 [![Repo size](https://img.shields.io/github/repo-size/intissar-git/stage_technique)](https://github.com/intissar-git/stage_technique)
 
 ## Description
 
-Ce dépôt « stage_technique » contient le code et la documentation du projet réalisé pendant mon stage technique. Ce README vise à présenter rapidement le projet, expliquer comment l'installer et comment contribuer.
+This repository "stage_technique" contains the code and documentation for the project completed during my technical internship. This README presents the project, explains how to install and use it, and provides contribution guidelines.
 
-> Remarque : adaptez les sections "Installation" et "Usage" au langage et aux outils réellement utilisés dans le projet (Python, Node.js, PHP, etc.).
-
-## Table des matières
+## Table of Contents
 
 - [Description](#description)
-- [État du projet](#etat-du-projet)
+- [Project Status](#project-status)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Structure du dépôt](#structure-du-depot)
+- [Repository Structure](#repository-structure)
 - [Tests](#tests)
-- [Contribuer](#contribuer)
-- [Licence](#licence)
-- [Auteurs & Contact](#auteurs--contact)
+- [Contributing](#contributing)
+- [License](#license)
+- [Authors & Contact](#authors--contact)
+- [Collaborators](#collaborators)
 
-## État du projet
+## Project Status
 
-- Statut : Work in Progress / Prototype (mettre à jour selon l'avancement)
-- Langage(s) principal(aux) : À renseigner (ex. Python, Node.js)
+- Status: Completed
+- Main language: Java
+- Framework: Spring Boot
+- Dependency manager: Maven
 
 ## Installation
 
-1. Clonez le dépôt :
+1. Clone the repository:
 
 ```bash
 git clone https://github.com/intissar-git/stage_technique.git
-cd stage_technique
+cd stage_technique/springJwt
 ```
 
-2. Prérequis (exemples — à adapter) :
-- Python 3.10+ et pip ou
-- Node.js 16+ et npm/yarn
-- Docker (optionnel)
+2. Prerequisites:
+- Java 17+ (JDK)
+- Maven 3.8+
+- (Optional) Docker or a compatible database server
 
-3. Configuration (exemples) :
-- Pour Python :
+3. Configuration:
+- Edit the database connection variables in `src/main/resources/application.properties` if necessary.
+
+4. Install dependencies and build the project:
+
 ```bash
-python -m venv .venv
-source .venv/bin/activate  # Mac/Linux
-.venv\Scripts\activate   # Windows
-pip install -r requirements.txt
+./mvnw clean install
 ```
-- Pour Node.js :
+or
 ```bash
-npm install
-# ou
-yarn install
+mvn clean install
 ```
-
-Si votre projet n'utilise pas ces technologies, remplacez ces commandes par celles correspondant à votre stack.
 
 ## Usage
 
-Expliquez comment lancer l'application, par exemple :
+To run the Spring Boot application:
 
 ```bash
-# Pour un projet Python
-python src/main.py
-
-# Pour un projet Node.js
-npm start
+./mvnw spring-boot:run
+```
+or
+```bash
+mvn spring-boot:run
 ```
 
-Ajoutez des exemples d'API, des captures d'écran, ou des commandes courantes.
+- The database creation script is in `database_project.sql`
+- Source code is located in the `src/` directory
+- Maven parameters are in `pom.xml`
 
-## Structure du dépôt
+## Repository Structure
 
-Voici une structure recommandée (à adapter) :
+The main content of the project is in the `springJwt` directory:
 
 ```
-stage_technique/
-├─ README.md
-├─ LICENSE
+springJwt/
 ├─ .gitignore
-├─ src/            # code source
-├─ tests/          # tests unitaires
-├─ docs/           # documentation
-├─ .github/        # workflows, templates
-└─ requirements.txt / package.json
+├─ .mvn/                   # Maven configuration
+├─ database_project.sql     # Database creation script
+├─ mvnw / mvnw.cmd          # Maven wrapper scripts
+├─ pom.xml                  # Project configuration and dependencies
+└─ src/                     # Java source code (Spring Boot)
 ```
 
 ## Tests
 
-Décrivez comment exécuter les tests :
+To run Maven tests:
 
 ```bash
-# Exemple Python (pytest)
-pytest -q
-
-# Exemple Node.js (jest/mocha)
-npm test
+./mvnw test
+# or
+mvn test
 ```
 
-## Contribuer
+## Contributing
 
-Merci de contribuer ! Voici quelques règles simples :
+Thank you for your interest! Please follow these simple rules:
 
-1. Forkez le dépôt et créez une branche feature/ ou fix/ (ex. `feature/ajout-docs`).
-2. Ouvrez une Pull Request décrivant les changements.
-3. Respectez les conventions de style et ajoutez des tests si possible.
+1. Fork the repository and create a feature/ or fix/ branch (e.g., `feature/add-auth`).
+2. Open a Pull Request describing your changes.
+3. Follow Java/Spring style conventions and add tests if possible.
 
-Ajoutez un fichier CONTRIBUTING.md plus détaillé pour les règles de revue et de codage.
+Consider adding a more detailed CONTRIBUTING.md file for review and coding rules.
 
-## Licence
+## License
 
-Ce dépôt peut être distribué sous licence MIT — ajoutez un fichier LICENSE à la racine si vous choisissez MIT.
+This repository is distributed under the MIT license — see the LICENSE file at the root.
 
-## Auteurs & Contact
+## Authors & Contact
 
-- Intissar (intissar-git) — auteur principal
-- Contact : ajoutez une adresse mail ou lien LinkedIn/GitHub
+- Intissar ([intissar-git](https://github.com/intissar-git)) — main author
+- Contact: Add an email address or LinkedIn/GitHub link
+
+## Collaborators
+
+Below are the main collaborators on this project:
+
+- [hasna745](https://github.com/hasna745)  
+  ![hasna745 avatar](https://avatars.githubusercontent.com/u/129042928?v=4)  
+  Contributions: 27
+
+- [intissar-git](https://github.com/intissar-git)  
+  ![intissar-git avatar](https://avatars.githubusercontent.com/u/179481534?v=4)  
+  Contributions: 20
+
+- [ikramazlani](https://github.com/ikramazlani)  
+  ![ikramazlani avatar](https://avatars.githubusercontent.com/u/174724184?v=4)  
+  Contributions: 18
 
 ---
 
-Si tu veux, je peux :
-- ajouter aussi LICENSE (MIT), .gitignore adapté au langage, CONTRIBUTING.md, templates d'issues/PR et un workflow GitHub Actions basique ;
-- créer une branche et ouvrir une Pull Request au lieu de pousser directement sur main.
+If needed, I can also:
+- Add a .gitignore adapted to Java/Maven/Spring
+- Create issue/PR templates and a basic GitHub Actions workflow
+- Open a Pull Request instead of pushing directly to main
