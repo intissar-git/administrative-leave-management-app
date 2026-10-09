@@ -438,54 +438,6 @@ npx serve .
 Le frontend sera accessible sur :
 ```
 👉 http://localhost:5500 (ou l'adresse affichée)
-```
-
----
-
-## 🔧 Configuration
-
-### Variables d'environnement
-
-Créez un fichier `.env` à la racine du projet :
-
-```env
-# Backend Configuration
-SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/gestion_conges_db
-SPRING_DATASOURCE_USERNAME=root
-SPRING_DATASOURCE_PASSWORD=
-
-JWT_SECRET=YOUR_SUPER_SECRET_KEY_MUST_BE_AT_LEAST_32_CHARACTERS_LONG
-JWT_EXPIRATION=86400000
-
-# Frontend Configuration
-API_URL=http://localhost:8080/api
-APP_NAME=AGCA - Gestion des Congés
-APP_VERSION=1.0.0
-```
-
-### Profils Spring
-
-#### Développement (`application-dev.properties`)
-```properties
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-logging.level.com.abhoer=DEBUG
-```
-
-#### Production (`application-prod.properties`)
-```properties
-spring.jpa.hibernate.ddl-auto=validate
-spring.jpa.show-sql=false
-logging.level.root=WARN
-server.ssl.enabled=true
-```
-
-Lancer avec un profil spécifique :
-```bash
-mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=prod"
-```
-
----
 
 ## 🖥️ Utilisation
 
@@ -547,12 +499,6 @@ mvn spring-boot:run -Dspring-boot.run.arguments="--spring.profiles.active=prod"
 | **Sécurité** | HTTPS en prod + mots de passe en BCrypt |
 
 ---
-
-## 🔌 API REST
-
-### Documentation complète
-
-Voir [docs/API.md](./docs/API.md)
 
 ### Endpoints principaux
 
@@ -709,23 +655,14 @@ Hibernate devrait créer les tables automatiquement avec `ddl-auto=update`. Si c
 DROP DATABASE gestion_conges_db;
 CREATE DATABASE gestion_conges_db 
 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
----
 
 ## 📚 Documentation complète
 
 - 📄 **[Rapport de Stage](./docs/RAPPORT_STAGE.pdf)** — Documentation complète du projet
-- 🔌 **[API REST](./docs/API.md)** — Documentation API détaillée
-- 👤 **[Guide Utilisateur](./docs/USER_GUIDE.md)** — Guide d'utilisation pour les utilisateurs finaux
-- 🛠️ **[Installation Détaillée](./docs/INSTALLATION.md)** — Guide d'installation complet
 - 📐 **[Diagrammes UML](./docs/diagrams/)** — Architecture et conception
   - Cas d'utilisation
   - Diagrammes de classe
   - Diagrammes de séquence
-- 📮 **[Collection Postman](./docs/postman/AGCA-API.postman_collection.json)** — Tests API prêts à l'emploi
-
----
 
 ## 🔐 Sécurité
 
@@ -748,18 +685,6 @@ CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 5. Utilisez un certificat SSL valide
 6. Limitez le taux de requêtes (rate limiting)
 
----
-
-## 📊 Statistiques du projet
-
-- **Backend** : ~7,4% Java
-- **Frontend** : ~1,5% JavaScript + 91,1% HTML/CSS
-- **Base de données** : Schema MySQL optimisé
-- **API Endpoints** : 50+ endpoints REST
-- **Couverture de tests** : En cours
-
----
-
 ## 🤝 Contribution
 
 Les contributions sont bienvenues ! Veuillez consulter [CONTRIBUTING.md](./CONTRIBUTING.md) pour les directives détaillées.
@@ -779,40 +704,6 @@ Les contributions sont bienvenues ! Veuillez consulter [CONTRIBUTING.md](./CONTR
 - **Commits** : Format conventionnel
 - **Tests** : Requise pour toute nouvelle fonctionnalité
 
----
-
-## 📄 Licence
-
-Ce projet est distribué sous la **Licence MIT**. Voir le fichier [LICENSE](./LICENSE) pour plus de détails.
-
-```
-MIT License
-
-Copyright (c) 2025 AGCA Contributors
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software...
-```
-
----
-
-## 👥 Auteurs
-
-### Auteurs principaux
-
-| Avatar | Nom | Rôle | GitHub |
-|--------|-----|------|--------|
-| ![Intissar](https://avatars.githubusercontent.com/u/179481534?v=4&s=48) | **Intissar FARHOUN** | Lead Developer | [@intissar-git](https://github.com/intissar-git) |
-| ![Ikram](https://avatars.githubusercontent.com/u/174724184?v=4&s=48) | **Ikram AZLANI** | Developer | [@ikramazlani](https://github.com/ikramazlani) |
-| ![Souaad](https://avatars.githubusercontent.com/u/129042928?v=4&s=48) | **Souaad AMRAOUI** | Developer | [@hasna745](https://github.com/hasna745) |
-
-### Formation
-- **Filière** : Génie Informatique — DUT
-- **Établissement** : École Supérieure de Technologie (ESTBM) — Béni Mellal
-- **Année académique** : 2024-2025
 
 ### Encadrants
 
@@ -820,8 +711,6 @@ copies of the Software...
 |------|-----|------|
 | **Encadrante professionnelle** | Mme. Hajar BOULAIZ | ABHOER |
 | **Encadrant académique** | M. Mohammed OUTANOUT | EST Béni Mellal |
-
----
 
 ## 🙏 Remerciements
 
