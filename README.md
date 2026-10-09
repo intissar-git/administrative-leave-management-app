@@ -157,79 +157,6 @@ Le système suit un **workflow de validation en 3 niveaux** :
 
 ---
 
-## 📁 Structure du projet
-
-```
-administrative-leave-management-app/
-│
-├── 📂 backend/                      # API REST (Spring Boot)
-│   ├── src/main/java/
-│   │   └── com/abhoer/
-│   │       ├── controllers/         # Contrôleurs REST
-│   │       ├── services/            # Logique métier
-│   │       ├── repositories/        # Accès données (JPA)
-│   │       ├── entities/            # Modèles JPA
-│   │       ├── security/            # JWT, authentification
-│   │       ├── exceptions/          # Gestion d'erreurs
-│   │       └── utils/               # Utilitaires
-│   │
-│   ├── pom.xml                      # Dépendances Maven
-│   └── mvnw / mvnw.cmd              # Maven Wrapper
-│
-├── 📂 frontend/                     # Application Web
-│   ├── index.html                   # Page d'accueil
-│   ├── 📂 pages/                    # Pages HTML
-│   │   ├── login.html
-│   │   ├── dashboard.html
-│   │   ├── demandes.html
-│   │   └── ...
-│   │
-│   ├── 📂 assets/                   # Ressources statiques
-│   │   ├── img/                     # Images
-│   │   ├── icons/                   # Icônes
-│   │   └── fonts/                   # Polices
-│   │
-│   ├── 📂 js/                       # JavaScript
-│   │   ├── config.js                # Configuration API
-│   │   ├── api.js                   # Appels API
-│   │   ├── auth.js                  # Authentification
-│   │   ├── utils.js                 # Fonctions utiles
-│   │   └── ...
-│   │
-│   ├── 📂 css/                      # Styles
-│   │   ├── tailwind.css
-│   │   ├── custom.css
-│   │   └── responsive.css
-│   │
-│   └── tailwind.config.js           # Config Tailwind
-│
-├── 📂 docs/                         # Documentation
-│   ├── RAPPORT_STAGE.pdf            # Rapport technique
-│   ├── API.md                       # Documentation API
-│   ├── USER_GUIDE.md                # Guide utilisateur
-│   ├── INSTALLATION.md              # Guide d'installation
-│   │
-│   ├── 📂 diagrams/                 # Diagrammes UML
-│   │   ├── cas-utilisation/
-│   │   ├── classe/
-│   │   ├── sequence/
-│   │   └── architecture/
-│   │
-│   ├── 📂 postman/                  # Collections Postman
-│   │   └── AGCA-API.postman_collection.json
-│   │
-│   └── 📂 screenshots/              # Captures d'écran
-│       ├── 01-login.png
-│       ├── 02-dashboard.png
-│       └── ...
-│
-├── .gitignore                       # Fichiers à ignorer
-├── LICENSE                          # Licence MIT
-├── CONTRIBUTING.md                  # Guide de contribution
-└── README.md                        # Ce fichier
-```
-
----
 
 ## ⚙️ Prérequis
 
@@ -295,14 +222,12 @@ EXIT;
 
 La configuration du backend se fait via des variables d'environnement ou des fichiers de configuration. Les paramètres principaux incluent :
 
-- **URL de la base de données** : `jdbc:mysql://localhost:3306/gestion_conges_db`
+- **URL de la base de données** : ``
 - **Identifiants MySQL** : Utilisateur et mot de passe
 - **Port du serveur** : `8080`
 - **Contexte API** : `/api`
 - **Clé JWT** : Pour la sécurité des tokens
 - **Configuration des emails** : Pour les notifications
-
-> **Note :** Consultez le fichier `.env.example` ou la documentation du backend pour les configurations complètes et les variables d'environnement à définir.
 
 #### c) Compiler et démarrer le backend
 
@@ -327,7 +252,7 @@ Le backend sera accessible sur :
 curl http://localhost:8080/api/health
 ```
 
-### 3. Frontend (JavaScript + Tailwind CSS)
+### 3. Frontend (JavaScript +اhtml+css)
 
 #### a) Naviguer vers le dossier frontend
 
@@ -343,25 +268,12 @@ cd ../frontend
 const API_URL = "http://localhost:8080/api";
 ```
 
-#### c) Servir l'application
-
-**Option 1 : Avec Live Server (VS Code)**
+#### c) Servir l'application  Avec Live Server (VS Code)**
 
 1. Installez l'extension "Live Server" dans VS Code
 2. Clic-droit sur `index.html` → "Open with Live Server"
 3. Le navigateur s'ouvrira à `http://localhost:5500`
 
-**Option 2 : Avec Python (Python 3)**
-
-```bash
-python -m http.server 5500
-```
-
-**Option 3 : Avec Node.js**
-
-```bash
-npx serve .
-```
 
 Le frontend sera accessible sur :
 ```
@@ -623,8 +535,6 @@ CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 ## 🤝 Contribution
 
-Les contributions sont bienvenues ! Veuillez consulter [CONTRIBUTING.md](./CONTRIBUTING.md) pour les directives détaillées.
-
 ### Processus de contribution
 
 1. **Fork** le dépôt
@@ -640,23 +550,6 @@ Les contributions sont bienvenues ! Veuillez consulter [CONTRIBUTING.md](./CONTR
 - **Commits** : Format conventionnel
 - **Tests** : Requise pour toute nouvelle fonctionnalité
 
----
-
-## 📜 Licence
-
-Ce projet est sous licence MIT. Voir [LICENSE](./LICENSE) pour plus de détails.
-
----
-
-## 👥 Auteurs
-
-### Auteurs principaux
-
-| Auteur | Rôle | GitHub |
-|--------|------|--------|
-| **Intissar FARHOUN** | Développeur Full-Stack | [@intissar-git](https://github.com/intissar-git) |
-| **Ikram AZLANI** | Développeur | [@ikramazlani](https://github.com/ikramazlani) |
-| **Souaad AMRAOUI** | Développeur | [@hasna745](https://github.com/hasna745) |
 
 ### Encadrants
 
@@ -683,12 +576,3 @@ Nous tenons à remercier chaleureusement :
 - 🐛 **Issues** : [GitHub Issues](https://github.com/intissar-git/administrative-leave-management-app/issues)
 - 💬 **Discussions** : [GitHub Discussions](https://github.com/intissar-git/administrative-leave-management-app/discussions)
 
----
-
-<div align="center">
-
-**Fait avec ❤️ par [Intissar FARHOUN](https://github.com/intissar-git), [Ikram AZLANI](https://github.com/ikramazlani) et [Souaad AMRAOUI](https://github.com/hasna745)**
-
-[⬆ Retour au sommet](#application-de-gestion-des-congés-administratifs)
-
-</div>
