@@ -124,11 +124,11 @@ Ce projet a été réalisé dans le cadre d'un **stage technique** de DUT Génie
 ## 🔄 Workflow de validation
 
 Le système suit un **workflow de validation en 3 niveaux** :
-<img src="Docs/Screenshots/app_workflow.png" alt="Architecture SOC — cliquez pour voir le flux de données" width="600">
+<img src="Screenshots/app_workflow.png" alt="Architecture SOC — cliquez pour voir le flux de données" width="600">
 
 
 ## 🏗️ Architecture technique
-<img src="Docs/Screenshots/architecture-diagramme.png" alt="Architecture SOC — cliquez pour voir le flux de données" width="600">
+<img src="Screenshots/architecture-diagramme.png" alt="Architecture SOC — cliquez pour voir le flux de données" width="600">
 
 
 
