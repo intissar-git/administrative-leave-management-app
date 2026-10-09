@@ -9,10 +9,6 @@
 ![Java](https://img.shields.io/badge/Java-17%2B-orange?style=for-the-badge)
 
 
-**Plateforme web moderne de dématérialisation de la gestion des congés administratifs**
-
-[Démarrer](#-installation-et-lancement) • [Architecture](#-architecture-technique) • [Documentation](#-documentation) • [Contribuer](#-contribution)
-
 </div>
 
 ---
