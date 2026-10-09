@@ -127,32 +127,6 @@ Ce projet a été réalisé dans le cadre d'un **stage technique** de DUT Génie
 
 ## �� Workflow de validation
 
-```
-┌─────────────┐
-│   Employé   │ Soumet la demande
-└──────┬──────┘
-       │ Statut: EN_ATTENTE
-       ▼
-┌──────────────────────┐
-│ Chef de Service (N+1)│ Validation de 1er niveau
-└──────┬───────────────┘
-       │ Approuvé ✓ / Refusé ✗
-       ▼
-┌──────────────────────┐
-│Chef de Département   │ Validation intermédiaire
-└──────┬───────────────┘
-       │ Approuvé ✓ / Refusé ✗
-       ▼
-┌──────────────────────┐
-│  Ressources Humaines │ Validation finale
-└──────┬───────────────┘
-       │ Approuvé ✓ / Refusé ✗
-       │ + Génération du PV
-       ▼
-┌──────────────────────┐
-│   Décision Finale    │ APPROVED / REJECTED
-└──────────────────────┘
-```
 
 **Notifications email** envoyées à chaque étape du workflow.
 
@@ -178,30 +152,7 @@ Ce projet a été réalisé dans le cadre d'un **stage technique** de DUT Génie
 
 ### Diagrammes d'Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Client (Frontend)                         │
-│         HTML/CSS/JavaScript + Tailwind CSS                   │
-└──────────────────────┬──────────────────────────────────────┘
-                       │ HTTP/HTTPS
-                       │ JSON
-                       ▼
-┌─────────────────────────────────────────────��───────────────┐
-│              REST API (Spring Boot)                          │
-│  ┌─────────────────────────────────────────────────────┐   │
-│  │  Controllers → Services → Repositories              │   │
-│  │  JWT Security → Authentication → Authorization     │   │
-│  └─────────────────────────────────────────────────────┘   │
-└──────────────────────┬──────────────────────────────────────┘
-                       │
-                       ▼
-┌─────────────────────────────────────────────────────────────┐
-│            MySQL Database (MySQL 8.x)                        │
-│  Tables: Users, Demandes, Departments, Services, etc.       │
-└─────────────────────────────────────────────────────────────┘
-```
 
----
 
 ## 📁 Structure du projet
 
