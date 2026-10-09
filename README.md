@@ -7,7 +7,7 @@
 ![MySQL](https://img.shields.io/badge/Database-MySQL-blue?style=for-the-badge)
 ![JavaScript](https://img.shields.io/badge/Frontend-JavaScript%20%2B%20Tailwind%20CSS-yellow?style=for-the-badge)
 ![Java](https://img.shields.io/badge/Java-17%2B-orange?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-purple?style=for-the-badge)
+
 
 **Plateforme web moderne de dématérialisation de la gestion des congés administratifs**
 
