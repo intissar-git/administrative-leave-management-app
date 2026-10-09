@@ -27,13 +27,13 @@
 - [Structure du projet](#-structure-du-projet)
 - [Prérequis](#-prérequis)
 - [Installation et lancement](#-installation-et-lancement)
-- [Configuration](#-configuration)
 - [Utilisation](#-utilisation)
 - [Règles métier](#-règles-métier)
 - [API REST](#-api-rest)
 - [Tests](#-tests)
 - [Troubleshooting](#-troubleshooting)
 - [Documentation complète](#-documentation-complète)
+- [Sécurité](#-sécurité)
 - [Contribution](#-contribution)
 - [Licence](#-licence)
 - [Auteurs](#-auteurs)
@@ -42,7 +42,7 @@
 
 ## 📌 À propos
 
-**Application Web de Gestion des Congés Administratifs (AGCA)** est une solution full-stack moderne développée dans le cadre d'un projet technique. Elle vise à **digitaliser et centraliser** la gestion des demandes de congés administratifs en remplaçant les processus manuels par une plateforme web sécurisée et traçable.
+**Application Web de Gestion des Congés Administratifs (AGCA)** est une solution full-stack moderne développée dans le cadre d'un projet technique. Elle vise à **digitaliser et centraliser** la gestion des demandes de congés administratifs au sein d'une organisation.
 
 ### Caractéristiques principales
 
@@ -125,8 +125,13 @@ Ce projet a été réalisé dans le cadre d'un **stage technique** de DUT Génie
 
 ---
 
-## �� Workflow de validation
+## 🔄 Workflow de validation
 
+Le système suit un **workflow de validation en 3 niveaux** :
+
+1. **Chef de Service (N+1)** → Première validation
+2. **Chef de Département (N+2)** → Validation intermédiaire
+3. **Ressources Humaines (RH)** → Validation finale et archivage
 
 **Notifications email** envoyées à chaque étape du workflow.
 
@@ -150,9 +155,7 @@ Ce projet a été réalisé dans le cadre d'un **stage technique** de DUT Génie
 | **IDE** | IntelliJ IDEA / VS Code |
 | **Versioning** | Git + GitHub |
 
-### Diagrammes d'Architecture
-
-
+---
 
 ## 📁 Structure du projet
 
@@ -169,12 +172,6 @@ administrative-leave-management-app/
 │   │       ├── security/            # JWT, authentification
 │   │       ├── exceptions/          # Gestion d'erreurs
 │   │       └── utils/               # Utilitaires
-│   │
-│   ├── src/main/resources/
-│   │   ├── application.properties   # Configuration
-│   │   ├── application-dev.properties
-│   │   ├── application-prod.properties
-│   │   └── data.sql                 # Données initiales
 │   │
 │   ├── pom.xml                      # Dépendances Maven
 │   └── mvnw / mvnw.cmd              # Maven Wrapper
@@ -227,7 +224,6 @@ administrative-leave-management-app/
 │       └── ...
 │
 ├── .gitignore                       # Fichiers à ignorer
-├── .env.example                     # Variables d'environnement
 ├── LICENSE                          # Licence MIT
 ├── CONTRIBUTING.md                  # Guide de contribution
 └── README.md                        # Ce fichier
@@ -295,37 +291,18 @@ COLLATE utf8mb4_unicode_ci;
 EXIT;
 ```
 
-#### b) Configurer `application.properties`
+#### b) Configuration du backend
 
-Éditer `backend/src/main/resources/application.properties` :
+La configuration du backend se fait via des variables d'environnement ou des fichiers de configuration. Les paramètres principaux incluent :
 
-```properties
-# ========== Base de données MySQL ==========
-spring.datasource.url=jdbc:mysql://localhost:3306/gestion_conges_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-spring.datasource.username=root
-spring.datasource.password=
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+- **URL de la base de données** : `jdbc:mysql://localhost:3306/gestion_conges_db`
+- **Identifiants MySQL** : Utilisateur et mot de passe
+- **Port du serveur** : `8080`
+- **Contexte API** : `/api`
+- **Clé JWT** : Pour la sécurité des tokens
+- **Configuration des emails** : Pour les notifications
 
-# ========== JPA / Hibernate ==========
-spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=false
-spring.jpa.properties.hibernate.format_sql=true
-
-# ========== Serveur ==========
-server.port=8080
-server.servlet.context-path=/api
-
-# ========== JWT ==========
-jwt.secret=YOUR_SUPER_SECRET_KEY_MUST_BE_AT_LEAST_32_CHARACTERS_LONG
-jwt.expiration=86400000
-
-# ========== Logging ==========
-logging.level.root=INFO
-logging.level.com.abhoer=DEBUG
-```
-
-**⚠️ Note :** Pour la production, définissez les variables d'environnement au lieu de hardcoder les valeurs.
+> **Note :** Consultez le fichier `.env.example` ou la documentation du backend pour les configurations complètes et les variables d'environnement à définir.
 
 #### c) Compiler et démarrer le backend
 
@@ -360,7 +337,7 @@ cd ../frontend
 
 #### b) Configurer l'URL de l'API
 
-Éditer `js/config.js` et assurez-vous que :
+Éditer `js/config.js` et assurez-vous que l'URL de l'API est correcte :
 
 ```javascript
 const API_URL = "http://localhost:8080/api";
@@ -389,6 +366,9 @@ npx serve .
 Le frontend sera accessible sur :
 ```
 👉 http://localhost:5500 (ou l'adresse affichée)
+```
+
+---
 
 ## 🖥️ Utilisation
 
@@ -450,6 +430,8 @@ Le frontend sera accessible sur :
 | **Sécurité** | HTTPS en prod + mots de passe en BCrypt |
 
 ---
+
+## 📡 API REST
 
 ### Endpoints principaux
 
@@ -572,7 +554,7 @@ kill -9 <PID>
 
 **Erreur : `Cannot connect to database`**
 1. Vérifier que MySQL est démarré
-2. Vérifier les credentials dans `application.properties`
+2. Vérifier les credentials de la base de données
 3. Vérifier que la base de données existe :
    ```sql
    SHOW DATABASES;
@@ -585,10 +567,7 @@ kill -9 <PID>
 Assurez-vous que :
 1. Le backend est en cours d'exécution
 2. L'URL de l'API est correcte dans `frontend/js/config.js`
-3. Ajouter CORS au backend (`application.properties`) :
-   ```properties
-   server.error.include-message=always
-   ```
+3. Les paramètres CORS sont correctement configurés
 
 **Erreur : `401 Unauthorized`**
 
@@ -600,12 +579,15 @@ Assurez-vous que :
 
 **Erreur : `table doesn't exist`**
 
-Hibernate devrait créer les tables automatiquement avec `ddl-auto=update`. Si ce n'est pas le cas :
+Hibernate devrait créer les tables automatiquement. Si ce n'est pas le cas :
 ```sql
 -- Réinitialiser la base (attention : supprime les données)
 DROP DATABASE gestion_conges_db;
 CREATE DATABASE gestion_conges_db 
 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+---
 
 ## 📚 Documentation complète
 
@@ -614,6 +596,8 @@ CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
   - Cas d'utilisation
   - Diagrammes de classe
   - Diagrammes de séquence
+
+---
 
 ## 🔐 Sécurité
 
@@ -629,12 +613,13 @@ CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 ### Recommandations production
 
-1. Changez la clé secrète JWT (`jwt.secret`)
-2. Utilisez des variables d'environnement pour les credentials
-3. Activez HTTPS/SSL
-4. Configurez un firewall
-5. Utilisez un certificat SSL valide
-6. Limitez le taux de requêtes (rate limiting)
+1. Utilisez des variables d'environnement pour tous les credentials
+2. Activez HTTPS/SSL avec un certificat valide
+3. Configurez un firewall et limitez les accès
+4. Limitez le taux de requêtes (rate limiting)
+5. Mettez en place un système de sauvegarde régulier de la base de données
+
+---
 
 ## 🤝 Contribution
 
@@ -655,6 +640,23 @@ Les contributions sont bienvenues ! Veuillez consulter [CONTRIBUTING.md](./CONTR
 - **Commits** : Format conventionnel
 - **Tests** : Requise pour toute nouvelle fonctionnalité
 
+---
+
+## 📜 Licence
+
+Ce projet est sous licence MIT. Voir [LICENSE](./LICENSE) pour plus de détails.
+
+---
+
+## 👥 Auteurs
+
+### Auteurs principaux
+
+| Auteur | Rôle | GitHub |
+|--------|------|--------|
+| **Intissar FARHOUN** | Développeur Full-Stack | [@intissar-git](https://github.com/intissar-git) |
+| **Ikram AZLANI** | Développeur | [@ikramazlani](https://github.com/ikramazlani) |
+| **Souaad AMRAOUI** | Développeur | [@hasna745](https://github.com/hasna745) |
 
 ### Encadrants
 
