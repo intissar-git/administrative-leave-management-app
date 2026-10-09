@@ -125,32 +125,11 @@ Ce projet a été réalisé dans le cadre d'un **stage technique** de DUT Génie
 
 Le système suit un **workflow de validation en 3 niveaux** :
 
-1. **Chef de Service (N+1)** → Première validation
-2. **Chef de Département (N+2)** → Validation intermédiaire
-3. **Ressources Humaines (RH)** → Validation finale et archivage
-
-**Notifications email** envoyées à chaque étape du workflow.
-
----
+(Screenshots/app_workflow)
 
 ## 🏗️ Architecture technique
 
-### Stack Technique
-
-| Couche | Technologies |
-|--------|--------------|
-| **Backend API** | Spring Boot 3.x, Spring Security, JWT |
-| **ORM** | Spring Data JPA, Hibernate |
-| **Frontend** | JavaScript (ES6+), HTML5, CSS3 |
-| **Styles** | Tailwind CSS |
-| **Base de données** | MySQL 8.x |
-| **Architecture** | Single Page Application (SPA) + REST API |
-| **Authentification** | JWT Tokens |
-| **Gestion de dépendances** | Maven |
-| **Tests API** | Postman, JUnit 5 |
-| **IDE** | IntelliJ IDEA / VS Code |
-| **Versioning** | Git + GitHub |
-
+(Screenshots/architecture-diagramme)
 ---
 
 
