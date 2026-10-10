@@ -547,6 +547,6 @@ Nous tenons à remercier chaleureusement :
 ## 📞 Support & Contact
 
 - 📧 **Email** : [intissar-git@github.com](mailto:intissar-git@github.com)
-- 🐛 **Issues** : [GitHub Issues](https://github.com/intissar-git/administrative-leave-management-app/issues)
+-  - **Issues** : [GitHub Issues](https://github.com/intissar-git/administrative-leave-management-app/issues)
 - 💬 **Discussions** : [GitHub Discussions](https://github.com/intissar-git/administrative-leave-management-app/discussions)
 
