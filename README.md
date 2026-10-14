@@ -477,7 +477,7 @@ CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 ## 📚 Documentation complète
 
-- 📄 **[Rapport de Stage](./docs/rapport_technique)** — Documentation complète du projet
+- 📄 **[Rapport de Stage](main/docs/rapport_technique)** — Documentation complète du projet
 
 ## 🔐 Sécurité
 
