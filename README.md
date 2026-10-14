@@ -20,7 +20,6 @@
 - [Fonctionnalités](#-fonctionnalités)
 - [Workflow de validation](#-workflow-de-validation)
 - [Architecture technique](#-architecture-technique)
-- [Structure du projet](#-structure-du-projet)
 - [Prérequis](#-prérequis)
 - [Installation et lancement](#-installation-et-lancement)
 - [Utilisation](#-utilisation)
@@ -31,7 +30,6 @@
 - [Documentation complète](#-documentation-complète)
 - [Sécurité](#-sécurité)
 - [Contribution](#-contribution)
-- [Licence](#-licence)
 - [Auteurs](#-auteurs)
 
 ---
@@ -477,7 +475,7 @@ CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 ## 📚 Documentation complète
 
-- 📄 **[Rapport de Stage](main/docs/rapport_technique)** — Documentation complète du projet
+- 📄 **[Rapport de Stage]([https://github.com/intissar-git/administrative-leave-management-app/tree/main/Docs])** — Documentation complète du projet
 
 ## 🔐 Sécurité
 
