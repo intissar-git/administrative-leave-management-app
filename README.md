@@ -475,7 +475,7 @@ CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 ## 📚 Documentation complète
 
-- 📄 **[Rapport de Stage]([https://github.com/intissar-git/administrative-leave-management-app/tree/main/Docs])** — Documentation complète du projet
+📄 **[Rapport de Stage](https://github.com/intissar-git/administrative-leave-management-app/tree/main/Docs)** — Documentation complète du projet
 
 ## 🔐 Sécurité
 
