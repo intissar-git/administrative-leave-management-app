@@ -478,12 +478,6 @@ CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ## 📚 Documentation complète
 
 - 📄 **[Rapport de Stage](./docs/RAPPORT_STAGE.pdf)** — Documentation complète du projet
-- 📐 **[Diagrammes UML](./docs/diagrams/)** — Architecture et conception
-  - Cas d'utilisation
-  - Diagrammes de classe
-  - Diagrammes de séquence
-
----
 
 ## 🔐 Sécurité
 
